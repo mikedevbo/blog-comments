@@ -32,6 +32,12 @@ namespace Web
                 });
             endpointConfiguration.UsePersistence<LearningPersistence>();
             endpointConfiguration.UseTransport<LearningTransport>();
+            var conventions = endpointConfiguration.Conventions();
+            conventions.DefiningCommandsAs(
+                type =>
+                {
+                    return type.Namespace == "Messages.Commands";
+                });
 
             endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
         }

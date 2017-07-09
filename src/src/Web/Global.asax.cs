@@ -11,7 +11,7 @@ namespace Web
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        private IEndpointInstance endpoint;
+        internal IEndpointInstance endpoint;
 
         protected void Application_Start()
         {

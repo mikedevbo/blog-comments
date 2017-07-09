@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messages
+namespace Messages.Commands
 {
-    public class Class1
+    public class CommentCommand
     {
+        public Guid Id { get; set; }
     }
 }
