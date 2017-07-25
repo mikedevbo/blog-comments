@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Messages.Commands
 {
-    public class CommentCommand
+    public class StartAddingComment
     {
-        public Guid Id { get; set; }
+        public Guid CommentId { get; set; }
     }
 }

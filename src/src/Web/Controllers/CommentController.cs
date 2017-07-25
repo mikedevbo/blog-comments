@@ -24,7 +24,7 @@ namespace Web.Controllers
         {
             var sendOptions = new SendOptions();
             sendOptions.SetDestination("blogcomments");
-            await this.endpoint.Send<CommentCommand>(cmd => cmd.Id = comment.Id, sendOptions)
+            await this.endpoint.Send<StartAddingComment>(cmd => cmd.CommentId = comment.Id, sendOptions)
                 .ConfigureAwait(false);
 
             ////throw new Exception("test");

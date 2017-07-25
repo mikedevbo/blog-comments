@@ -43,7 +43,18 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Commands\CommentCommand.cs" />
+    <Compile Include="Commands\AddComment.cs" />
+    <Compile Include="Commands\CheckCommentResponse.cs" />
+    <Compile Include="Commands\CheckCommentResponseTimeout.cs" />
+    <Compile Include="Commands\CreateGitHubBranch.cs" />
+    <Compile Include="Commands\SendEmail.cs" />
+    <Compile Include="Commands\SendGitHubPullRequest.cs" />
+    <Compile Include="Commands\StartAddingComment.cs" />
+    <Compile Include="CommentResponseState.cs" />
+    <Compile Include="Events\ICommentAdded.cs" />
+    <Compile Include="Events\ICommentResponseAdded.cs" />
+    <Compile Include="Events\IGitHubBranchCreated.cs" />
+    <Compile Include="Events\IGitHubPullRequestSent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
