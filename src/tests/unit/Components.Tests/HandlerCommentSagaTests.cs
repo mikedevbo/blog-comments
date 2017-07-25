@@ -1,4 +1,5 @@
-﻿using Messages.Commands;
+﻿using Messages;
+using Messages.Commands;
 using Messages.Events;
 using NServiceBus.Testing;
 using NSubstitute;
@@ -50,6 +51,74 @@ namespace Components.Tests
             Assert.IsNotNull(sentMessage);
             Assert.True(sentMessage.CommentId == this.id);
         }
+
+        [Test]
+        public async Task Handle_CommentAdded_SendGitHubPullRequestWithProperData()
+        {
+            // Arrange
+            var message = Substitute.For<ICommentAdded>();
+            message.CommentId = this.id;
+            var saga = this.GetHandlerCommentSaga();
+            var context = this.GetTestableMessageHandlerContext();
+
+            // Act
+            await saga.Handle(message, context).ConfigureAwait(false);
+
+            // Assert
+            var sentMessage = this.GetSentMessage<SendGitHubPullRequest>(context);
+            Assert.IsNotNull(sentMessage);
+            Assert.True(sentMessage.CommentId == this.id);
+        }
+
+        [Test]
+        public void Handle_GitHubPullRequestSent_SendCheckCommentResponseTimeoutWithProperData()
+        {
+            Test.Saga<HandlerCommentSaga>()
+                .ExpectTimeoutToBeSetIn<IGitHubPullRequestSent>((state, span) =>
+                    {
+                        return span == TimeSpan.FromDays(30);
+                    });
+        }
+
+        [Test]
+        public void Handle_SagaTimeout_SendCheckCommentResponseWithProperData()
+        {
+            Test.Saga<HandlerCommentSaga>()
+                .WhenSagaTimesOut()
+                .ExpectSend<CheckCommentResponse>();
+        }
+
+        [Test]
+        public void Handle_CommentResponseAdded_SendSendEmailWithProperDataAndCompleteSaga()
+        {
+            var message = Substitute.For<ICommentResponseAdded>();
+            message.CommentResponseState = CommentResponseState.Added;
+
+            Test.Saga<HandlerCommentSaga>()
+                .ExpectSend<SendEmail>()
+                .When(
+                    sagaIsInvoked: (saga, context) =>
+                    {
+                        return saga.Handle(message, context);
+                    })
+                .AssertSagaCompletionIs(true);
+        }
+
+        ////[Test]
+        ////public void Handle_CommentResponseAdded_SendCheckCommentResponseTimeoutWithProperData()
+        ////{
+        ////    var message = Substitute.For<ICommentResponseAdded>();
+        ////    message.CommentResponseState = CommentResponseState.NotAddded;
+
+        ////    Test.Saga<HandlerCommentSaga>()
+        ////        .ExpectTimeoutToBeSetIn<ICommentResponseAdded>()
+        ////        .When(
+        ////            sagaIsInvoked: (saga, context) =>
+        ////            {
+        ////                return saga.Handle(message, context);
+        ////            })
+        ////        .AssertSagaCompletionIs(true);
+        ////}
 
         private HandlerCommentSaga GetHandlerCommentSaga()
         {
