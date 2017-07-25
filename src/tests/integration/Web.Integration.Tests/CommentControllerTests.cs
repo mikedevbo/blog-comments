@@ -11,7 +11,7 @@ using Web.Models;
 namespace Web.Integration.Tests
 {
     [TestFixture]
-    //[Ignore("do not auto run")]
+    [Ignore("do not auto run")]
     public class CommentControllerTests
     {
         [Test]
