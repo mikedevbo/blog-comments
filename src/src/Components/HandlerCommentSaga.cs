@@ -44,57 +44,48 @@ namespace Components
                 .ToSaga(sagaData => sagaData.CommentId);
         }
 
-        public Task Handle(StartAddingComment message, IMessageHandlerContext context)
+        public async Task Handle(StartAddingComment message, IMessageHandlerContext context)
         {
-            context.Send<CreateGitHubBranch>(command => command.CommentId = message.CommentId)
+            await context.Send<CreateGitHubBranch>(command => command.CommentId = message.CommentId)
                 .ConfigureAwait(false);
-
-            return Task.CompletedTask;
         }
 
-        public Task Handle(IGitHubBranchCreated message, IMessageHandlerContext context)
+        public async Task Handle(IGitHubBranchCreated message, IMessageHandlerContext context)
         {
-            context.Send<AddComment>(command => command.CommentId = message.CommentId)
+            await context.Send<AddComment>(command => command.CommentId = message.CommentId)
                 .ConfigureAwait(false);
-
-            return Task.CompletedTask;
         }
 
-        public Task Handle(ICommentAdded message, IMessageHandlerContext context)
+        public async Task Handle(ICommentAdded message, IMessageHandlerContext context)
         {
-            context.Send<SendGitHubPullRequest>(command => command.CommentId = message.CommentId)
+            await context.Send<SendGitHubPullRequest>(command => command.CommentId = message.CommentId)
                 .ConfigureAwait(false);
-
-            return Task.CompletedTask;
         }
 
-        public Task Handle(IGitHubPullRequestSent message, IMessageHandlerContext context)
+        public async Task Handle(IGitHubPullRequestSent message, IMessageHandlerContext context)
         {
-            return RequestTimeout<CheckCommentResponseTimeout>(context, TimeSpan.FromMinutes(this.timeoutMinutes));
-        }
-
-        public Task Timeout(CheckCommentResponseTimeout state, IMessageHandlerContext context)
-        {
-            context.Send<CheckCommentResponse>(command => command.CommentId = state.CommentId)
+            await RequestTimeout<CheckCommentResponseTimeout>(context, TimeSpan.FromMinutes(this.timeoutMinutes))
                 .ConfigureAwait(false);
-
-            return Task.CompletedTask;
         }
 
-        public Task Handle(ICommentResponseAdded message, IMessageHandlerContext context)
+        public async Task Timeout(CheckCommentResponseTimeout state, IMessageHandlerContext context)
+        {
+            await context.Send<CheckCommentResponse>(command => command.CommentId = state.CommentId)
+                .ConfigureAwait(false);
+        }
+
+        public async Task Handle(ICommentResponseAdded message, IMessageHandlerContext context)
         {
             if (message.CommentResponseState == CommentResponseState.Added)
             {
-                context.Send<SendEmail>(command => command.EmailAddress = this.Data.UserEmailAddress)
+                await context.Send<SendEmail>(command => command.EmailAddress = this.Data.UserEmailAddress)
                     .ConfigureAwait(false);
 
                 MarkAsComplete();
-
-                return Task.CompletedTask;
             }
             else
             {
-                return RequestTimeout<CheckCommentResponseTimeout>(context, TimeSpan.FromMinutes(this.timeoutMinutes));
+                await RequestTimeout<CheckCommentResponseTimeout>(context, TimeSpan.FromMinutes(this.timeoutMinutes));
             }
         }
     }
