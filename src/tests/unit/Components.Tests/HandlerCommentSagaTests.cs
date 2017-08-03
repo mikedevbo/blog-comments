@@ -16,6 +16,7 @@ namespace Components.Tests
     public class HandlerCommentSagaTests
     {
         private readonly Guid id = Guid.Parse(@"0C242B08-7704-499D-A9D8-184ED6D93988");
+        private readonly int timeoutMinutes = 30;
 
         [Test]
         public async Task Handle_StartAddingComment_SendCreateGitHubBranchWithProperData()
@@ -76,7 +77,7 @@ namespace Components.Tests
             Test.Saga<HandlerCommentSaga>()
                 .ExpectTimeoutToBeSetIn<IGitHubPullRequestSent>((state, span) =>
                     {
-                        return span == TimeSpan.FromDays(30);
+                        return span == TimeSpan.FromDays(this.timeoutMinutes);
                     });
         }
 
@@ -89,7 +90,7 @@ namespace Components.Tests
         }
 
         [Test]
-        public void Handle_CommentResponseAdded_SendSendEmailWithProperDataAndCompleteSaga()
+        public void Handle_CommentResponseAdded_WhenCommentAddedThenSendEmailWithProperDataAndCompleteSaga()
         {
             var message = Substitute.For<ICommentResponseAdded>();
             message.CommentResponseState = CommentResponseState.Added;
@@ -104,21 +105,18 @@ namespace Components.Tests
                 .AssertSagaCompletionIs(true);
         }
 
-        ////[Test]
-        ////public void Handle_CommentResponseAdded_SendCheckCommentResponseTimeoutWithProperData()
-        ////{
-        ////    var message = Substitute.For<ICommentResponseAdded>();
-        ////    message.CommentResponseState = CommentResponseState.NotAddded;
+        [Test]
+        public void Handle_CommentResponseAdded_WhenCommentNotAddedThenSendCheckCommentResponseTimeoutWithProperData()
+        {
+            var message = Substitute.For<ICommentResponseAdded>();
+            message.CommentResponseState = CommentResponseState.NotAddded;
 
-        ////    Test.Saga<HandlerCommentSaga>()
-        ////        .ExpectTimeoutToBeSetIn<ICommentResponseAdded>()
-        ////        .When(
-        ////            sagaIsInvoked: (saga, context) =>
-        ////            {
-        ////                return saga.Handle(message, context);
-        ////            })
-        ////        .AssertSagaCompletionIs(true);
-        ////}
+            Test.Saga<HandlerCommentSaga>()
+                .ExpectTimeoutToBeSetIn<ICommentResponseAdded>((state, span) =>
+                {
+                    return span == TimeSpan.FromDays(this.timeoutMinutes);
+                });
+        }
 
         private HandlerCommentSaga GetHandlerCommentSaga()
         {
