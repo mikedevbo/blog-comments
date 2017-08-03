@@ -24,28 +24,11 @@ namespace Components
 
         public async Task Handle(CreateGitHubBranch message, IMessageHandlerContext context)
         {
-            string userAgent = this.configurationManager.UserAgent;
-            string authorizationToken = this.configurationManager.AuthorizationToken;
-            string masterRepositoryName = this.configurationManager.MasterRepositoryName;
-
-            Repository masterRepo = this.gitHubApi.GetRepository(
-                userAgent,
-                authorizationToken,
-                masterRepositoryName);
-
-            string sha = masterRepo.Object.Sha;
-
-            var sb = new StringBuilder();
-            sb.Append(DateTime.UtcNow).Append(Guid.NewGuid());
-            string branchName = sb.ToString();
-
-            ////Is this idempotent ?
+            ////TODO: Is this idempotent ?
             this.gitHubApi.CreateRepositoryBranch(
-                userAgent,
-                authorizationToken,
-                masterRepositoryName,
-                sha,
-                branchName);
+                this.configurationManager.UserAgent,
+                this.configurationManager.AuthorizationToken,
+                this.configurationManager.MasterRepositoryName);
 
             await context.Publish<IGitHubBranchCreated>(evt => evt.CommentId = message.CommentId)
                 .ConfigureAwait(false);
