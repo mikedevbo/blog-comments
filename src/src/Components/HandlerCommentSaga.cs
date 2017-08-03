@@ -27,6 +27,21 @@ namespace Components
         {
             mapper.ConfigureMapping<StartAddingComment>(message => message.CommentId)
                 .ToSaga(sagaData => sagaData.CommentId);
+
+            mapper.ConfigureMapping<IGitHubBranchCreated>(message => message.CommentId)
+                            .ToSaga(sagaData => sagaData.CommentId);
+
+            mapper.ConfigureMapping<ICommentAdded>(message => message.CommentId)
+                .ToSaga(sagaData => sagaData.CommentId);
+
+            mapper.ConfigureMapping<IGitHubPullRequestSent>(message => message.CommentId)
+                .ToSaga(sagaData => sagaData.CommentId);
+
+            mapper.ConfigureMapping<CheckCommentResponseTimeout>(message => message.CommentId)
+                .ToSaga(sagaData => sagaData.CommentId);
+
+            mapper.ConfigureMapping<ICommentResponseAdded>(message => message.CommentId)
+                .ToSaga(sagaData => sagaData.CommentId);
         }
 
         public Task Handle(StartAddingComment message, IMessageHandlerContext context)
