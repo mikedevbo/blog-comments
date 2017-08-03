@@ -46,12 +46,16 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="GitHub\Dto\Object.cs" />
+    <Compile Include="GitHub\Dto\Repository.cs" />
+    <Compile Include="GitHub\IGitHubApi.cs" />
     <Compile Include="HandlerAddComment.cs" />
     <Compile Include="HandlerCheckCommentResponse.cs" />
     <Compile Include="HandlerCommentSaga.cs" />
     <Compile Include="CommentSagaData.cs" />
     <Compile Include="HandlerCreateGitHubBranch.cs" />
     <Compile Include="HandlerSendGitHubPullRequest.cs" />
+    <Compile Include="IConfigurationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -63,5 +67,6 @@
       <Name>Messages</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
