@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Messages.Commands
 {
-    public class CreateGitHubBranch
+    public class CreateBranch
     {
         public Guid CommentId { get; set; }
     }

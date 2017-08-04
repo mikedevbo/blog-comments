@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Components
 {
-    public class HandlerSendGitHubPullRequest : IHandleMessages<SendGitHubPullRequest>
+    public class HandlerCreatePullRequest : IHandleMessages<CreatePullRequest>
     {
-        public Task Handle(SendGitHubPullRequest message, IMessageHandlerContext context)
+        public Task Handle(CreatePullRequest message, IMessageHandlerContext context)
         {
 
 

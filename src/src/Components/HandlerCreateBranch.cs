@@ -11,18 +11,18 @@ using System.Threading.Tasks;
 
 namespace Components
 {
-    public class HandlerCreateGitHubBranch : IHandleMessages<CreateGitHubBranch>
+    public class HandlerCreateBranch : IHandleMessages<CreateBranch>
     {
         private readonly IConfigurationManager configurationManager;
         private readonly IGitHubApi gitHubApi;
 
-        public HandlerCreateGitHubBranch(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
+        public HandlerCreateBranch(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
         {
             this.configurationManager = configurationManager;
             this.gitHubApi = gitHubApi;
         }
 
-        public async Task Handle(CreateGitHubBranch message, IMessageHandlerContext context)
+        public async Task Handle(CreateBranch message, IMessageHandlerContext context)
         {
             var sb = new StringBuilder();
             sb.Append(DateTime.UtcNow).Append(Guid.NewGuid());
@@ -37,7 +37,7 @@ namespace Components
                 this.configurationManager.MasterBranchName,
                 branchName);
 
-            await context.Publish<IGitHubBranchCreated>(evt => evt.CommentId = message.CommentId)
+            await context.Publish<IBranchCreated>(evt => evt.CommentId = message.CommentId)
                 .ConfigureAwait(false);
         }
     }

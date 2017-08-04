@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Messages.Events
 {
-    public interface IGitHubBranchCreated
+    public interface IBranchCreated
     {
         Guid CommentId { get; set; }
     }

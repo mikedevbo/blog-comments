@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Messages.Commands
 {
-    public class SendGitHubPullRequest
+    public class CreatePullRequest
     {
         public Guid CommentId { get; set; }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Messages.Events
 {
-    public interface IGitHubPullRequestSent
+    public interface IPullRequestCreated
     {
         Guid CommentId { get; set; }
     }

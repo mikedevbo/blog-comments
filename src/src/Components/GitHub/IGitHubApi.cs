@@ -34,7 +34,13 @@ namespace Components.GitHub
             string repositoryName,
             string branchName,
             string fileName,
-            string content
-            );
+            string content);
+
+        void CreatePullRequest(
+            string userAgent,
+            string authorizationToken,
+            string repositoryName,
+            string headBranchName,
+            string baseBranchName);
     }
 }

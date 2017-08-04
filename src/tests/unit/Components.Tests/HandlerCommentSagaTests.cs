@@ -19,7 +19,7 @@ namespace Components.Tests
         private readonly int timeoutMinutes = 30;
 
         [Test]
-        public async Task Handle_StartAddingComment_SendCreateGitHubBranchWithProperData()
+        public async Task Handle_StartAddingComment_SendCreateBranchWithProperData()
         {
             // Arrange
             var message = new StartAddingComment { CommentId = this.id };
@@ -30,7 +30,7 @@ namespace Components.Tests
             await saga.Handle(message, context).ConfigureAwait(false);
 
             // Assert
-            var sentMessage = this.GetSentMessage<CreateGitHubBranch>(context);
+            var sentMessage = this.GetSentMessage<CreateBranch>(context);
             Assert.IsNotNull(sentMessage);
             Assert.True(sentMessage.CommentId == this.id);
         }
@@ -39,7 +39,7 @@ namespace Components.Tests
         public async Task Handle_GitHubBranchCreated_SendAddCommentWithProperData()
         {
             // Arrange
-            var message = Substitute.For<IGitHubBranchCreated>();
+            var message = Substitute.For<IBranchCreated>();
             message.CommentId = this.id;
             var saga = this.GetHandlerCommentSaga();
             var context = this.GetTestableMessageHandlerContext();
@@ -54,7 +54,7 @@ namespace Components.Tests
         }
 
         [Test]
-        public async Task Handle_CommentAdded_SendGitHubPullRequestWithProperData()
+        public async Task Handle_CommentAdded_CreatePullRequestWithProperData()
         {
             // Arrange
             var message = Substitute.For<ICommentAdded>();
@@ -66,16 +66,16 @@ namespace Components.Tests
             await saga.Handle(message, context).ConfigureAwait(false);
 
             // Assert
-            var sentMessage = this.GetSentMessage<SendGitHubPullRequest>(context);
+            var sentMessage = this.GetSentMessage<CreatePullRequest>(context);
             Assert.IsNotNull(sentMessage);
             Assert.True(sentMessage.CommentId == this.id);
         }
 
         [Test]
-        public void Handle_GitHubPullRequestSent_SendCheckCommentResponseTimeoutWithProperData()
+        public void Handle_PullRequestCreated_SendCheckCommentResponseTimeoutWithProperData()
         {
             Test.Saga<HandlerCommentSaga>()
-                .ExpectTimeoutToBeSetIn<IGitHubPullRequestSent>((state, span) =>
+                .ExpectTimeoutToBeSetIn<IPullRequestCreated>((state, span) =>
                     {
                         return span == TimeSpan.FromDays(this.timeoutMinutes);
                     });

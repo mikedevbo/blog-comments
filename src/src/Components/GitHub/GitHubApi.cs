@@ -37,6 +37,16 @@ namespace Components.GitHub
             ////TODO: to implement
         }
 
+        public void CreatePullRequest(
+            string userAgent, 
+            string authorizationToken, 
+            string repositoryName,
+            string headBranchName,
+            string baseBranchName)
+        {
+            ////TODO: to implement
+        }
+
         public Repository GetRepository(
             string userAgent,
             string authorizationToken,

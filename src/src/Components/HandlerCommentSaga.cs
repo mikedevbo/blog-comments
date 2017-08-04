@@ -14,9 +14,9 @@ namespace Components
     public class HandlerCommentSaga :
         Saga<CommentSagaData>,
         IAmStartedByMessages<StartAddingComment>,
-        IHandleMessages<IGitHubBranchCreated>,
+        IHandleMessages<IBranchCreated>,
         IHandleMessages<ICommentAdded>,
-        IHandleMessages<IGitHubPullRequestSent>,
+        IHandleMessages<IPullRequestCreated>,
         IHandleTimeouts<CheckCommentResponseTimeout>,
         IHandleMessages<ICommentResponseAdded>
     {
@@ -28,13 +28,13 @@ namespace Components
             mapper.ConfigureMapping<StartAddingComment>(message => message.CommentId)
                 .ToSaga(sagaData => sagaData.CommentId);
 
-            mapper.ConfigureMapping<IGitHubBranchCreated>(message => message.CommentId)
+            mapper.ConfigureMapping<IBranchCreated>(message => message.CommentId)
                             .ToSaga(sagaData => sagaData.CommentId);
 
             mapper.ConfigureMapping<ICommentAdded>(message => message.CommentId)
                 .ToSaga(sagaData => sagaData.CommentId);
 
-            mapper.ConfigureMapping<IGitHubPullRequestSent>(message => message.CommentId)
+            mapper.ConfigureMapping<IPullRequestCreated>(message => message.CommentId)
                 .ToSaga(sagaData => sagaData.CommentId);
 
             mapper.ConfigureMapping<CheckCommentResponseTimeout>(message => message.CommentId)
@@ -46,11 +46,11 @@ namespace Components
 
         public async Task Handle(StartAddingComment message, IMessageHandlerContext context)
         {
-            await context.Send<CreateGitHubBranch>(command => command.CommentId = message.CommentId)
+            await context.Send<CreateBranch>(command => command.CommentId = message.CommentId)
                 .ConfigureAwait(false);
         }
 
-        public async Task Handle(IGitHubBranchCreated message, IMessageHandlerContext context)
+        public async Task Handle(IBranchCreated message, IMessageHandlerContext context)
         {
             await context.Send<AddComment>(command => command.CommentId = message.CommentId)
                 .ConfigureAwait(false);
@@ -58,11 +58,11 @@ namespace Components
 
         public async Task Handle(ICommentAdded message, IMessageHandlerContext context)
         {
-            await context.Send<SendGitHubPullRequest>(command => command.CommentId = message.CommentId)
+            await context.Send<CreatePullRequest>(command => command.CommentId = message.CommentId)
                 .ConfigureAwait(false);
         }
 
-        public async Task Handle(IGitHubPullRequestSent message, IMessageHandlerContext context)
+        public async Task Handle(IPullRequestCreated message, IMessageHandlerContext context)
         {
             await RequestTimeout<CheckCommentResponseTimeout>(context, TimeSpan.FromMinutes(this.timeoutMinutes))
                 .ConfigureAwait(false);

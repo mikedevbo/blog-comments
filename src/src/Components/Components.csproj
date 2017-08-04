@@ -54,8 +54,8 @@
     <Compile Include="HandlerCheckCommentResponse.cs" />
     <Compile Include="HandlerCommentSaga.cs" />
     <Compile Include="CommentSagaData.cs" />
-    <Compile Include="HandlerCreateGitHubBranch.cs" />
-    <Compile Include="HandlerSendGitHubPullRequest.cs" />
+    <Compile Include="HandlerCreateBranch.cs" />
+    <Compile Include="HandlerCreatePullRequest.cs" />
     <Compile Include="IConfigurationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
