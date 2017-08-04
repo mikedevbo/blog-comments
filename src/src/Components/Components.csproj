@@ -56,6 +56,7 @@
     <Compile Include="CommentSagaData.cs" />
     <Compile Include="HandlerCreateBranch.cs" />
     <Compile Include="HandlerCreatePullRequest.cs" />
+    <Compile Include="HandlerSendEmail.cs" />
     <Compile Include="IConfigurationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
