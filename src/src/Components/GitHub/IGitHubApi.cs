@@ -28,9 +28,13 @@ namespace Components.GitHub
             string masterBranchName,
             string newBranchName);
 
-        //void UpdateFile(
-        //    string repositoryName,
-
-        //    )
+        void UpdateFile(
+            string userAgent,
+            string authorizationToken,
+            string repositoryName,
+            string branchName,
+            string fileName,
+            string content
+            );
     }
 }

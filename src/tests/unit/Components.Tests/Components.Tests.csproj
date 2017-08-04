@@ -55,6 +55,7 @@
     <Compile Include="..\..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="HandlerAddCommentTests.cs" />
     <Compile Include="HandlerCommentSagaTests.cs" />
     <Compile Include="HandlerCreateGitHubBranchTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

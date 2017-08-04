@@ -26,6 +26,17 @@ namespace Components.GitHub
             ////TODO: to implement
         }
 
+        public void UpdateFile(
+            string userAgent, 
+            string authorizationToken, 
+            string repositoryName, 
+            string branchName, 
+            string fileName, 
+            string content)
+        {
+            ////TODO: to implement
+        }
+
         public Repository GetRepository(
             string userAgent,
             string authorizationToken,
