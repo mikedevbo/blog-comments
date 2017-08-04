@@ -25,8 +25,8 @@ namespace Components.Tests
         {
             // Arrange
             var message = new CreateBranch { CommentId = id };
-            var handler = this.GetHandlerCreateBranch();
-            var context = this.GetTestableMessageHandlerContext();
+            var handler = this.GetHandler();
+            var context = this.GetContext();
 
             // Act
             await handler.Handle(message, context);
@@ -37,7 +37,7 @@ namespace Components.Tests
             Assert.True(publishedMessage.CommentId == this.id);
         }
 
-        private HandlerCreateBranch GetHandlerCreateBranch()
+        private HandlerCreateBranch GetHandler()
         {
             this.configurationManager = Substitute.For<IConfigurationManager>();
             this.gitHubApi = Substitute.For<IGitHubApi>();
@@ -45,7 +45,7 @@ namespace Components.Tests
             return new HandlerCreateBranch(this.configurationManager, this.gitHubApi);
         }
 
-        private TestableMessageHandlerContext GetTestableMessageHandlerContext()
+        private TestableMessageHandlerContext GetContext()
         {
             return new TestableMessageHandlerContext();
         }

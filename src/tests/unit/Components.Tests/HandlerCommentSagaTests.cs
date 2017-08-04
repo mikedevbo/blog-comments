@@ -23,8 +23,8 @@ namespace Components.Tests
         {
             // Arrange
             var message = new StartAddingComment { CommentId = this.id };
-            var saga = this.GetHandlerCommentSaga();
-            var context = this.GetTestableMessageHandlerContext();
+            var saga = this.GetHandler();
+            var context = this.GetContext();
 
             // Act
             await saga.Handle(message, context).ConfigureAwait(false);
@@ -41,8 +41,8 @@ namespace Components.Tests
             // Arrange
             var message = Substitute.For<IBranchCreated>();
             message.CommentId = this.id;
-            var saga = this.GetHandlerCommentSaga();
-            var context = this.GetTestableMessageHandlerContext();
+            var saga = this.GetHandler();
+            var context = this.GetContext();
 
             // Act
             await saga.Handle(message, context).ConfigureAwait(false);
@@ -59,8 +59,8 @@ namespace Components.Tests
             // Arrange
             var message = Substitute.For<ICommentAdded>();
             message.CommentId = this.id;
-            var saga = this.GetHandlerCommentSaga();
-            var context = this.GetTestableMessageHandlerContext();
+            var saga = this.GetHandler();
+            var context = this.GetContext();
 
             // Act
             await saga.Handle(message, context).ConfigureAwait(false);
@@ -118,12 +118,12 @@ namespace Components.Tests
                 });
         }
 
-        private HandlerCommentSaga GetHandlerCommentSaga()
+        private HandlerCommentSaga GetHandler()
         {
             return new HandlerCommentSaga();
         }
 
-        private TestableMessageHandlerContext GetTestableMessageHandlerContext()
+        private TestableMessageHandlerContext GetContext()
         {
             return new TestableMessageHandlerContext();
         }

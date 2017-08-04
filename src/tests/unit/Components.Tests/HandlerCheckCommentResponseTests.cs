@@ -25,7 +25,7 @@ namespace Components.Tests
             // Arrange
             var message = new CheckCommentResponse { CommentId = id };
             var handler = this.GetHandler();
-            var context = this.GetTestableMessageHandlerContext();
+            var context = this.GetContext();
 
             // Act
             await handler.Handle(message, context);
@@ -44,7 +44,7 @@ namespace Components.Tests
             return new HandlerCheckCommentResponse(this.configurationManager, this.gitHubApi);
         }
 
-        private TestableMessageHandlerContext GetTestableMessageHandlerContext()
+        private TestableMessageHandlerContext GetContext()
         {
             return new TestableMessageHandlerContext();
         }
