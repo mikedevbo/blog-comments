@@ -15,5 +15,11 @@ namespace Components
         string RepositoryName { get; set; }
 
         string MasterBranchName { get; set; }
+
+        string NsbEndpointName { get; }
+
+        string NsbEndpointInstanceId { get; }
+
+        string NsbTransportConnectionStringName { get; }
     }
 }

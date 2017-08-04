@@ -9,6 +9,7 @@ namespace Web
     {
         public static void RegisterEndpoint(IEndpointInstance endpoint)
         {
+            var configurationManager = new ConfigurationManager();
             var builder = new ContainerBuilder();
 
             // Register the MVC controllers.
@@ -21,8 +22,10 @@ namespace Web
             // Set the dependency resolver to be Autofac.
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
-            var endpointConfiguration = new EndpointConfiguration("blogcomments");
-            endpointConfiguration.MakeInstanceUniquelyAddressable("1");
+            var endpointConfiguration = new EndpointConfiguration(configurationManager.NsbEndpointName);
+            endpointConfiguration.MakeInstanceUniquelyAddressable(configurationManager.NsbEndpointInstanceId);
+            endpointConfiguration.EnableInstallers();
+            endpointConfiguration.SendFailedMessagesTo("error");
             endpointConfiguration.EnableCallbacks();
             endpointConfiguration.UseSerialization<JsonSerializer>();
             endpointConfiguration.UseContainer<AutofacBuilder>(
@@ -30,14 +33,24 @@ namespace Web
                 {
                     customizations.ExistingLifetimeScope(container);
                 });
-            endpointConfiguration.UsePersistence<LearningPersistence>();
-            endpointConfiguration.UseTransport<LearningTransport>();
+            
             var conventions = endpointConfiguration.Conventions();
             conventions.DefiningCommandsAs(
                 type =>
                 {
                     return type.Namespace == "Messages.Commands";
                 });
+            conventions.DefiningEventsAs(
+                type =>
+                {
+                    return type.Namespace == "Messages.Events";
+                });
+
+            var transport = endpointConfiguration.UseTransport<SqlServerTransport>();
+            transport.ConnectionStringName(configurationManager.NsbTransportConnectionStringName);
+            endpointConfiguration.UsePersistence<InMemoryPersistence>();
+
+            endpointConfiguration.EnableOutbox();
 
             endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
         }
