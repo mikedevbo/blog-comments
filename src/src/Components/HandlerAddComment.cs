@@ -1,4 +1,5 @@
-﻿using Messages.Commands;
+﻿using Components.GitHub;
+using Messages.Commands;
 using Messages.Events;
 using NServiceBus;
 using System;
@@ -11,12 +12,21 @@ namespace Components
 {
     public class HandlerAddComment : IHandleMessages<AddComment>
     {
-        public Task Handle(AddComment message, IMessageHandlerContext context)
-        {
-            context.Publish<ICommentAdded>(evt => evt.CommentId = message.CommentId)
-                .ConfigureAwait(false);
+        private readonly IConfigurationManager configurationManager;
+        private readonly IGitHubApi gitHubApi;
 
-            return Task.CompletedTask;
+        public HandlerAddComment(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
+        {
+            this.configurationManager = configurationManager;
+            this.gitHubApi = gitHubApi;
+        }
+
+        public async Task Handle(AddComment message, IMessageHandlerContext context)
+        {
+
+
+            await context.Publish<ICommentAdded>(evt => evt.CommentId = message.CommentId)
+                .ConfigureAwait(false);
         }
     }
 }

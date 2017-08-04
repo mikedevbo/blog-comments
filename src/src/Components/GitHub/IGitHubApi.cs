@@ -24,6 +24,13 @@ namespace Components.GitHub
         void CreateRepositoryBranch(
             string userAgent,
             string authorizationToken,
-            string masterRepositoryName);
+            string repositoryName,
+            string masterBranchName,
+            string newBranchName);
+
+        //void UpdateFile(
+        //    string repositoryName,
+
+        //    )
     }
 }

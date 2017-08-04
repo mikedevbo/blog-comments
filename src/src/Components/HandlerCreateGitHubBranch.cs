@@ -24,11 +24,18 @@ namespace Components
 
         public async Task Handle(CreateGitHubBranch message, IMessageHandlerContext context)
         {
+            var sb = new StringBuilder();
+            sb.Append(DateTime.UtcNow).Append(Guid.NewGuid());
+            string branchName = sb.ToString();
+
             ////TODO: Is this idempotent ?
+            ////TODO: Is this can be awaitable ?
             this.gitHubApi.CreateRepositoryBranch(
                 this.configurationManager.UserAgent,
                 this.configurationManager.AuthorizationToken,
-                this.configurationManager.MasterRepositoryName);
+                this.configurationManager.RepositoryName,
+                this.configurationManager.MasterBranchName,
+                branchName);
 
             await context.Publish<IGitHubBranchCreated>(evt => evt.CommentId = message.CommentId)
                 .ConfigureAwait(false);

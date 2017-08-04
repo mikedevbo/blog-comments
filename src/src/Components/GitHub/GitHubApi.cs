@@ -12,7 +12,9 @@ namespace Components.GitHub
         public void CreateRepositoryBranch(
             string userAgent, 
             string authorizationToken, 
-            string masterRepositoryName)
+            string masterRepositoryName,
+            string masterBranchName,
+            string newBranchName)
         {
             Repository masterRepo = this.GetRepository(
                 userAgent,
@@ -20,10 +22,6 @@ namespace Components.GitHub
                 masterRepositoryName);
 
             string sha = masterRepo.Object.Sha;
-
-            var sb = new StringBuilder();
-            sb.Append(DateTime.UtcNow).Append(Guid.NewGuid());
-            string branchName = sb.ToString();
 
             ////TODO: to implement
         }

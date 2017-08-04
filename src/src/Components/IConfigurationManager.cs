@@ -12,6 +12,8 @@ namespace Components
 
         string AuthorizationToken { get; set; }
 
-        string MasterRepositoryName { get; set; }
+        string RepositoryName { get; set; }
+
+        string MasterBranchName { get; set; }
     }
 }

@@ -41,17 +41,6 @@ namespace Components.Tests
         {
             this.configurationManager = Substitute.For<IConfigurationManager>();
             this.gitHubApi = Substitute.For<IGitHubApi>();
-            //this.gitHubApi
-            //    .GetRepository(string.Empty, string.Empty, string.Empty)
-            //    .ReturnsForAnyArgs(new Repository
-            //    {
-            //        Ref = "test",
-            //        Url = "test",
-            //        Object = new GitHub.Dto.Object
-            //        {
-            //            Sha = "test"
-            //        }
-            //    });
 
             return new HandlerCreateGitHubBranch(this.configurationManager, this.gitHubApi);
         }
