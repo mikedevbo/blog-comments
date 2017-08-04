@@ -9,17 +9,28 @@ namespace Components.GitHub
 {
     public class GitHubApi : IGitHubApi
     {
+        public Repository GetRepository(
+            string userAgent,
+            string authorizationToken,
+            string repositoryName,
+            string branchName)
+        {
+            ////TODO: to implement
+            return new Repository();
+        }
+
         public void CreateRepositoryBranch(
             string userAgent, 
             string authorizationToken, 
-            string masterRepositoryName,
+            string repositoryName,
             string masterBranchName,
             string newBranchName)
         {
             Repository masterRepo = this.GetRepository(
                 userAgent,
                 authorizationToken,
-                masterRepositoryName);
+                repositoryName,
+                masterBranchName);
 
             string sha = masterRepo.Object.Sha;
 
@@ -45,15 +56,6 @@ namespace Components.GitHub
             string baseBranchName)
         {
             ////TODO: to implement
-        }
-
-        public Repository GetRepository(
-            string userAgent,
-            string authorizationToken,
-            string repositoryName)
-        {
-            ////TODO: to implement
-            return new Repository();
         }
     }
 }

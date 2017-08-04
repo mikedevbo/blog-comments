@@ -1,4 +1,5 @@
-﻿using Messages.Commands;
+﻿using Components.GitHub;
+using Messages.Commands;
 using Messages.Events;
 using NServiceBus;
 using System;
@@ -11,12 +12,27 @@ namespace Components
 {
     public class HandlerCheckCommentResponse : IHandleMessages<CheckCommentResponse>
     {
-        public Task Handle(CheckCommentResponse message, IMessageHandlerContext context)
-        {
-            context.Publish<ICommentResponseAdded>(evt => evt.CommentId = message.CommentId)
-                .ConfigureAwait(false);
+        private readonly IConfigurationManager configurationManager;
+        private readonly IGitHubApi gitHubApi;
 
-            return Task.CompletedTask;
+        public HandlerCheckCommentResponse(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
+        {
+            this.configurationManager = configurationManager;
+            this.gitHubApi = gitHubApi;
+        }
+
+        public async Task Handle(CheckCommentResponse message, IMessageHandlerContext context)
+        {
+            var repo = this.gitHubApi.GetRepository(
+                this.configurationManager.UserAgent,
+                this.configurationManager.AuthorizationToken,
+                this.configurationManager.RepositoryName,
+                message.BranchName);
+
+            ////TODO: add if implementation
+
+            await context.Publish<ICommentResponseAdded>(evt => evt.CommentId = message.CommentId)
+                .ConfigureAwait(false);
         }
     }
 }

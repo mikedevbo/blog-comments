@@ -9,17 +9,11 @@ namespace Components.GitHub
 {
     public interface IGitHubApi
     {
-        //Repository GetRepository(
-        //    string userAgent, 
-        //    string authorizationToken, 
-        //    string repositoryName);
-
-        //void CreateRepositoryBranch(
-        //    string userAgent,
-        //    string authorizationToken,
-        //    string masterRepositoryName,
-        //    string masterRepositorySha,
-        //    string branchName);
+        Repository GetRepository(
+            string userAgent,
+            string authorizationToken,
+            string repositoryName,
+            string branchName);
 
         void CreateRepositoryBranch(
             string userAgent,
