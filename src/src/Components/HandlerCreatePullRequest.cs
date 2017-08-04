@@ -1,4 +1,6 @@
-﻿using Messages.Commands;
+﻿using Components.GitHub;
+using Messages.Commands;
+using Messages.Events;
 using NServiceBus;
 using System;
 using System.Collections.Generic;
@@ -10,11 +12,26 @@ namespace Components
 {
     public class HandlerCreatePullRequest : IHandleMessages<CreatePullRequest>
     {
-        public Task Handle(CreatePullRequest message, IMessageHandlerContext context)
+        private readonly IConfigurationManager configurationManager;
+        private readonly IGitHubApi gitHubApi;
+
+        public HandlerCreatePullRequest(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
         {
+            this.configurationManager = configurationManager;
+            this.gitHubApi = gitHubApi;
+        }
 
+        public async Task Handle(CreatePullRequest message, IMessageHandlerContext context)
+        {
+            this.gitHubApi.CreatePullRequest(
+                this.configurationManager.UserAgent,
+                this.configurationManager.AuthorizationToken,
+                this.configurationManager.RepositoryName,
+                message.HeadBranchName,
+                message.BaseBranchName);
 
-            return Task.CompletedTask;
+            await context.Publish<IPullRequestCreated>(evt => evt.CommentId = message.CommentId)
+                .ConfigureAwait(false);
         }
     }
 }

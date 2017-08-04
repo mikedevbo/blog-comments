@@ -9,5 +9,9 @@ namespace Messages.Commands
     public class CreatePullRequest
     {
         public Guid CommentId { get; set; }
+
+        public string HeadBranchName { get; set; }
+
+        public string BaseBranchName { get; set; }
     }
 }

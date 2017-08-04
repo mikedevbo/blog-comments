@@ -58,6 +58,7 @@
     <Compile Include="HandlerAddCommentTests.cs" />
     <Compile Include="HandlerCommentSagaTests.cs" />
     <Compile Include="HandlerCreateBranchTests.cs" />
+    <Compile Include="HandlerCreatePullRequestTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
