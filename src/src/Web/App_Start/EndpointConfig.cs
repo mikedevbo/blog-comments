@@ -26,6 +26,7 @@ namespace Web
             endpointConfiguration.MakeInstanceUniquelyAddressable(configurationManager.NsbEndpointInstanceId);
             endpointConfiguration.EnableInstallers();
             endpointConfiguration.SendFailedMessagesTo("error");
+            endpointConfiguration.AuditProcessedMessagesTo("audit");
             endpointConfiguration.EnableCallbacks();
             endpointConfiguration.UseSerialization<JsonSerializer>();
             endpointConfiguration.UseContainer<AutofacBuilder>(

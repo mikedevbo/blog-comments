@@ -39,5 +39,21 @@ namespace Web
                 return @"NsbTransportConnectionStringName";
             }
         }
+
+        public string NsbErrorQueueName
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings[@"NsbErrorQueueName"];
+            }
+        }
+
+        public string NsbAuditQueueName
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings[@"NsbAuditQueueName"];
+            }
+        }
     }
 }

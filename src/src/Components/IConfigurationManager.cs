@@ -21,5 +21,9 @@ namespace Components
         string NsbEndpointInstanceId { get; }
 
         string NsbTransportConnectionStringName { get; }
+
+        string NsbErrorQueueName { get; }
+
+        string NsbAuditQueueName { get; }
     }
 }
