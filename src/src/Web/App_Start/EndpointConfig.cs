@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
 using NServiceBus;
+using NServiceBus.Persistence.Sql;
+using System.Data.SqlClient;
 using System.Web.Mvc;
 
 namespace Web
@@ -48,8 +50,17 @@ namespace Web
                 });
 
             var transport = endpointConfiguration.UseTransport<SqlServerTransport>();
-            transport.ConnectionStringName(configurationManager.NsbTransportConnectionStringName);
-            endpointConfiguration.UsePersistence<InMemoryPersistence>();
+            transport.ConnectionString(configurationManager.NsbTransportConnectionString);
+
+            var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+            persistence.ConnectionBuilder(
+                connectionBuilder: () =>
+                {
+                    return new SqlConnection(configurationManager.NsbTransportConnectionString);
+                });
+
+            var subscriptions = persistence.SubscriptionSettings();
+            subscriptions.DisableCache();
 
             endpointConfiguration.EnableOutbox();
 

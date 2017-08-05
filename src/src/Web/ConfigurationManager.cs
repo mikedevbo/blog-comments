@@ -32,11 +32,11 @@ namespace Web
             }
         }
 
-        public string NsbTransportConnectionStringName
+        public string NsbTransportConnectionString
         {
             get
             {
-                return @"NsbTransportConnectionStringName";
+                return System.Configuration.ConfigurationManager.ConnectionStrings[@"NsbTransportConnectionString"].ConnectionString;
             }
         }
 

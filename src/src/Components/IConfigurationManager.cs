@@ -20,7 +20,7 @@ namespace Components
 
         string NsbEndpointInstanceId { get; }
 
-        string NsbTransportConnectionStringName { get; }
+        string NsbTransportConnectionString { get; }
 
         string NsbErrorQueueName { get; }
 

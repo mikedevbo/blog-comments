@@ -3,6 +3,7 @@ using Messages.Commands;
 using Messages.Events;
 using NServiceBus;
 using NServiceBus.Logging;
+using NServiceBus.Persistence.Sql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace Components
 {
     public class HandlerCommentSaga :
-        Saga<CommentSagaData>,
+        SqlSaga<CommentSagaData>,
         IAmStartedByMessages<StartAddingComment>,
         IHandleMessages<IBranchCreated>,
         IHandleMessages<ICommentAdded>,
@@ -23,26 +24,17 @@ namespace Components
         private ILog log = LogManager.GetLogger<HandlerCommentSaga>();
         private readonly int timeoutMinutes = 30;
 
-        protected override void ConfigureHowToFindSaga(SagaPropertyMapper<CommentSagaData> mapper)
+        protected override void ConfigureMapping(IMessagePropertyMapper mapper)
         {
-            mapper.ConfigureMapping<StartAddingComment>(message => message.CommentId)
-                .ToSaga(sagaData => sagaData.CommentId);
-
-            mapper.ConfigureMapping<IBranchCreated>(message => message.CommentId)
-                            .ToSaga(sagaData => sagaData.CommentId);
-
-            mapper.ConfigureMapping<ICommentAdded>(message => message.CommentId)
-                .ToSaga(sagaData => sagaData.CommentId);
-
-            mapper.ConfigureMapping<IPullRequestCreated>(message => message.CommentId)
-                .ToSaga(sagaData => sagaData.CommentId);
-
-            mapper.ConfigureMapping<CheckCommentResponseTimeout>(message => message.CommentId)
-                .ToSaga(sagaData => sagaData.CommentId);
-
-            mapper.ConfigureMapping<ICommentResponseAdded>(message => message.CommentId)
-                .ToSaga(sagaData => sagaData.CommentId);
+            mapper.ConfigureMapping<StartAddingComment>(message => message.CommentId);
+            mapper.ConfigureMapping<IBranchCreated>(message => message.CommentId);
+            mapper.ConfigureMapping<ICommentAdded>(message => message.CommentId);
+            mapper.ConfigureMapping<IPullRequestCreated>(message => message.CommentId);
+            mapper.ConfigureMapping<CheckCommentResponseTimeout>(message => message.CommentId);
+            mapper.ConfigureMapping<ICommentResponseAdded>(message => message.CommentId);
         }
+
+        protected override string CorrelationPropertyName => nameof(CommentSagaData.CommentId);
 
         public async Task Handle(StartAddingComment message, IMessageHandlerContext context)
         {
