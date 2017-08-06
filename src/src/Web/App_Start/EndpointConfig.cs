@@ -14,29 +14,33 @@ namespace Web
             var configurationManager = new ConfigurationManager();
             var builder = new ContainerBuilder();
 
-            // Register the MVC controllers.
+            // container
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
-            // Register the endpoint as a factory as the instance isn't created yet.
             builder.Register(ctx => endpoint).SingleInstance();
-
             var container = builder.Build();
-
-            // Set the dependency resolver to be Autofac.
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
             var endpointConfiguration = new EndpointConfiguration(configurationManager.NsbEndpointName);
-            endpointConfiguration.MakeInstanceUniquelyAddressable(configurationManager.NsbEndpointInstanceId);
-            endpointConfiguration.EnableInstallers();
-            endpointConfiguration.SendFailedMessagesTo("error");
-            endpointConfiguration.AuditProcessedMessagesTo("audit");
-            endpointConfiguration.EnableCallbacks();
-            endpointConfiguration.UseSerialization<JsonSerializer>();
+
+            // container
             endpointConfiguration.UseContainer<AutofacBuilder>(
                 customizations: customizations =>
                 {
                     customizations.ExistingLifetimeScope(container);
                 });
-            
+
+            // error & audit
+            endpointConfiguration.SendFailedMessagesTo(configurationManager.NsbErrorQueueName);
+            endpointConfiguration.AuditProcessedMessagesTo(configurationManager.NsbAuditQueueName);
+
+            // callbacks
+            endpointConfiguration.EnableCallbacks();
+            endpointConfiguration.MakeInstanceUniquelyAddressable(configurationManager.NsbEndpointInstanceId);
+
+            // serialization
+            endpointConfiguration.UseSerialization<JsonSerializer>();
+
+            // convenstions
             var conventions = endpointConfiguration.Conventions();
             conventions.DefiningCommandsAs(
                 type =>
@@ -49,9 +53,11 @@ namespace Web
                     return type.Namespace == "Messages.Events";
                 });
 
+            // transport
             var transport = endpointConfiguration.UseTransport<SqlServerTransport>();
             transport.ConnectionString(configurationManager.NsbTransportConnectionString);
 
+            // persistence
             var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
             persistence.SqlVariant(SqlVariant.MsSqlServer);
             persistence.ConnectionBuilder(
@@ -63,7 +69,12 @@ namespace Web
             var subscriptions = persistence.SubscriptionSettings();
             subscriptions.DisableCache();
 
+            // outbox
             endpointConfiguration.EnableOutbox();
+
+
+            // installers
+            endpointConfiguration.EnableInstallers();
 
             endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
         }
