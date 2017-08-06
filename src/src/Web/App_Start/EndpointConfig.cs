@@ -53,6 +53,7 @@ namespace Web
             transport.ConnectionString(configurationManager.NsbTransportConnectionString);
 
             var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
+            persistence.SqlVariant(SqlVariant.MsSqlServer);
             persistence.ConnectionBuilder(
                 connectionBuilder: () =>
                 {

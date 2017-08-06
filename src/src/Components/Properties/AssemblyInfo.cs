@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using NServiceBus.Persistence.Sql;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
@@ -16,3 +17,4 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("98b5d703-030c-497e-ba03-42b9d7373c63")]
+[assembly: SqlPersistenceSettings(MsSqlServerScripts = true)]
