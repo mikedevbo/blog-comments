@@ -55,5 +55,21 @@ namespace Web
                 return System.Configuration.ConfigurationManager.AppSettings[@"NsbAuditQueueName"];
             }
         }
+
+        public bool NsbIsIntegrationTests
+        {
+            get
+            {
+                return Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["NsbIsIntegrationTests"]);
+            }
+        }
+
+        public int CommentResponseAddedSagaTimeoutInSeconds
+        {
+            get
+            {
+                return Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["CommentResponseAddedSagaTimeoutInSeconds"]);
+            }
+        }
     }
 }

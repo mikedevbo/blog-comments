@@ -22,7 +22,12 @@ namespace Components
         IHandleMessages<ICommentResponseAdded>
     {
         private ILog log = LogManager.GetLogger<HandlerCommentSaga>();
-        private readonly int timeoutMinutes = 30;
+        private readonly IConfigurationManager configurationManager;
+
+        public HandlerCommentSaga(IConfigurationManager configurationManager)
+        {
+            this.configurationManager = configurationManager;
+        }
 
         protected override void ConfigureMapping(IMessagePropertyMapper mapper)
         {
@@ -56,7 +61,10 @@ namespace Components
 
         public async Task Handle(IPullRequestCreated message, IMessageHandlerContext context)
         {
-            await RequestTimeout<CheckCommentResponseTimeout>(context, TimeSpan.FromMinutes(this.timeoutMinutes))
+            await RequestTimeout(
+                context, 
+                TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds), 
+                new CheckCommentResponseTimeout { CommentId = message.CommentId })
                 .ConfigureAwait(false);
         }
 
@@ -77,7 +85,11 @@ namespace Components
             }
             else
             {
-                await RequestTimeout<CheckCommentResponseTimeout>(context, TimeSpan.FromMinutes(this.timeoutMinutes));
+                await RequestTimeout(
+                    context, 
+                    TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds),
+                    new CheckCommentResponseTimeout { CommentId = message.CommentId })
+                    .ConfigureAwait(false);
             }
         }
     }

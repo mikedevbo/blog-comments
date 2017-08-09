@@ -23,8 +23,11 @@ namespace Web.Controllers
         public async Task RequestForComment(Comment comment)
         {
             var sendOptions = new SendOptions();
-            sendOptions.SetDestination("blogcomments");
-            await this.endpoint.Send<StartAddingComment>(cmd => cmd.CommentId = comment.Id, sendOptions)
+            //sendOptions.SetDestination("blogcomments");
+            //await this.endpoint.Send<StartAddingComment>(cmd => cmd.CommentId = comment.Id, sendOptions)
+            //    .ConfigureAwait(false);
+
+            await this.endpoint.Send<StartAddingComment>(cmd => cmd.CommentId = comment.Id)
                 .ConfigureAwait(false);
 
             ////throw new Exception("test");

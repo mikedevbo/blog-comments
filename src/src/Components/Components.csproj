@@ -57,6 +57,7 @@
     <Compile Include="GitHub\Dto\Object.cs" />
     <Compile Include="GitHub\Dto\Repository.cs" />
     <Compile Include="GitHub\GitHubApi.cs" />
+    <Compile Include="GitHub\GitHubApiForTests.cs" />
     <Compile Include="GitHub\IGitHubApi.cs" />
     <Compile Include="HandlerAddComment.cs" />
     <Compile Include="HandlerCheckCommentResponse.cs" />

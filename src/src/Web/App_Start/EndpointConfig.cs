@@ -1,5 +1,9 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
+using Components;
+using Components.GitHub;
+using Messages.Commands;
+using Messages.Events;
 using NServiceBus;
 using NServiceBus.Persistence.Sql;
 using System.Data.SqlClient;
@@ -28,6 +32,7 @@ namespace Web
                 {
                     customizations.ExistingLifetimeScope(container);
                 });
+            RegisterComponents(endpointConfiguration, configurationManager);
 
             // error & audit
             endpointConfiguration.SendFailedMessagesTo(configurationManager.NsbErrorQueueName);
@@ -56,6 +61,13 @@ namespace Web
             // transport
             var transport = endpointConfiguration.UseTransport<SqlServerTransport>();
             transport.ConnectionString(configurationManager.NsbTransportConnectionString);
+            var routing = transport.Routing();
+            routing.RouteToEndpoint(
+                assembly: typeof(CreateBranch).Assembly,
+                destination: configurationManager.NsbEndpointName);
+            routing.RegisterPublisher(
+                assembly: typeof(IBranchCreated).Assembly,
+                publisherEndpoint: configurationManager.NsbEndpointName);
 
             // persistence
             var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
@@ -72,11 +84,35 @@ namespace Web
             // outbox
             endpointConfiguration.EnableOutbox();
 
-
             // installers
             endpointConfiguration.EnableInstallers();
 
             endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+        }
+
+        public static void RegisterComponents(
+            EndpointConfiguration endpointConfiguration,
+            IConfigurationManager configurationManager)
+        {
+
+            endpointConfiguration.RegisterComponents(
+                registration: configureComponents =>
+                {
+                    configureComponents.ConfigureComponent<ConfigurationManager>(DependencyLifecycle.InstancePerCall);
+                });
+
+            if (configurationManager.NsbIsIntegrationTests)
+            {
+                endpointConfiguration.RegisterComponents(
+                    registration: configureComponents =>
+                    {
+                        configureComponents.ConfigureComponent<GitHubApiForTests>(DependencyLifecycle.InstancePerCall);
+                    });
+            }
+            else
+            {
+                ////TODO: use real api
+            }
         }
     }
 }

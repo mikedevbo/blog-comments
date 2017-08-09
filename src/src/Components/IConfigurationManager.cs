@@ -25,5 +25,9 @@ namespace Components
         string NsbErrorQueueName { get; }
 
         string NsbAuditQueueName { get; }
+
+        bool NsbIsIntegrationTests { get; }
+
+        int CommentResponseAddedSagaTimeoutInSeconds { get; }
     }
 }

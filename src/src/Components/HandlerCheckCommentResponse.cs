@@ -31,7 +31,11 @@ namespace Components
 
             ////TODO: add if implementation
 
-            await context.Publish<ICommentResponseAdded>(evt => evt.CommentId = message.CommentId)
+            await context.Publish<ICommentResponseAdded>(
+                evt => {
+                    evt.CommentId = message.CommentId;
+                    evt.CommentResponseState = Messages.CommentResponseState.Added;
+                    })
                 .ConfigureAwait(false);
         }
     }
