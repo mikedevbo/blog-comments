@@ -96,7 +96,7 @@ namespace Components.Tests
             message.CommentResponseState = CommentResponseState.Added;
 
             Test.Saga<HandlerCommentSaga>()
-                .ExpectSend<SendEmail>()
+                .ExpectSend<SendEmailForTests>()
                 .When(
                     sagaIsInvoked: (saga, context) =>
                     {

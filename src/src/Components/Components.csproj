@@ -67,7 +67,9 @@
     <Compile Include="HandlerCreatePullRequest.cs" />
     <Compile Include="HandlerSendEmail.cs" />
     <Compile Include="IConfigurationManager.cs" />
+    <Compile Include="ISendEmail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SendEmailForTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

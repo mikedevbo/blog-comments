@@ -108,6 +108,12 @@ namespace Web
                     {
                         configureComponents.ConfigureComponent<GitHubApiForTests>(DependencyLifecycle.InstancePerCall);
                     });
+
+                endpointConfiguration.RegisterComponents(
+                    registration: configureComponents =>
+                    {
+                        configureComponents.ConfigureComponent<SendEmailForTests>(DependencyLifecycle.InstancePerCall);
+                    });
             }
             else
             {
