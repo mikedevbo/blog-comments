@@ -12,11 +12,12 @@ namespace Components.GitHub
     {
         private readonly HttpClient httpClient;
 
-        public GitHubApi(HttpClient httpClient)
+        public GitHubApi()
         {
-            this.httpClient = httpClient;
-            this.httpClient.BaseAddress = new Uri("https://api.github.com/");
-            this.httpClient.DefaultRequestHeaders.Accept.Clear();
+            this.httpClient = new HttpClient()
+            {
+                BaseAddress = new Uri("https://api.github.com/")
+            };
         }
 
         public Repository GetRepository(
@@ -26,6 +27,7 @@ namespace Components.GitHub
             string branchName)
         {
             ////TODO: to implement
+            this.httpClient.DefaultRequestHeaders.Accept.Clear();
             this.httpClient.DefaultRequestHeaders.Add("User-agent", userAgent);
             this.httpClient.DefaultRequestHeaders.Add("Authorization", string.Format("Token {0}", authorizationToken));
             return new Repository();

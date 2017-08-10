@@ -46,11 +46,17 @@
     <Compile Include="..\..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Class1.cs" />
+    <Compile Include="GitHubApiTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Components\Components.csproj">
+      <Project>{98b5d703-030c-497e-ba03-42b9d7373c63}</Project>
+      <Name>Components</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
