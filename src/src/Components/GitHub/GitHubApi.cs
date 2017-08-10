@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,15 @@ namespace Components.GitHub
 {
     public class GitHubApi : IGitHubApi
     {
+        private readonly HttpClient httpClient;
+
+        public GitHubApi(HttpClient httpClient)
+        {
+            this.httpClient = httpClient;
+            this.httpClient.BaseAddress = new Uri("https://api.github.com/");
+            this.httpClient.DefaultRequestHeaders.Accept.Clear();
+        }
+
         public Repository GetRepository(
             string userAgent,
             string authorizationToken,
@@ -16,6 +26,8 @@ namespace Components.GitHub
             string branchName)
         {
             ////TODO: to implement
+            this.httpClient.DefaultRequestHeaders.Add("User-agent", userAgent);
+            this.httpClient.DefaultRequestHeaders.Add("Authorization", string.Format("Token {0}", authorizationToken));
             return new Repository();
         }
 
