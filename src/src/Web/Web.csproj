@@ -178,6 +178,7 @@
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="DevMode.cs" />
     <Compile Include="GitHubApiForTests.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

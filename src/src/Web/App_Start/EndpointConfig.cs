@@ -84,6 +84,22 @@ namespace Web
             // outbox
             endpointConfiguration.EnableOutbox();
 
+            // recoverability
+            if (configurationManager.DevMode == DevMode.Dev)
+            {
+                var recoverability = endpointConfiguration.Recoverability();
+                recoverability.Immediate(
+                    immediate =>
+                    {
+                        immediate.NumberOfRetries(0);
+                    });
+                recoverability.Delayed(
+                    delayed =>
+                    {
+                        delayed.NumberOfRetries(0);
+                    });
+            }
+
             // installers
             endpointConfiguration.EnableInstallers();
 
