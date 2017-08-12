@@ -1,17 +1,14 @@
-﻿using Messages;
-using Messages.Commands;
-using Messages.Events;
-using NServiceBus.Testing;
-using NSubstitute;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Components.Tests
+﻿namespace Components.Tests
 {
+    using System;
+    using System.Threading.Tasks;
+    using Messages;
+    using Messages.Commands;
+    using Messages.Events;
+    using NServiceBus.Testing;
+    using NSubstitute;
+    using NUnit.Framework;
+
     [TestFixture]
     public class HandlerCommentSagaTests
     {
