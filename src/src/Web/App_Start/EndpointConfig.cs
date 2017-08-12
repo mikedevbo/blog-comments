@@ -1,18 +1,24 @@
-﻿using Autofac;
-using Autofac.Integration.Mvc;
-using Components;
-using Components.GitHub;
-using Messages.Commands;
-using Messages.Events;
-using NServiceBus;
-using NServiceBus.Persistence.Sql;
-using System.Data.SqlClient;
-using System.Web.Mvc;
-
-namespace Web
+﻿namespace Web
 {
+    using System.Data.SqlClient;
+    using System.Web.Mvc;
+    using Autofac;
+    using Autofac.Integration.Mvc;
+    using Components;
+    using Messages.Commands;
+    using Messages.Events;
+    using NServiceBus;
+    using NServiceBus.Persistence.Sql;
+
+    /// <summary>
+    /// The endpoint config.
+    /// </summary>
     public class EndpointConfig
     {
+        /// <summary>
+        /// Registers the endpoint.
+        /// </summary>
+        /// <param name="endpoint">The endpoint.</param>
         public static void RegisterEndpoint(IEndpointInstance endpoint)
         {
             var configurationManager = new ConfigurationManager();
@@ -106,11 +112,15 @@ namespace Web
             endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Registers the components.
+        /// </summary>
+        /// <param name="endpointConfiguration">The endpoint configuration.</param>
+        /// <param name="configurationManager">The configuration manager.</param>
         public static void RegisterComponents(
             EndpointConfiguration endpointConfiguration,
             IConfigurationManager configurationManager)
         {
-
             endpointConfiguration.RegisterComponents(
                 registration: configureComponents =>
                 {

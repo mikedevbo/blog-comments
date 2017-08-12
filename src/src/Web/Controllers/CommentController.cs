@@ -1,37 +1,41 @@
-﻿using Messages.Commands;
-using NServiceBus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using Web.Models;
-
-namespace Web.Controllers
+﻿namespace Web.Controllers
 {
+    using System;
+    using System.Threading.Tasks;
+    using System.Web.Mvc;
+    using Messages.Commands;
+    using NServiceBus;
+    using Web.Models;
+
+    /// <summary>
+    /// The controller.
+    /// </summary>
+    /// <seealso cref="System.Web.Mvc.Controller" />
     public class CommentController : Controller
     {
-        IEndpointInstance endpoint;
+        private IEndpointInstance endpoint;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommentController"/> class.
+        /// </summary>
+        /// <param name="endpoint">The endpoint.</param>
         public CommentController(IEndpointInstance endpoint)
         {
             this.endpoint = endpoint;
         }
 
+        /// <summary>
+        /// Requests for comment.
+        /// </summary>
+        /// <param name="comment">The comment.</param>
+        /// <returns>Represents the async method.</returns>
         [HttpPost]
         public async Task RequestForComment(Comment comment)
         {
             var sendOptions = new SendOptions();
-            //sendOptions.SetDestination("blogcomments");
-            //await this.endpoint.Send<StartAddingComment>(cmd => cmd.CommentId = comment.Id, sendOptions)
-            //    .ConfigureAwait(false);
 
             await this.endpoint.Send<StartAddingComment>(cmd => cmd.CommentId = comment.Id)
                 .ConfigureAwait(false);
-
-            ////throw new Exception("test");
-            Console.WriteLine("test");
         }
     }
 }

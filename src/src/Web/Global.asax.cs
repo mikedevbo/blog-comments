@@ -1,18 +1,24 @@
-﻿using NServiceBus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Routing;
+﻿#pragma warning disable SA1649  // SA1649FileNameMustMatchTypeName
+#pragma warning disable CS0649  // CS0649FileNameMustMatchTypeName
 
 namespace Web
 {
+    using System.Web.Mvc;
+    using System.Web.Optimization;
+    using System.Web.Routing;
+    using NServiceBus;
+
+    /// <summary>
+    /// The mvc application.
+    /// </summary>
+    /// <seealso cref="System.Web.HttpApplication" />
     public class MvcApplication : System.Web.HttpApplication
     {
-        internal IEndpointInstance endpoint;
+        private IEndpointInstance endpoint;
 
+        /// <summary>
+        /// Applications the start.
+        /// </summary>
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -22,9 +28,12 @@ namespace Web
             EndpointConfig.RegisterEndpoint(this.endpoint);
         }
 
+        /// <summary>
+        /// Applications the end.
+        /// </summary>
         protected void Application_End()
         {
-            endpoint?.Stop().GetAwaiter().GetResult();
+            this.endpoint?.Stop().GetAwaiter().GetResult();
         }
     }
 }

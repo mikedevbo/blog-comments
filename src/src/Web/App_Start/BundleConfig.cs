@@ -1,11 +1,16 @@
-﻿using System.Web;
-using System.Web.Optimization;
-
-namespace Web
+﻿namespace Web
 {
+    using System.Web.Optimization;
+
+    /// <summary>
+    /// The bundle config.
+    /// </summary>
     public class BundleConfig
     {
-        // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
+        /// <summary>
+        /// Registers the bundles.         // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
+        /// </summary>
+        /// <param name="bundles">The bundles.</param>
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
