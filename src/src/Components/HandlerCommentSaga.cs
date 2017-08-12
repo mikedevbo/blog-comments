@@ -24,6 +24,11 @@ namespace Components
         private ILog log = LogManager.GetLogger<HandlerCommentSaga>();
         private readonly IConfigurationManager configurationManager;
 
+        public HandlerCommentSaga()
+        {
+            ////for unit tests only
+        }
+
         public HandlerCommentSaga(IConfigurationManager configurationManager)
         {
             this.configurationManager = configurationManager;
