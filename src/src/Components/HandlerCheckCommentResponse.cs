@@ -12,21 +12,21 @@ namespace Components
 {
     public class HandlerCheckCommentResponse : IHandleMessages<CheckCommentResponse>
     {
-        private readonly IConfigurationManager configurationManager;
+        private readonly IComponentsConfigurationManager componentsConfigurationManager;
         private readonly IGitHubApi gitHubApi;
 
-        public HandlerCheckCommentResponse(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
+        public HandlerCheckCommentResponse(IComponentsConfigurationManager componentsConfigurationManager, IGitHubApi gitHubApi)
         {
-            this.configurationManager = configurationManager;
+            this.componentsConfigurationManager = componentsConfigurationManager;
             this.gitHubApi = gitHubApi;
         }
 
         public async Task Handle(CheckCommentResponse message, IMessageHandlerContext context)
         {
             var repo = this.gitHubApi.GetRepository(
-                this.configurationManager.UserAgent,
-                this.configurationManager.AuthorizationToken,
-                this.configurationManager.RepositoryName,
+                this.componentsConfigurationManager.UserAgent,
+                this.componentsConfigurationManager.AuthorizationToken,
+                this.componentsConfigurationManager.RepositoryName,
                 message.BranchName);
 
             ////TODO: add if implementation

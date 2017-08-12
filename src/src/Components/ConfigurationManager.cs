@@ -8,14 +8,6 @@ namespace Components
 {
     public class ConfigurationManager : IConfigurationManager
     {
-        public string UserAgent { get; set; }
-
-        public string AuthorizationToken { get; set; }
-
-        public string RepositoryName { get; set; }
-
-        public string MasterBranchName { get; set; }
-
         public string NsbEndpointName
         {
             get
@@ -61,14 +53,6 @@ namespace Components
             get
             {
                 return Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["NsbIsIntegrationTests"]);
-            }
-        }
-
-        public int CommentResponseAddedSagaTimeoutInSeconds
-        {
-            get
-            {
-                return Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["CommentResponseAddedSagaTimeoutInSeconds"]);
             }
         }
     }

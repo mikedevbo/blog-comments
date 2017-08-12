@@ -65,6 +65,7 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ComponentsConfigurationManager.cs" />
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="GitHub\Dto\Object.cs" />
     <Compile Include="GitHub\Dto\Repository.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="HandlerCreateBranch.cs" />
     <Compile Include="HandlerCreatePullRequest.cs" />
     <Compile Include="HandlerSendEmail.cs" />
+    <Compile Include="IComponentsConfigurationManager.cs" />
     <Compile Include="IConfigurationManager.cs" />
     <Compile Include="ISendEmail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

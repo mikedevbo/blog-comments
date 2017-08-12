@@ -12,21 +12,21 @@ namespace Components
 {
     public class HandlerAddComment : IHandleMessages<AddComment>
     {
-        private readonly IConfigurationManager configurationManager;
+        private readonly IComponentsConfigurationManager componentsConfigurationManager;
         private readonly IGitHubApi gitHubApi;
 
-        public HandlerAddComment(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
+        public HandlerAddComment(IComponentsConfigurationManager configurationManager, IGitHubApi gitHubApi)
         {
-            this.configurationManager = configurationManager;
+            this.componentsConfigurationManager = configurationManager;
             this.gitHubApi = gitHubApi;
         }
 
         public async Task Handle(AddComment message, IMessageHandlerContext context)
         {
             this.gitHubApi.UpdateFile(
-                this.configurationManager.UserAgent,
-                this.configurationManager.AuthorizationToken,
-                this.configurationManager.RepositoryName,
+                this.componentsConfigurationManager.UserAgent,
+                this.componentsConfigurationManager.AuthorizationToken,
+                this.componentsConfigurationManager.RepositoryName,
                 message.BranchName,
                 message.FileName,
                 message.Comment);

@@ -13,12 +13,12 @@ namespace Components
 {
     public class HandlerCreateBranch : IHandleMessages<CreateBranch>
     {
-        private readonly IConfigurationManager configurationManager;
+        private readonly IComponentsConfigurationManager componentsConfigurationManager;
         private readonly IGitHubApi gitHubApi;
 
-        public HandlerCreateBranch(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
+        public HandlerCreateBranch(IComponentsConfigurationManager componentsConfigurationManager, IGitHubApi gitHubApi)
         {
-            this.configurationManager = configurationManager;
+            this.componentsConfigurationManager = componentsConfigurationManager;
             this.gitHubApi = gitHubApi;
         }
 
@@ -31,10 +31,10 @@ namespace Components
             ////TODO: Is this idempotent ?
             ////TODO: Is this can be awaitable ?
             this.gitHubApi.CreateRepositoryBranch(
-                this.configurationManager.UserAgent,
-                this.configurationManager.AuthorizationToken,
-                this.configurationManager.RepositoryName,
-                this.configurationManager.MasterBranchName,
+                this.componentsConfigurationManager.UserAgent,
+                this.componentsConfigurationManager.AuthorizationToken,
+                this.componentsConfigurationManager.RepositoryName,
+                this.componentsConfigurationManager.MasterBranchName,
                 branchName);
 
             await context.Publish<IBranchCreated>(evt => evt.CommentId = message.CommentId)

@@ -101,6 +101,12 @@ namespace Web
                     configureComponents.ConfigureComponent<ConfigurationManager>(DependencyLifecycle.InstancePerCall);
                 });
 
+            endpointConfiguration.RegisterComponents(
+                registration: configureComponents =>
+                {
+                    configureComponents.ConfigureComponent<ComponentsConfigurationManager>(DependencyLifecycle.InstancePerCall);
+                });
+
             if (configurationManager.NsbIsIntegrationTests)
             {
                 endpointConfiguration.RegisterComponents(

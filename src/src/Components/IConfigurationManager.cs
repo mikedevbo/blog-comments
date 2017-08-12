@@ -8,14 +8,6 @@ namespace Components
 {
     public interface IConfigurationManager
     {
-        string UserAgent { get; set; }
-
-        string AuthorizationToken { get; set; }
-
-        string RepositoryName { get; set; }
-
-        string MasterBranchName { get; set; }
-
         string NsbEndpointName { get; }
 
         string NsbEndpointInstanceId { get; }
@@ -27,7 +19,5 @@ namespace Components
         string NsbAuditQueueName { get; }
 
         bool NsbIsIntegrationTests { get; }
-
-        int CommentResponseAddedSagaTimeoutInSeconds { get; }
     }
 }

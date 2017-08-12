@@ -22,16 +22,16 @@ namespace Components
         IHandleMessages<ICommentResponseAdded>
     {
         private ILog log = LogManager.GetLogger<HandlerCommentSaga>();
-        private readonly IConfigurationManager configurationManager;
+        private readonly IComponentsConfigurationManager componentsConfigurationManager;
 
         public HandlerCommentSaga()
         {
             ////for unit tests only
         }
 
-        public HandlerCommentSaga(IConfigurationManager configurationManager)
+        public HandlerCommentSaga(IComponentsConfigurationManager componentsConfigurationManager)
         {
-            this.configurationManager = configurationManager;
+            this.componentsConfigurationManager = componentsConfigurationManager;
         }
 
         protected override void ConfigureMapping(IMessagePropertyMapper mapper)
@@ -68,7 +68,7 @@ namespace Components
         {
             await RequestTimeout(
                 context, 
-                TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds), 
+                TimeSpan.FromSeconds(this.componentsConfigurationManager.CommentResponseAddedSagaTimeoutInSeconds), 
                 new CheckCommentResponseTimeout { CommentId = message.CommentId })
                 .ConfigureAwait(false);
         }
@@ -92,7 +92,7 @@ namespace Components
             {
                 await RequestTimeout(
                     context, 
-                    TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds),
+                    TimeSpan.FromSeconds(this.componentsConfigurationManager.CommentResponseAddedSagaTimeoutInSeconds),
                     new CheckCommentResponseTimeout { CommentId = message.CommentId })
                     .ConfigureAwait(false);
             }

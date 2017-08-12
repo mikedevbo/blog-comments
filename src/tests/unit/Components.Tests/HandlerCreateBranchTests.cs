@@ -16,7 +16,7 @@ namespace Components.Tests
     [TestFixture]
     public class HandlerCreateBranchTests
     {
-        private IConfigurationManager configurationManager;
+        private IComponentsConfigurationManager componentsConfigurationManager;
         private IGitHubApi gitHubApi;
         private readonly Guid id = Guid.Parse(@"0C242B08-7704-499D-A9D8-184ED6D93988");
 
@@ -39,10 +39,10 @@ namespace Components.Tests
 
         private HandlerCreateBranch GetHandler()
         {
-            this.configurationManager = Substitute.For<IConfigurationManager>();
+            this.componentsConfigurationManager = Substitute.For<IComponentsConfigurationManager>();
             this.gitHubApi = Substitute.For<IGitHubApi>();
 
-            return new HandlerCreateBranch(this.configurationManager, this.gitHubApi);
+            return new HandlerCreateBranch(this.componentsConfigurationManager, this.gitHubApi);
         }
 
         private TestableMessageHandlerContext GetContext()

@@ -12,21 +12,21 @@ namespace Components
 {
     public class HandlerCreatePullRequest : IHandleMessages<CreatePullRequest>
     {
-        private readonly IConfigurationManager configurationManager;
+        private readonly IComponentsConfigurationManager componentsConfigurationManager;
         private readonly IGitHubApi gitHubApi;
 
-        public HandlerCreatePullRequest(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
+        public HandlerCreatePullRequest(IComponentsConfigurationManager componentsConfigurationManager, IGitHubApi gitHubApi)
         {
-            this.configurationManager = configurationManager;
+            this.componentsConfigurationManager = componentsConfigurationManager;
             this.gitHubApi = gitHubApi;
         }
 
         public async Task Handle(CreatePullRequest message, IMessageHandlerContext context)
         {
             this.gitHubApi.CreatePullRequest(
-                this.configurationManager.UserAgent,
-                this.configurationManager.AuthorizationToken,
-                this.configurationManager.RepositoryName,
+                this.componentsConfigurationManager.UserAgent,
+                this.componentsConfigurationManager.AuthorizationToken,
+                this.componentsConfigurationManager.RepositoryName,
                 message.HeadBranchName,
                 message.BaseBranchName);
 
