@@ -1,17 +1,12 @@
-﻿using Components.GitHub;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Components.Integration.Tests
+﻿namespace Components.Integration.Tests
 {
+    using Components.GitHub;
+    using NUnit.Framework;
+
     [TestFixture]
     public class GitHubApiTests
     {
-        ///private readonly IConfigurationManager configurationManager = 
+        ////private readonly IConfigurationManager configurationManager =
 
         [Test]
         public void T()
@@ -20,7 +15,7 @@ namespace Components.Integration.Tests
             var api = this.GetGitHubApi();
 
             // Act
-            ///api.GetRepository()
+            ////api.GetRepository()
 
             // Assert
         }
