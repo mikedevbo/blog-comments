@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Components
+﻿namespace Components
 {
+    /// <summary>
+    /// The send mail interface.
+    /// </summary>
     public interface ISendEmail
     {
+        /// <summary>
+        /// Sends this instance.
+        /// </summary>
         void Send();
     }
 }
