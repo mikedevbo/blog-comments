@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Messages.Commands
+﻿namespace Messages.Commands
 {
+    using System;
+
+    /// <summary>
+    /// The command.
+    /// </summary>
     public class CreateBranch
     {
+        /// <summary>
+        /// Gets or sets the comment identifier.
+        /// </summary>
+        /// <value>
+        /// The comment identifier.
+        /// </value>
         public Guid CommentId { get; set; }
     }
 }
