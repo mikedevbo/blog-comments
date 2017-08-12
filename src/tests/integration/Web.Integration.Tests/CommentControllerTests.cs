@@ -15,7 +15,7 @@ namespace Web.Integration.Tests
     public class CommentControllerTests
     {
         [Test]
-        public async Task T()
+        public async Task Post_ForCommentData_FullProcessShouldBeSuccess()
         {
             // Arrange
             HttpClient client = new HttpClient();
