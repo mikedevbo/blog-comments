@@ -6,22 +6,23 @@ using System.Threading.Tasks;
 using Components.GitHub.Dto;
 using NServiceBus.Logging;
 using Simple.Data;
+using Components.GitHub;
 
-namespace Components.GitHub
+namespace Web
 {
     public class GitHubApiForTests : IGitHubApi
     {
         private static ILog log = LogManager.GetLogger<GitHubApiForTests>();
-        private readonly IConfigurationManager configurationManager;
+        private readonly IConfigurationManager configurationManacger;
 
-        public GitHubApiForTests(IConfigurationManager configurationManager)
+        public GitHubApiForTests(IConfigurationManager configurationManacger)
         {
-            this.configurationManager = configurationManager;
+            this.configurationManacger = configurationManacger;
         }
 
         public void CreatePullRequest(string userAgent, string authorizationToken, string repositoryName, string headBranchName, string baseBranchName)
         {
-            Database.OpenConnection(this.configurationManager.NsbTransportConnectionString)
+            Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
                     .SagaTestResults
                     .Insert(Result: 1);
 
@@ -30,7 +31,7 @@ namespace Components.GitHub
 
         public void CreateRepositoryBranch(string userAgent, string authorizationToken, string repositoryName, string masterBranchName, string newBranchName)
         {
-            Database.OpenConnection(this.configurationManager.NsbTransportConnectionString)
+            Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
                     .SagaTestResults
                     .Insert(Result: 2);
 
@@ -39,7 +40,7 @@ namespace Components.GitHub
 
         public Repository GetRepository(string userAgent, string authorizationToken, string repositoryName, string branchName)
         {
-            Database.OpenConnection(this.configurationManager.NsbTransportConnectionString)
+            Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
                     .SagaTestResults
                     .Insert(Result: 3);
 
@@ -49,7 +50,7 @@ namespace Components.GitHub
 
         public void UpdateFile(string userAgent, string authorizationToken, string repositoryName, string branchName, string fileName, string content)
         {
-            Database.OpenConnection(this.configurationManager.NsbTransportConnectionString)
+            Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
                     .SagaTestResults
                     .Insert(Result: 4);
 

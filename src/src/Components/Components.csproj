@@ -66,11 +66,9 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ComponentsConfigurationManager.cs" />
-    <Compile Include="ConfigurationManager.cs" />
     <Compile Include="GitHub\Dto\Object.cs" />
     <Compile Include="GitHub\Dto\Repository.cs" />
     <Compile Include="GitHub\GitHubApi.cs" />
-    <Compile Include="GitHub\GitHubApiForTests.cs" />
     <Compile Include="GitHub\IGitHubApi.cs" />
     <Compile Include="HandlerAddComment.cs" />
     <Compile Include="HandlerCheckCommentResponse.cs" />
@@ -80,10 +78,8 @@
     <Compile Include="HandlerCreatePullRequest.cs" />
     <Compile Include="HandlerSendEmail.cs" />
     <Compile Include="IComponentsConfigurationManager.cs" />
-    <Compile Include="IConfigurationManager.cs" />
     <Compile Include="ISendEmail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SendEmailForTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

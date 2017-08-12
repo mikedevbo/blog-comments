@@ -1,4 +1,5 @@
-﻿using NServiceBus.Logging;
+﻿using Components;
+using NServiceBus.Logging;
 using Simple.Data;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Components
+namespace Web
 {
     public class SendEmailForTests : ISendEmail
     {

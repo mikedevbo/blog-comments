@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Components
+namespace Web
 {
     public class ConfigurationManager : IConfigurationManager
     {
