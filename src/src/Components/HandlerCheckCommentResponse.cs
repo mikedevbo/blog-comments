@@ -46,10 +46,11 @@
             ////TODO: add if implementation
 
             await context.Publish<ICommentResponseAdded>(
-                evt => {
+                evt =>
+                {
                     evt.CommentId = message.CommentId;
                     evt.CommentResponseState = Messages.CommentResponseState.Added;
-                    })
+                })
                 .ConfigureAwait(false);
         }
     }

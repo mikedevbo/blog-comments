@@ -1,7 +1,7 @@
-﻿using Components.GitHub.Dto;
-
-namespace Components.GitHub
+﻿namespace Components.GitHub
 {
+    using Components.GitHub.Dto;
+
     /// <summary>
     /// The github api interface.
     /// </summary>

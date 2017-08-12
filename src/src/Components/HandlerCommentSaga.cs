@@ -42,21 +42,7 @@
         }
 
         /// <summary>
-        /// Allows messages to be mapped to <see cref="P:NServiceBus.Persistence.Sql.SqlSaga`1.CorrelationPropertyName" />.
-        /// </summary>
-        /// <param name="mapper">The mapper.</param>
-        protected override void ConfigureMapping(IMessagePropertyMapper mapper)
-        {
-            mapper.ConfigureMapping<StartAddingComment>(message => message.CommentId);
-            mapper.ConfigureMapping<IBranchCreated>(message => message.CommentId);
-            mapper.ConfigureMapping<ICommentAdded>(message => message.CommentId);
-            mapper.ConfigureMapping<IPullRequestCreated>(message => message.CommentId);
-            mapper.ConfigureMapping<CheckCommentResponseTimeout>(message => message.CommentId);
-            mapper.ConfigureMapping<ICommentResponseAdded>(message => message.CommentId);
-        }
-
-        /// <summary>
-        /// Gets the name of the correlation property for <typeparamref name="TSagaData" />.
+        /// Gets the name of the correlation property.
         /// </summary>
         protected override string CorrelationPropertyName => nameof(CommentSagaData.CommentId);
 
@@ -117,8 +103,8 @@
         public async Task Handle(IPullRequestCreated message, IMessageHandlerContext context)
         {
             await this.RequestTimeout(
-                context, 
-                TimeSpan.FromSeconds(this.componentsConfigurationManager.CommentResponseAddedSagaTimeoutInSeconds), 
+                context,
+                TimeSpan.FromSeconds(this.componentsConfigurationManager.CommentResponseAddedSagaTimeoutInSeconds),
                 new CheckCommentResponseTimeout { CommentId = message.CommentId })
                 .ConfigureAwait(false);
         }
@@ -157,11 +143,25 @@
             else
             {
                 await this.RequestTimeout(
-                    context, 
+                    context,
                     TimeSpan.FromSeconds(this.componentsConfigurationManager.CommentResponseAddedSagaTimeoutInSeconds),
                     new CheckCommentResponseTimeout { CommentId = message.CommentId })
                     .ConfigureAwait(false);
             }
+        }
+
+        /// <summary>
+        /// Allows messages to be mapped to <see cref="P:NServiceBus.Persistence.Sql.SqlSaga`1.CorrelationPropertyName" />.
+        /// </summary>
+        /// <param name="mapper">The mapper.</param>
+        protected override void ConfigureMapping(IMessagePropertyMapper mapper)
+        {
+            mapper.ConfigureMapping<StartAddingComment>(message => message.CommentId);
+            mapper.ConfigureMapping<IBranchCreated>(message => message.CommentId);
+            mapper.ConfigureMapping<ICommentAdded>(message => message.CommentId);
+            mapper.ConfigureMapping<IPullRequestCreated>(message => message.CommentId);
+            mapper.ConfigureMapping<CheckCommentResponseTimeout>(message => message.CommentId);
+            mapper.ConfigureMapping<ICommentResponseAdded>(message => message.CommentId);
         }
     }
 }
