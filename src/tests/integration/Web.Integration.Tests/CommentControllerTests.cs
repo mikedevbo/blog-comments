@@ -29,6 +29,10 @@
             var json = serializer.Serialize(comment);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
 
+            var db = Database.OpenConnection(this.configurationManager.NsbTransportConnectionString);
+
+            db.SagaTestResults.DeleteAll();
+
             // Act
             HttpResponseMessage response = await client.PostAsync("Comment/RequestForComment", stringContent);
 
@@ -46,7 +50,7 @@
 
             await Task.Delay(15000).ConfigureAwait(false);
 
-            List<ResultRow> result = Database.OpenConnection(this.configurationManager.NsbTransportConnectionString)
+            List<ResultRow> result = db
                     .SagaTestResults
                     .All()
                     .ToList<ResultRow>();
