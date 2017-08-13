@@ -2,9 +2,6 @@
 {
     using System.Web.Optimization;
 
-    /// <summary>
-    /// The bundle config.
-    /// </summary>
     public class BundleConfig
     {
         /// <summary>

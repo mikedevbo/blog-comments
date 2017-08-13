@@ -10,15 +10,8 @@
     using NServiceBus;
     using NServiceBus.Persistence.Sql;
 
-    /// <summary>
-    /// The endpoint config.
-    /// </summary>
     public class EndpointConfig
     {
-        /// <summary>
-        /// Registers the endpoint.
-        /// </summary>
-        /// <param name="endpoint">The endpoint.</param>
         public static void RegisterEndpoint(IEndpointInstance endpoint)
         {
             var configurationManager = new ConfigurationManager();
@@ -112,11 +105,6 @@
             endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
         }
 
-        /// <summary>
-        /// Registers the components.
-        /// </summary>
-        /// <param name="endpointConfiguration">The endpoint configuration.</param>
-        /// <param name="configurationManager">The configuration manager.</param>
         public static void RegisterComponents(
             EndpointConfiguration endpointConfiguration,
             IConfigurationManager configurationManager)
