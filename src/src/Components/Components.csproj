@@ -68,6 +68,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ComponentsConfigurationManager.cs" />
+    <Compile Include="GitHub\Dto\GitHubRef.cs" />
     <Compile Include="GitHub\Dto\Object.cs" />
     <Compile Include="GitHub\Dto\Repository.cs" />
     <Compile Include="GitHub\GitHubApi.cs" />

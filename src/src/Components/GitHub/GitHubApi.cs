@@ -8,15 +8,7 @@
 
     public class GitHubApi : IGitHubApi
     {
-        private readonly HttpClient httpClient;
-
-        public GitHubApi()
-        {
-            this.httpClient = new HttpClient()
-            {
-                BaseAddress = new Uri("https://api.github.com/")
-            };
-        }
+        private const string ApiBaseUri = @"https://api.github.com/";
 
         public async Task<Repository> GetRepository(
             string userAgent,
@@ -24,13 +16,11 @@
             string repositoryName,
             string branchName)
         {
-            this.httpClient.DefaultRequestHeaders.Accept.Clear();
-            this.httpClient.DefaultRequestHeaders.Add("User-agent", userAgent);
-            this.httpClient.DefaultRequestHeaders.Add("Authorization", string.Format("Token {0}", authorizationToken));
-            this.httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
 
             var requestUri = string.Format(@"repos/{0}/{1}/git/refs/heads/{2}", userAgent, repositoryName, branchName);
-            HttpResponseMessage response = await this.httpClient.GetAsync(requestUri).ConfigureAwait(false);
+            HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
             var repo = await response.Content.ReadtAsJsonAsync<Repository>();
@@ -44,15 +34,24 @@
             string masterBranchName,
             string newBranchName)
         {
+            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
+
             Repository masterRepo = await this.GetRepository(
                 userAgent,
                 authorizationToken,
                 repositoryName,
                 masterBranchName);
 
-            string sha = masterRepo.Object.Sha;
+            var requestUri = string.Format(@"repos/{0}/{1}/git/refs", userAgent, repositoryName);
+            var gitHubRef = new GitHubRef
+            {
+                Ref = string.Format(@"refs/heads/{0}", newBranchName),
+                Sha = masterRepo.Object.Sha
+            };
 
-            ////TODO: to implement
+            HttpResponseMessage response = await httpClient.PostAsJsonAsync(requestUri, gitHubRef).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
         }
 
         public async Task UpdateFile(
@@ -76,6 +75,14 @@
         {
             ////TODO: to implement
             await Task.CompletedTask;
+        }
+
+        private void SetRequestHeaders(HttpRequestHeaders httpRequestHeaders, string userAgent, string authorizationToken)
+        {
+            httpRequestHeaders.Accept.Clear();
+            httpRequestHeaders.Add("User-agent", userAgent);
+            httpRequestHeaders.Add("Authorization", string.Format("Token {0}", authorizationToken));
+            httpRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
     }
 }

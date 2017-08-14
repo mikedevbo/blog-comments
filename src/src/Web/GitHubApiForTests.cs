@@ -1,5 +1,6 @@
 ﻿namespace Web
 {
+    using System.Threading.Tasks;
     using Components.GitHub;
     using Components.GitHub.Dto;
     using NServiceBus.Logging;
@@ -15,41 +16,48 @@
             this.configurationManacger = configurationManacger;
         }
 
-        public void CreatePullRequest(string userAgent, string authorizationToken, string repositoryName, string headBranchName, string baseBranchName)
+        public Task CreatePullRequest(string userAgent, string authorizationToken, string repositoryName, string headBranchName, string baseBranchName)
         {
             Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
                     .SagaTestResults
                     .Insert(Result: 1);
 
             log.Info("CreatePullRequest");
+
+            return Task.CompletedTask;
         }
 
-        public void CreateRepositoryBranch(string userAgent, string authorizationToken, string repositoryName, string masterBranchName, string newBranchName)
+        public Task CreateRepositoryBranch(string userAgent, string authorizationToken, string repositoryName, string masterBranchName, string newBranchName)
         {
             Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
                     .SagaTestResults
                     .Insert(Result: 2);
 
             log.Info("CreateRepositoryBranch");
+
+            return Task.CompletedTask;
         }
 
-        public Repository GetRepository(string userAgent, string authorizationToken, string repositoryName, string branchName)
+        public Task<Repository> GetRepository(string userAgent, string authorizationToken, string repositoryName, string branchName)
         {
             Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
                     .SagaTestResults
                     .Insert(Result: 3);
 
             log.Info("GetRepository");
-            return new Repository();
+
+            return new Task<Repository>(() => new Repository());
         }
 
-        public void UpdateFile(string userAgent, string authorizationToken, string repositoryName, string branchName, string fileName, string content)
+        public Task UpdateFile(string userAgent, string authorizationToken, string repositoryName, string branchName, string fileName, string content)
         {
             Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
                     .SagaTestResults
                     .Insert(Result: 4);
 
             log.Info("UpdateFile");
+
+            return Task.CompletedTask;
         }
     }
 }
