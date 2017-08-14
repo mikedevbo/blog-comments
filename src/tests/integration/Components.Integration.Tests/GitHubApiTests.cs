@@ -62,6 +62,26 @@
             Console.WriteLine(string.Format("{0} {1} {2}", result.Ref, result.Url, result.Object.Sha));
         }
 
+        [Test]
+        public async Task UpdateFile_Execute_ProperResult()
+        {
+            // Arrange
+            const string branchName = "c-14";
+            var api = this.GetGitHubApi();
+
+            // Act
+            await api.UpdateFile(
+                this.configurationComponentsManager.UserAgent,
+                this.configurationComponentsManager.AuthorizationToken,
+                this.configurationComponentsManager.RepositoryName,
+                branchName,
+                "test.txt",
+                "\nnew comment - " + DateTime.Now);
+
+            // Assert
+            ////TODO: to implement
+        }
+
         private GitHubApi GetGitHubApi()
         {
             return new GitHubApi();

@@ -3,6 +3,7 @@
     using System;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Text;
     using System.Threading.Tasks;
     using Components.GitHub.Dto;
 
@@ -62,8 +63,33 @@
             string fileName,
             string content)
         {
-            ////TODO: to implement
-            await Task.CompletedTask;
+            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
+
+            // get file to update
+            var requestUri = string.Format(@"repos/{0}/{1}/contents/{2}?ref={3}", userAgent, repositoryName, fileName, branchName);
+            HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+
+            var fileToUpdate = await response.Content.ReadtAsJsonAsync<FileContent>();
+            byte[] data = Convert.FromBase64String(fileToUpdate.Content);
+            string decodedData = Encoding.UTF8.GetString(data);
+
+            // update file content
+            decodedData += content;
+
+            // update file
+            requestUri = string.Format(@"repos/{0}/{1}/contents/{2}", userAgent, repositoryName, fileName);
+            var newFile = new FileContentPut
+            {
+                Message = "add comment",
+                Content = Convert.ToBase64String(Encoding.UTF8.GetBytes(decodedData)),
+                Sha = fileToUpdate.Sha,
+                Branch = branchName
+            };
+
+            response = await httpClient.PutAsJsonAsync(requestUri, newFile);
+            response.EnsureSuccessStatusCode();
         }
 
         public async Task CreatePullRequest(
