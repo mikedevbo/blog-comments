@@ -72,6 +72,7 @@
     <Compile Include="GitHub\Dto\FileContentPut.cs" />
     <Compile Include="GitHub\Dto\GitHubRef.cs" />
     <Compile Include="GitHub\Dto\Object.cs" />
+    <Compile Include="GitHub\Dto\PullRequest.cs" />
     <Compile Include="GitHub\Dto\Repository.cs" />
     <Compile Include="GitHub\GitHubApi.cs" />
     <Compile Include="GitHub\HttpClientExtensionMethods.cs" />

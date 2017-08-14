@@ -23,7 +23,7 @@
                 this.configurationComponentsManager.UserAgent,
                 this.configurationComponentsManager.AuthorizationToken,
                 this.configurationComponentsManager.RepositoryName,
-                this.configurationComponentsManager.MasterBranchName);
+                this.configurationComponentsManager.MasterBranchName).ConfigureAwait(false);
 
             // Assert
             Assert.NotNull(result.Ref);
@@ -46,14 +46,14 @@
                 this.configurationComponentsManager.AuthorizationToken,
                 this.configurationComponentsManager.RepositoryName,
                 this.configurationComponentsManager.MasterBranchName,
-                newBranchName);
+                newBranchName).ConfigureAwait(false);
 
             // Assert
             var result = await api.GetRepository(
                 this.configurationComponentsManager.UserAgent,
                 this.configurationComponentsManager.AuthorizationToken,
                 this.configurationComponentsManager.RepositoryName,
-                newBranchName);
+                newBranchName).ConfigureAwait(false);
 
             Assert.NotNull(result.Ref);
             Assert.NotNull(result.Url);
@@ -76,7 +76,26 @@
                 this.configurationComponentsManager.RepositoryName,
                 branchName,
                 "test.txt",
-                "\nnew comment - " + DateTime.Now);
+                "\nnew comment - " + DateTime.Now).ConfigureAwait(false);
+
+            // Assert
+            ////TODO: to implement
+        }
+
+        [Test]
+        public async Task CreatePullRequest_Execute_ProperResult()
+        {
+            // Arrange
+            const string branchName = "c-14";
+            var api = this.GetGitHubApi();
+
+            // Act
+            await api.CreatePullRequest(
+                this.configurationComponentsManager.UserAgent,
+                this.configurationComponentsManager.AuthorizationToken,
+                this.configurationComponentsManager.RepositoryName,
+                branchName,
+                "master").ConfigureAwait(false);
 
             // Assert
             ////TODO: to implement

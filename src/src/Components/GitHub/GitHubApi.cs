@@ -24,7 +24,7 @@
             HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
-            var repo = await response.Content.ReadtAsJsonAsync<Repository>();
+            var repo = await response.Content.ReadtAsJsonAsync<Repository>().ConfigureAwait(false);
             return repo;
         }
 
@@ -38,13 +38,14 @@
             HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
             this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
 
+            var requestUri = string.Format(@"repos/{0}/{1}/git/refs", userAgent, repositoryName);
+
             Repository masterRepo = await this.GetRepository(
                 userAgent,
                 authorizationToken,
                 repositoryName,
-                masterBranchName);
+                masterBranchName).ConfigureAwait(false);
 
-            var requestUri = string.Format(@"repos/{0}/{1}/git/refs", userAgent, repositoryName);
             var gitHubRef = new GitHubRef
             {
                 Ref = string.Format(@"refs/heads/{0}", newBranchName),
@@ -71,7 +72,7 @@
             HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
-            var fileToUpdate = await response.Content.ReadtAsJsonAsync<FileContent>();
+            var fileToUpdate = await response.Content.ReadtAsJsonAsync<FileContent>().ConfigureAwait(false);
             byte[] data = Convert.FromBase64String(fileToUpdate.Content);
             string decodedData = Encoding.UTF8.GetString(data);
 
@@ -88,7 +89,7 @@
                 Branch = branchName
             };
 
-            response = await httpClient.PutAsJsonAsync(requestUri, newFile);
+            response = await httpClient.PutAsJsonAsync(requestUri, newFile).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
         }
 
@@ -99,8 +100,21 @@
             string headBranchName,
             string baseBranchName)
         {
-            ////TODO: to implement
-            await Task.CompletedTask;
+            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
+
+            var requestUri = string.Format(@"repos/{0}/{1}/pulls", userAgent, repositoryName);
+
+            var pullRequest = new PullRequest
+            {
+                Title = "new comment",
+                Body = "comment to merge",
+                Head = headBranchName,
+                Base = baseBranchName
+            };
+
+            HttpResponseMessage response = await httpClient.PostAsJsonAsync(requestUri, pullRequest).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
         }
 
         private void SetRequestHeaders(HttpRequestHeaders httpRequestHeaders, string userAgent, string authorizationToken)
