@@ -1,6 +1,6 @@
 ﻿namespace Components.GitHub.Dto
 {
-    public class FileContent
+    public class FileContentResponse
     {
         public string Content { get; set; }
 

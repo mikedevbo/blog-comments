@@ -5,7 +5,7 @@
 
     public interface IGitHubApi
     {
-       Task<Repository> GetRepository(
+       Task<RepositoryResponse> GetRepository(
             string userAgent,
             string authorizationToken,
             string repositoryName,

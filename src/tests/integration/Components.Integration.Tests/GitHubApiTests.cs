@@ -28,9 +28,9 @@
             // Assert
             Assert.NotNull(result.Ref);
             Assert.NotNull(result.Url);
-            Assert.NotNull(result.Object.Sha);
+            Assert.NotNull(result.RefObject.Sha);
 
-            Console.WriteLine(string.Format("{0} {1} {2}", result.Ref, result.Url, result.Object.Sha));
+            Console.WriteLine(string.Format("{0} {1} {2}", result.Ref, result.Url, result.RefObject.Sha));
         }
 
         [Test]
@@ -57,9 +57,9 @@
 
             Assert.NotNull(result.Ref);
             Assert.NotNull(result.Url);
-            Assert.NotNull(result.Object.Sha);
+            Assert.NotNull(result.RefObject.Sha);
 
-            Console.WriteLine(string.Format("{0} {1} {2}", result.Ref, result.Url, result.Object.Sha));
+            Console.WriteLine(string.Format("{0} {1} {2}", result.Ref, result.Url, result.RefObject.Sha));
         }
 
         [Test]

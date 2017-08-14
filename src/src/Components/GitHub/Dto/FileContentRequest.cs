@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
 
-    public class FileContentPut
+    public class FileContentRequest
     {
         [JsonProperty("message")]
         public string Message { get; set; }

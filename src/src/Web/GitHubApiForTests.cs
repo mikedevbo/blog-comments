@@ -38,7 +38,7 @@
             return Task.CompletedTask;
         }
 
-        public Task<Repository> GetRepository(string userAgent, string authorizationToken, string repositoryName, string branchName)
+        public Task<RepositoryResponse> GetRepository(string userAgent, string authorizationToken, string repositoryName, string branchName)
         {
             Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
                     .SagaTestResults
@@ -46,7 +46,7 @@
 
             log.Info("GetRepository");
 
-            return new Task<Repository>(() => new Repository());
+            return new Task<RepositoryResponse>(() => new RepositoryResponse());
         }
 
         public Task UpdateFile(string userAgent, string authorizationToken, string repositoryName, string branchName, string fileName, string content)

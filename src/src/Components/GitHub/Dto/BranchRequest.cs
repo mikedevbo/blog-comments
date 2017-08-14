@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
 
-    public class GitHubRef
+    public class BranchRequest
     {
         [JsonProperty("ref")]
         public string Ref { get; set; }

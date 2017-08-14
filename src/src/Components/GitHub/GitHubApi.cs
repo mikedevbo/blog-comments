@@ -11,7 +11,7 @@
     {
         private const string ApiBaseUri = @"https://api.github.com/";
 
-        public async Task<Repository> GetRepository(
+        public async Task<RepositoryResponse> GetRepository(
             string userAgent,
             string authorizationToken,
             string repositoryName,
@@ -24,7 +24,7 @@
             HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
-            var repo = await response.Content.ReadtAsJsonAsync<Repository>().ConfigureAwait(false);
+            var repo = await response.Content.ReadtAsJsonAsync<RepositoryResponse>().ConfigureAwait(false);
             return repo;
         }
 
@@ -40,19 +40,19 @@
 
             var requestUri = string.Format(@"repos/{0}/{1}/git/refs", userAgent, repositoryName);
 
-            Repository masterRepo = await this.GetRepository(
+            var masterRepo = await this.GetRepository(
                 userAgent,
                 authorizationToken,
                 repositoryName,
                 masterBranchName).ConfigureAwait(false);
 
-            var gitHubRef = new GitHubRef
+            var branchRequest = new BranchRequest
             {
                 Ref = string.Format(@"refs/heads/{0}", newBranchName),
-                Sha = masterRepo.Object.Sha
+                Sha = masterRepo.RefObject.Sha
             };
 
-            HttpResponseMessage response = await httpClient.PostAsJsonAsync(requestUri, gitHubRef).ConfigureAwait(false);
+            HttpResponseMessage response = await httpClient.PostAsJsonAsync(requestUri, branchRequest).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
         }
 
@@ -72,7 +72,7 @@
             HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
-            var fileToUpdate = await response.Content.ReadtAsJsonAsync<FileContent>().ConfigureAwait(false);
+            var fileToUpdate = await response.Content.ReadtAsJsonAsync<FileContentResponse>().ConfigureAwait(false);
             byte[] data = Convert.FromBase64String(fileToUpdate.Content);
             string decodedData = Encoding.UTF8.GetString(data);
 
@@ -81,7 +81,7 @@
 
             // update file
             requestUri = string.Format(@"repos/{0}/{1}/contents/{2}", userAgent, repositoryName, fileName);
-            var newFile = new FileContentPut
+            var newFile = new FileContentRequest
             {
                 Message = "add comment",
                 Content = Convert.ToBase64String(Encoding.UTF8.GetBytes(decodedData)),

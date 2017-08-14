@@ -1,6 +1,6 @@
 ﻿namespace Components.GitHub.Dto
 {
-    public class Object
+    public class RefObject
     {
         public string Sha { get; set; }
     }

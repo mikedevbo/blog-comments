@@ -12,7 +12,6 @@
     using Web.Models;
 
     [TestFixture]
-    ////[Ignore("do not auto run")]
     public class CommentControllerTests
     {
         private IConfigurationManager configurationManager = new ConfigurationManager();
