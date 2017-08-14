@@ -2,13 +2,13 @@
 {
     public interface IComponentsConfigurationManager
     {
-        string UserAgent { get; set; }
+        string UserAgent { get; }
 
-        string AuthorizationToken { get; set; }
+        string AuthorizationToken { get; }
 
-        string RepositoryName { get; set; }
+        string RepositoryName { get; }
 
-        string MasterBranchName { get; set; }
+        string MasterBranchName { get; }
 
         int CommentResponseAddedSagaTimeoutInSeconds { get; }
     }

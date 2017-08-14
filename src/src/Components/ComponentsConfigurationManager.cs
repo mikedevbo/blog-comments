@@ -1,22 +1,47 @@
 ﻿namespace Components
 {
     using System;
+    using System.Configuration;
 
     public class ComponentsConfigurationManager : IComponentsConfigurationManager
     {
-        public string UserAgent { get; set; }
+        public string UserAgent
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["UserAgent"];
+            }
+        }
 
-        public string AuthorizationToken { get; set; }
+        public string AuthorizationToken
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["AuthorizationToken"];
+            }
+        }
 
-        public string RepositoryName { get; set; }
+        public string RepositoryName
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["RepositoryName"];
+            }
+        }
 
-        public string MasterBranchName { get; set; }
+        public string MasterBranchName
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["MasterBranchName"];
+            }
+        }
 
         public int CommentResponseAddedSagaTimeoutInSeconds
         {
             get
             {
-                return Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["CommentResponseAddedSagaTimeoutInSeconds"]);
+                return Convert.ToInt32(ConfigurationManager.AppSettings["CommentResponseAddedSagaTimeoutInSeconds"]);
             }
         }
     }
