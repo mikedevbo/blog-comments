@@ -1,5 +1,6 @@
 ﻿namespace Components.Integration.Tests
 {
+    using System.Threading.Tasks;
     using Components.GitHub;
     using NUnit.Framework;
 
@@ -11,18 +12,17 @@
 
         [Test]
         [Ignore("only for manual tests")]
-        public void GetRepository_Execute_ProperResult()
+        public async Task GetRepository_Execute_ProperResult()
         {
             // Arrange
             var api = this.GetGitHubApi();
 
             // Act
-            var result = api.GetRepository(
+            var result = await api.GetRepository(
                 this.configurationComponentsManager.UserAgent,
                 this.configurationComponentsManager.AuthorizationToken,
                 this.configurationComponentsManager.RepositoryName,
-                "test"
-                );
+                this.configurationComponentsManager.MasterBranchName);
 
             // Assert
             Assert.NotNull(result.Ref);

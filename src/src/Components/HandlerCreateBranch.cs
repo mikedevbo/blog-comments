@@ -27,7 +27,7 @@
 
             ////TODO: Is this idempotent ?
             ////TODO: Is this can be awaitable ?
-            this.gitHubApi.CreateRepositoryBranch(
+            await this.gitHubApi.CreateRepositoryBranch(
                 this.componentsConfigurationManager.UserAgent,
                 this.componentsConfigurationManager.AuthorizationToken,
                 this.componentsConfigurationManager.RepositoryName,

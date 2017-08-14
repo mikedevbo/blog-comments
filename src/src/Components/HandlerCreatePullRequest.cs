@@ -19,7 +19,7 @@
 
         public async Task Handle(CreatePullRequest message, IMessageHandlerContext context)
         {
-            this.gitHubApi.CreatePullRequest(
+            await this.gitHubApi.CreatePullRequest(
                 this.componentsConfigurationManager.UserAgent,
                 this.componentsConfigurationManager.AuthorizationToken,
                 this.componentsConfigurationManager.RepositoryName,

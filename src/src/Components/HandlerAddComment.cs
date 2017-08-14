@@ -19,7 +19,7 @@
 
         public async Task Handle(AddComment message, IMessageHandlerContext context)
         {
-            this.gitHubApi.UpdateFile(
+            await this.gitHubApi.UpdateFile(
                 this.componentsConfigurationManager.UserAgent,
                 this.componentsConfigurationManager.AuthorizationToken,
                 this.componentsConfigurationManager.RepositoryName,

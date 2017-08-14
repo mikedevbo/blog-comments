@@ -1,23 +1,24 @@
 ﻿namespace Components.GitHub
 {
+    using System.Threading.Tasks;
     using Components.GitHub.Dto;
 
     public interface IGitHubApi
     {
-        Repository GetRepository(
+       Task<Repository> GetRepository(
             string userAgent,
             string authorizationToken,
             string repositoryName,
             string branchName);
 
-        void CreateRepositoryBranch(
+        Task CreateRepositoryBranch(
             string userAgent,
             string authorizationToken,
             string repositoryName,
             string masterBranchName,
             string newBranchName);
 
-        void UpdateFile(
+        Task UpdateFile(
             string userAgent,
             string authorizationToken,
             string repositoryName,
@@ -25,7 +26,7 @@
             string fileName,
             string content);
 
-        void CreatePullRequest(
+        Task CreatePullRequest(
             string userAgent,
             string authorizationToken,
             string repositoryName,

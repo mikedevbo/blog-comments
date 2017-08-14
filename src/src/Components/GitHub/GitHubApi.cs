@@ -2,6 +2,8 @@
 {
     using System;
     using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Threading.Tasks;
     using Components.GitHub.Dto;
 
     public class GitHubApi : IGitHubApi
@@ -16,27 +18,33 @@
             };
         }
 
-        public Repository GetRepository(
+        public async Task<Repository> GetRepository(
             string userAgent,
             string authorizationToken,
             string repositoryName,
             string branchName)
         {
-            ////TODO: to implement
             this.httpClient.DefaultRequestHeaders.Accept.Clear();
             this.httpClient.DefaultRequestHeaders.Add("User-agent", userAgent);
             this.httpClient.DefaultRequestHeaders.Add("Authorization", string.Format("Token {0}", authorizationToken));
-            return new Repository();
+            this.httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var requestUri = string.Format(@"repos/{0}/{1}/git/refs/heads/{2}", userAgent, repositoryName, branchName);
+            HttpResponseMessage response = await this.httpClient.GetAsync(requestUri).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+
+            var repo = await response.Content.ReadtAsJsonAsync<Repository>();
+            return repo;
         }
 
-        public void CreateRepositoryBranch(
+        public async Task CreateRepositoryBranch(
             string userAgent,
             string authorizationToken,
             string repositoryName,
             string masterBranchName,
             string newBranchName)
         {
-            Repository masterRepo = this.GetRepository(
+            Repository masterRepo = await this.GetRepository(
                 userAgent,
                 authorizationToken,
                 repositoryName,
@@ -47,7 +55,7 @@
             ////TODO: to implement
         }
 
-        public void UpdateFile(
+        public async Task UpdateFile(
             string userAgent,
             string authorizationToken,
             string repositoryName,
@@ -56,9 +64,10 @@
             string content)
         {
             ////TODO: to implement
+            await Task.CompletedTask;
         }
 
-        public void CreatePullRequest(
+        public async Task CreatePullRequest(
             string userAgent,
             string authorizationToken,
             string repositoryName,
@@ -66,6 +75,7 @@
             string baseBranchName)
         {
             ////TODO: to implement
+            await Task.CompletedTask;
         }
     }
 }
