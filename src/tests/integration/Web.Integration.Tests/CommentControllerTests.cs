@@ -22,7 +22,14 @@
             // Arrange
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri("http://localhost:49866/");
-            var comment = new Comment { Id = Guid.NewGuid() };
+            var comment = new Comment
+            {
+                UserName = "testUser",
+                UserEmail = "testUser@test.com",
+                UserWebsite = "testUser.com",
+                FileName = @"test.txt",
+                Content = @"new comment",
+            };
 
             var serializer = new JavaScriptSerializer();
             var json = serializer.Serialize(comment);

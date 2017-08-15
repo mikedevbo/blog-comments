@@ -107,7 +107,7 @@
 
             var pullRequest = new PullRequest
             {
-                Title = "new comment",
+                Title = headBranchName,
                 Body = "comment to merge",
                 Head = headBranchName,
                 Base = baseBranchName

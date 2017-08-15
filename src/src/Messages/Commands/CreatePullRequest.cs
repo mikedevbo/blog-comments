@@ -6,7 +6,7 @@
     {
         public Guid CommentId { get; set; }
 
-        public string HeadBranchName { get; set; }
+        public string CommentBranchName { get; set; }
 
         public string BaseBranchName { get; set; }
     }

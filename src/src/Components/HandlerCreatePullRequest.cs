@@ -23,8 +23,8 @@
                 this.componentsConfigurationManager.UserAgent,
                 this.componentsConfigurationManager.AuthorizationToken,
                 this.componentsConfigurationManager.RepositoryName,
-                message.HeadBranchName,
-                message.BaseBranchName);
+                message.CommentBranchName,
+                message.BaseBranchName).ConfigureAwait(false);
 
             await context.Publish<IPullRequestCreated>(evt => evt.CommentId = message.CommentId)
                 .ConfigureAwait(false);

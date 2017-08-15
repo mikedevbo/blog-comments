@@ -63,8 +63,13 @@
 
         public async Task Handle(ICommentAdded message, IMessageHandlerContext context)
         {
-            await context.Send<CreatePullRequest>(command => command.CommentId = message.CommentId)
-                .ConfigureAwait(false);
+            await context.Send<CreatePullRequest>(command =>
+            {
+                command.CommentId = this.Data.CommentId;
+                command.CommentBranchName = this.Data.BranchName;
+                command.BaseBranchName = this.componentsConfigurationManager.MasterBranchName;
+            })
+            .ConfigureAwait(false);
         }
 
         public async Task Handle(IPullRequestCreated message, IMessageHandlerContext context)
