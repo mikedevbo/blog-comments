@@ -14,6 +14,7 @@
     {
         private readonly Guid id = Guid.Parse(@"0C242B08-7704-499D-A9D8-184ED6D93988");
         private readonly int timeoutMinutes = 30;
+        private IComponentsConfigurationManager componentsConfigurationManager;
 
         [Test]
         public async Task Handle_StartAddingComment_SendCreateBranchWithProperData()
@@ -117,7 +118,21 @@
 
         private HandlerCommentSaga GetHandler()
         {
-            return new HandlerCommentSaga();
+            this.componentsConfigurationManager = Substitute.For<IComponentsConfigurationManager>();
+
+            return new HandlerCommentSaga(this.componentsConfigurationManager)
+            {
+                Data = new CommentSagaData
+                {
+                    CommentId = this.id,
+                    UserName = @"test",
+                    UserEmail = @"test@test.com",
+                    UserWebsite = @"test.com",
+                    FileName = @"test.txt",
+                    Content = @"test comment",
+                    BranchName = @"testBranch"
+                }
+            };
         }
 
         private TestableMessageHandlerContext GetContext()
