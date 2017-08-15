@@ -5,6 +5,7 @@
     using Autofac;
     using Autofac.Integration.Mvc;
     using Components;
+    using Components.GitHub;
     using Messages.Commands;
     using Messages.Events;
     using NServiceBus;
@@ -109,35 +110,18 @@
             EndpointConfiguration endpointConfiguration,
             IConfigurationManager configurationManager)
         {
-            endpointConfiguration.RegisterComponents(
-                registration: configureComponents =>
-                {
-                    configureComponents.ConfigureComponent<ConfigurationManager>(DependencyLifecycle.InstancePerCall);
-                });
-
-            endpointConfiguration.RegisterComponents(
-                registration: configureComponents =>
-                {
-                    configureComponents.ConfigureComponent<ComponentsConfigurationManager>(DependencyLifecycle.InstancePerCall);
-                });
+            endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<ConfigurationManager>(DependencyLifecycle.InstancePerCall));
+            endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<ComponentsConfigurationManager>(DependencyLifecycle.InstancePerCall));
 
             if (configurationManager.NsbIsIntegrationTests)
             {
-                endpointConfiguration.RegisterComponents(
-                    registration: configureComponents =>
-                    {
-                        configureComponents.ConfigureComponent<GitHubApiForTests>(DependencyLifecycle.InstancePerCall);
-                    });
-
-                endpointConfiguration.RegisterComponents(
-                    registration: configureComponents =>
-                    {
-                        configureComponents.ConfigureComponent<SendEmailForTests>(DependencyLifecycle.InstancePerCall);
-                    });
+                endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<GitHubApiForTests>(DependencyLifecycle.InstancePerCall));
+                endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<SendEmailForTests>(DependencyLifecycle.InstancePerCall));
             }
             else
             {
-                ////TODO: use real api
+                endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<GitHubApi>(DependencyLifecycle.InstancePerCall));
+                ////TODO: add emial registration
             }
         }
     }

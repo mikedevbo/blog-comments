@@ -22,17 +22,15 @@
         public async Task Handle(CreateBranch message, IMessageHandlerContext context)
         {
             var sb = new StringBuilder();
-            sb.Append(DateTime.UtcNow).Append(Guid.NewGuid());
+            sb.Append("c-").Append(DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss-fff"));
             string branchName = sb.ToString();
 
-            ////TODO: Is this idempotent ?
-            ////TODO: Is this can be awaitable ?
             await this.gitHubApi.CreateRepositoryBranch(
                 this.componentsConfigurationManager.UserAgent,
                 this.componentsConfigurationManager.AuthorizationToken,
                 this.componentsConfigurationManager.RepositoryName,
                 this.componentsConfigurationManager.MasterBranchName,
-                branchName);
+                branchName).ConfigureAwait(false);
 
             await context.Publish<IBranchCreated>(evt => evt.CommentId = message.CommentId)
                 .ConfigureAwait(false);

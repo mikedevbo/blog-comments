@@ -6,6 +6,6 @@
 
         public string Url { get; set; }
 
-        public RefObject RefObject { get; set; }
+        public RefObject Object { get; set; }
     }
 }

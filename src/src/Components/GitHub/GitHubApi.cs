@@ -49,7 +49,7 @@
             var branchRequest = new BranchRequest
             {
                 Ref = string.Format(@"refs/heads/{0}", newBranchName),
-                Sha = masterRepo.RefObject.Sha
+                Sha = masterRepo.Object.Sha
             };
 
             HttpResponseMessage response = await httpClient.PostAsJsonAsync(requestUri, branchRequest).ConfigureAwait(false);

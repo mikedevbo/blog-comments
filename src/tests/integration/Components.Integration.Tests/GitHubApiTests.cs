@@ -28,16 +28,16 @@
             // Assert
             Assert.NotNull(result.Ref);
             Assert.NotNull(result.Url);
-            Assert.NotNull(result.RefObject.Sha);
+            Assert.NotNull(result.Object.Sha);
 
-            Console.WriteLine(string.Format("{0} {1} {2}", result.Ref, result.Url, result.RefObject.Sha));
+            Console.WriteLine(string.Format("{0} {1} {2}", result.Ref, result.Url, result.Object.Sha));
         }
 
         [Test]
         public async Task CreateRepositoryBranch_Execute_ProperResult()
         {
             // Arrange
-            const string newBranchName = "c-14";
+            const string newBranchName = "c-15";
             var api = this.GetGitHubApi();
 
             // Act
@@ -57,9 +57,9 @@
 
             Assert.NotNull(result.Ref);
             Assert.NotNull(result.Url);
-            Assert.NotNull(result.RefObject.Sha);
+            Assert.NotNull(result.Object.Sha);
 
-            Console.WriteLine(string.Format("{0} {1} {2}", result.Ref, result.Url, result.RefObject.Sha));
+            Console.WriteLine(string.Format("{0} {1} {2}", result.Ref, result.Url, result.Object.Sha));
         }
 
         [Test]
