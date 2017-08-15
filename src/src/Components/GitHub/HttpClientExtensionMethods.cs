@@ -9,7 +9,7 @@
     {
         public static async Task<TModel> ReadtAsJsonAsync<TModel>(this HttpContent content)
         {
-            var jsonResult = await content.ReadAsStringAsync();
+            var jsonResult = await content.ReadAsStringAsync().ConfigureAwait(false);
             var result = JsonConvert.DeserializeObject<TModel>(jsonResult);
             return result;
         }
@@ -18,7 +18,7 @@
         {
             var json = JsonConvert.SerializeObject(model);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var result = await client.PostAsync(requestUrl, stringContent);
+            var result = await client.PostAsync(requestUrl, stringContent).ConfigureAwait(false);
             return result;
         }
 
@@ -26,7 +26,7 @@
         {
             var json = JsonConvert.SerializeObject(model);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var result = await client.PutAsync(requestUrl, stringContent);
+            var result = await client.PutAsync(requestUrl, stringContent).ConfigureAwait(false);
             return result;
         }
     }

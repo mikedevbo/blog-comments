@@ -25,7 +25,7 @@
             var context = this.GetContext();
 
             // Act
-            await handler.Handle(message, context);
+            await handler.Handle(message, context).ConfigureAwait(false);
 
             // Assert
             var publishedMessage = context.PublishedMessages[0].Message as IPullRequestCreated;

@@ -40,7 +40,8 @@
             db.SagaTestResults.DeleteAll();
 
             // Act
-            HttpResponseMessage response = await client.PostAsync("Comment/RequestForComment", stringContent);
+            HttpResponseMessage response = await client.PostAsync("Comment/RequestForComment", stringContent)
+                .ConfigureAwait(false);
 
             // Assert
             try
