@@ -5,5 +5,7 @@
     public interface IBranchCreated
     {
         Guid CommentId { get; set; }
+
+        string CreatedBranchName { get; set; }
     }
 }

@@ -19,10 +19,16 @@
         [HttpPost]
         public async Task RequestForComment(Comment comment)
         {
-            var sendOptions = new SendOptions();
-
-            await this.endpoint.Send<StartAddingComment>(cmd => cmd.CommentId = comment.Id)
-                .ConfigureAwait(false);
+            await this.endpoint.Send<StartAddingComment>(command =>
+            {
+                command.CommentId = Guid.NewGuid();
+                command.UserName = comment.UserName;
+                command.UserEmail = comment.UserEmail;
+                command.UserWebsite = comment.UserWebsite;
+                command.FileName = comment.FileName;
+                command.Content = comment.Content;
+            })
+            .ConfigureAwait(false);
         }
     }
 }

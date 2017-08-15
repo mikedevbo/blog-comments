@@ -35,14 +35,30 @@
 
         public async Task Handle(StartAddingComment message, IMessageHandlerContext context)
         {
-            await context.Send<CreateBranch>(command => command.CommentId = message.CommentId)
+            this.Data.CommentId = message.CommentId;
+            this.Data.UserName = message.UserName;
+            this.Data.UserEmail = message.UserEmail;
+            this.Data.UserWebsite = message.UserWebsite;
+            this.Data.FileName = message.FileName;
+            this.Data.Content = message.Content;
+
+            await context.Send<CreateBranch>(command => command.CommentId = this.Data.CommentId)
                 .ConfigureAwait(false);
         }
 
         public async Task Handle(IBranchCreated message, IMessageHandlerContext context)
         {
-            await context.Send<AddComment>(command => command.CommentId = message.CommentId)
-                .ConfigureAwait(false);
+            this.Data.BranchName = message.CreatedBranchName;
+
+            await context.Send<AddComment>(command =>
+            {
+                command.CommentId = this.Data.CommentId;
+                command.UserName = this.Data.UserName;
+                command.BranchName = this.Data.BranchName;
+                command.FileName = this.Data.FileName;
+                command.Content = this.Data.Content;
+            })
+            .ConfigureAwait(false);
         }
 
         public async Task Handle(ICommentAdded message, IMessageHandlerContext context)
@@ -70,7 +86,7 @@
         {
             if (message.CommentResponseState == CommentResponseState.Added)
             {
-                await context.Send<SendEmail>(command => command.EmailAddress = this.Data.UserEmailAddress)
+                await context.Send<SendEmail>(command => command.EmailAddress = this.Data.UserEmail)
                     .ConfigureAwait(false);
 
                 this.MarkAsComplete();

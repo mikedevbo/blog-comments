@@ -32,7 +32,12 @@
                 this.componentsConfigurationManager.MasterBranchName,
                 branchName).ConfigureAwait(false);
 
-            await context.Publish<IBranchCreated>(evt => evt.CommentId = message.CommentId)
+            await context.Publish<IBranchCreated>(
+                evt =>
+                {
+                    evt.CommentId = message.CommentId;
+                    evt.CreatedBranchName = branchName;
+                })
                 .ConfigureAwait(false);
         }
     }
