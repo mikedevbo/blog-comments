@@ -17,7 +17,7 @@
             this.gitHubApi = gitHubApi;
         }
 
-        public async Task Handle(CheckCommentResponse message, IMessageHandlerContext context)
+        public Task Handle(CheckCommentResponse message, IMessageHandlerContext context)
         {
             var repo = this.gitHubApi.GetRepository(
                 this.componentsConfigurationManager.UserAgent,
@@ -27,13 +27,12 @@
 
             ////TODO: add if implementation
 
-            await context.Publish<ICommentResponseAdded>(
+            return context.Publish<ICommentResponseAdded>(
                 evt =>
                 {
                     evt.CommentId = message.CommentId;
                     evt.CommentResponseState = Messages.CommentResponseState.Added;
-                })
-                .ConfigureAwait(false);
+                });
         }
     }
 }

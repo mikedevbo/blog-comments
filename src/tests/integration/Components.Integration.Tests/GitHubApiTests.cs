@@ -63,39 +63,39 @@
         }
 
         [Test]
-        public async Task UpdateFile_Execute_ProperResult()
+        public Task UpdateFile_Execute_ProperResult()
         {
             // Arrange
             const string branchName = "c-14";
             var api = this.GetGitHubApi();
 
             // Act
-            await api.UpdateFile(
+            return api.UpdateFile(
                 this.configurationComponentsManager.UserAgent,
                 this.configurationComponentsManager.AuthorizationToken,
                 this.configurationComponentsManager.RepositoryName,
                 branchName,
                 "test.txt",
-                "\nnew comment - " + DateTime.Now).ConfigureAwait(false);
+                "\nnew comment - " + DateTime.Now);
 
             // Assert
             ////TODO: to implement
         }
 
         [Test]
-        public async Task CreatePullRequest_Execute_ProperResult()
+        public Task CreatePullRequest_Execute_ProperResult()
         {
             // Arrange
             const string branchName = "c-14";
             var api = this.GetGitHubApi();
 
             // Act
-            await api.CreatePullRequest(
+            return api.CreatePullRequest(
                 this.configurationComponentsManager.UserAgent,
                 this.configurationComponentsManager.AuthorizationToken,
                 this.configurationComponentsManager.RepositoryName,
                 branchName,
-                "master").ConfigureAwait(false);
+                "master");
 
             // Assert
             ////TODO: to implement

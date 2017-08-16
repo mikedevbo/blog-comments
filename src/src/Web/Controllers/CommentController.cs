@@ -17,18 +17,17 @@
         }
 
         [HttpPost]
-        public async Task RequestForComment(Comment comment)
+        public Task RequestForComment(Comment comment)
         {
-            await this.endpoint.Send<StartAddingComment>(command =>
-            {
-                command.CommentId = Guid.NewGuid();
-                command.UserName = comment.UserName;
-                command.UserEmail = comment.UserEmail;
-                command.UserWebsite = comment.UserWebsite;
-                command.FileName = comment.FileName;
-                command.Content = comment.Content;
-            })
-            .ConfigureAwait(false);
+            return this.endpoint.Send<StartAddingComment>(command =>
+             {
+                 command.CommentId = Guid.NewGuid();
+                 command.UserName = comment.UserName;
+                 command.UserEmail = comment.UserEmail;
+                 command.UserWebsite = comment.UserWebsite;
+                 command.FileName = comment.FileName;
+                 command.Content = comment.Content;
+             });
         }
     }
 }

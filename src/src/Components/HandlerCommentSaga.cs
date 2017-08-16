@@ -33,7 +33,7 @@
 
         protected override string CorrelationPropertyName => nameof(CommentSagaData.CommentId);
 
-        public async Task Handle(StartAddingComment message, IMessageHandlerContext context)
+        public Task Handle(StartAddingComment message, IMessageHandlerContext context)
         {
             this.Data.CommentId = message.CommentId;
             this.Data.UserName = message.UserName;
@@ -42,49 +42,44 @@
             this.Data.FileName = message.FileName;
             this.Data.Content = message.Content;
 
-            await context.Send<CreateBranch>(command => command.CommentId = this.Data.CommentId)
-                .ConfigureAwait(false);
+            return context.Send<CreateBranch>(command => command.CommentId = this.Data.CommentId);
         }
 
-        public async Task Handle(IBranchCreated message, IMessageHandlerContext context)
+        public Task Handle(IBranchCreated message, IMessageHandlerContext context)
         {
             this.Data.BranchName = message.CreatedBranchName;
 
-            await context.Send<AddComment>(command =>
-            {
-                command.CommentId = this.Data.CommentId;
-                command.UserName = this.Data.UserName;
-                command.BranchName = this.Data.BranchName;
-                command.FileName = this.Data.FileName;
-                command.Content = this.Data.Content;
-            })
-            .ConfigureAwait(false);
+            return context.Send<AddComment>(command =>
+             {
+                 command.CommentId = this.Data.CommentId;
+                 command.UserName = this.Data.UserName;
+                 command.BranchName = this.Data.BranchName;
+                 command.FileName = this.Data.FileName;
+                 command.Content = this.Data.Content;
+             });
         }
 
-        public async Task Handle(ICommentAdded message, IMessageHandlerContext context)
+        public Task Handle(ICommentAdded message, IMessageHandlerContext context)
         {
-            await context.Send<CreatePullRequest>(command =>
-            {
-                command.CommentId = this.Data.CommentId;
-                command.CommentBranchName = this.Data.BranchName;
-                command.BaseBranchName = this.componentsConfigurationManager.MasterBranchName;
-            })
-            .ConfigureAwait(false);
+            return context.Send<CreatePullRequest>(command =>
+             {
+                 command.CommentId = this.Data.CommentId;
+                 command.CommentBranchName = this.Data.BranchName;
+                 command.BaseBranchName = this.componentsConfigurationManager.MasterBranchName;
+             });
         }
 
-        public async Task Handle(IPullRequestCreated message, IMessageHandlerContext context)
+        public Task Handle(IPullRequestCreated message, IMessageHandlerContext context)
         {
-            await this.RequestTimeout(
+            return this.RequestTimeout(
                 context,
                 TimeSpan.FromSeconds(this.componentsConfigurationManager.CommentResponseAddedSagaTimeoutInSeconds),
-                new CheckCommentResponseTimeout { CommentId = message.CommentId })
-                .ConfigureAwait(false);
+                new CheckCommentResponseTimeout { CommentId = message.CommentId });
         }
 
-        public async Task Timeout(CheckCommentResponseTimeout state, IMessageHandlerContext context)
+        public Task Timeout(CheckCommentResponseTimeout state, IMessageHandlerContext context)
         {
-            await context.Send<CheckCommentResponse>(command => command.CommentId = state.CommentId)
-                .ConfigureAwait(false);
+            return context.Send<CheckCommentResponse>(command => command.CommentId = state.CommentId);
         }
 
         public async Task Handle(ICommentResponseAdded message, IMessageHandlerContext context)
