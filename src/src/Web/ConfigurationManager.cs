@@ -12,14 +12,6 @@
             }
         }
 
-        public string NsbEndpointInstanceId
-        {
-            get
-            {
-                return System.Configuration.ConfigurationManager.AppSettings[@"NsbEndpointInstanceId"];
-            }
-        }
-
         public string NsbTransportConnectionString
         {
             get

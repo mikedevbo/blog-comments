@@ -4,8 +4,6 @@
     {
         string NsbEndpointName { get; }
 
-        string NsbEndpointInstanceId { get; }
-
         string NsbTransportConnectionString { get; }
 
         string NsbErrorQueueName { get; }

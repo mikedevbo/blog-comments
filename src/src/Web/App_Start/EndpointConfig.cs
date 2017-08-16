@@ -38,10 +38,6 @@
             endpointConfiguration.SendFailedMessagesTo(configurationManager.NsbErrorQueueName);
             endpointConfiguration.AuditProcessedMessagesTo(configurationManager.NsbAuditQueueName);
 
-            // callbacks
-            endpointConfiguration.EnableCallbacks();
-            endpointConfiguration.MakeInstanceUniquelyAddressable(configurationManager.NsbEndpointInstanceId);
-
             // serialization
             endpointConfiguration.UseSerialization<JsonSerializer>();
 
