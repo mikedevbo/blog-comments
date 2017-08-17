@@ -19,15 +19,19 @@
 
         public async Task Handle(CreatePullRequest message, IMessageHandlerContext context)
         {
-            await this.gitHubApi.CreatePullRequest(
+            var result = await this.gitHubApi.CreatePullRequest(
                 this.componentsConfigurationManager.UserAgent,
                 this.componentsConfigurationManager.AuthorizationToken,
                 this.componentsConfigurationManager.RepositoryName,
                 message.CommentBranchName,
                 message.BaseBranchName).ConfigureAwait(false);
 
-            await context.Publish<IPullRequestCreated>(evt => evt.CommentId = message.CommentId)
-                .ConfigureAwait(false);
+            await context.Publish<IPullRequestCreated>(evt =>
+            {
+                evt.CommentId = message.CommentId;
+                evt.PullRequestLocation = result.Location;
+            })
+            .ConfigureAwait(false);
         }
     }
 }

@@ -72,8 +72,9 @@
     <Compile Include="GitHub\Dto\FileContentResponse.cs" />
     <Compile Include="GitHub\Dto\FileContentRequest.cs" />
     <Compile Include="GitHub\Dto\BranchRequest.cs" />
+    <Compile Include="GitHub\Dto\PullRequestResponse.cs" />
     <Compile Include="GitHub\Dto\RefObject.cs" />
-    <Compile Include="GitHub\Dto\PullRequest.cs" />
+    <Compile Include="GitHub\Dto\PullRequestRequest.cs" />
     <Compile Include="GitHub\Dto\RepositoryResponse.cs" />
     <Compile Include="GitHub\GitHubApi.cs" />
     <Compile Include="GitHub\HttpClientExtensionMethods.cs" />

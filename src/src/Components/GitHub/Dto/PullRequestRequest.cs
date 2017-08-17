@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
 
-    public class PullRequest
+    public class PullRequestRequest
     {
         [JsonProperty("title")]
         public string Title { get; set; }

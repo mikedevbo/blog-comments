@@ -16,7 +16,7 @@
             this.configurationManacger = configurationManacger;
         }
 
-        public Task CreatePullRequest(string userAgent, string authorizationToken, string repositoryName, string headBranchName, string baseBranchName)
+        public Task<PullRequestResponse> CreatePullRequest(string userAgent, string authorizationToken, string repositoryName, string headBranchName, string baseBranchName)
         {
             Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
                     .SagaTestResults
@@ -24,7 +24,7 @@
 
             log.Info("CreatePullRequest");
 
-            return Task.CompletedTask;
+            return new Task<PullRequestResponse>(() => new PullRequestResponse { Location = @"https://test/test" });
         }
 
         public Task CreateRepositoryBranch(string userAgent, string authorizationToken, string repositoryName, string masterBranchName, string newBranchName)

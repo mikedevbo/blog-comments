@@ -8,6 +8,7 @@
     using NServiceBus.Testing;
     using NSubstitute;
     using NUnit.Framework;
+    using Components.GitHub.Dto;
 
     [TestFixture]
     public class HandlerCreatePullRequestTests
@@ -23,6 +24,10 @@
             var message = new CreatePullRequest { CommentId = this.id };
             var handler = this.GetHandler();
             var context = this.GetContext();
+
+            this.gitHubApi
+                .CreatePullRequest(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty)
+                .ReturnsForAnyArgs(new PullRequestResponse { Location = @"https://test/test" });
 
             // Act
             await handler.Handle(message, context).ConfigureAwait(false);

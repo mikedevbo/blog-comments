@@ -18,5 +18,7 @@
         public string Content { get; set; }
 
         public string BranchName { get; set; }
+
+        public string PullRequestLocation { get; set; }
     }
 }

@@ -5,5 +5,7 @@
     public interface IPullRequestCreated
     {
         Guid CommentId { get; set; }
+
+        string PullRequestLocation { get; set; }
     }
 }

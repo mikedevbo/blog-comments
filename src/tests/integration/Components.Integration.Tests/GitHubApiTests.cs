@@ -83,22 +83,23 @@
         }
 
         [Test]
-        public Task CreatePullRequest_Execute_ProperResult()
+        public async Task CreatePullRequest_Execute_ProperResult()
         {
             // Arrange
-            const string branchName = "c-14";
+            const string branchName = "c-15";
             var api = this.GetGitHubApi();
 
             // Act
-            return api.CreatePullRequest(
+            var result = await api.CreatePullRequest(
                 this.configurationComponentsManager.UserAgent,
                 this.configurationComponentsManager.AuthorizationToken,
                 this.configurationComponentsManager.RepositoryName,
                 branchName,
-                "master");
+                "master").ConfigureAwait(false);
 
             // Assert
-            ////TODO: to implement
+            Assert.NotNull(result.Location);
+            Console.WriteLine(result.Location);
         }
 
         private GitHubApi GetGitHubApi()

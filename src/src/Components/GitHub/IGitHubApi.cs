@@ -26,7 +26,7 @@
             string fileName,
             string content);
 
-        Task CreatePullRequest(
+        Task<PullRequestResponse> CreatePullRequest(
             string userAgent,
             string authorizationToken,
             string repositoryName,

@@ -93,7 +93,7 @@
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task CreatePullRequest(
+        public async Task<PullRequestResponse> CreatePullRequest(
             string userAgent,
             string authorizationToken,
             string repositoryName,
@@ -105,7 +105,7 @@
 
             var requestUri = string.Format(@"repos/{0}/{1}/pulls", userAgent, repositoryName);
 
-            var pullRequest = new PullRequest
+            var pullRequest = new PullRequestRequest
             {
                 Title = headBranchName,
                 Body = "comment to merge",
@@ -115,6 +115,8 @@
 
             HttpResponseMessage response = await httpClient.PostAsJsonAsync(requestUri, pullRequest).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
+
+            return new PullRequestResponse { Location = response.Headers.Location.AbsoluteUri };
         }
 
         private void SetRequestHeaders(HttpRequestHeaders httpRequestHeaders, string userAgent, string authorizationToken)

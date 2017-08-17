@@ -71,10 +71,12 @@
 
         public Task Handle(IPullRequestCreated message, IMessageHandlerContext context)
         {
+            this.Data.PullRequestLocation = message.PullRequestLocation;
+
             return this.RequestTimeout(
                 context,
                 TimeSpan.FromSeconds(this.componentsConfigurationManager.CommentResponseAddedSagaTimeoutInSeconds),
-                new CheckCommentResponseTimeout { CommentId = message.CommentId });
+                new CheckCommentResponseTimeout { CommentId = this.Data.CommentId });
         }
 
         public Task Timeout(CheckCommentResponseTimeout state, IMessageHandlerContext context)
@@ -96,7 +98,7 @@
                 await this.RequestTimeout(
                     context,
                     TimeSpan.FromSeconds(this.componentsConfigurationManager.CommentResponseAddedSagaTimeoutInSeconds),
-                    new CheckCommentResponseTimeout { CommentId = message.CommentId })
+                    new CheckCommentResponseTimeout { CommentId = this.Data.CommentId })
                     .ConfigureAwait(false);
             }
         }
