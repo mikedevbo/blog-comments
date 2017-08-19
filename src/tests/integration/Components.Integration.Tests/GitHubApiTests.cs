@@ -1,6 +1,7 @@
 ﻿namespace Components.Integration.Tests
 {
     using System;
+    using System.Configuration;
     using System.Threading.Tasks;
     using Components.GitHub;
     using NUnit.Framework;
@@ -100,6 +101,40 @@
             // Assert
             Assert.NotNull(result.Location);
             Console.WriteLine(result.Location);
+        }
+
+        [Test]
+        public async Task IsPullRequestExists_Execute_ProperResult()
+        {
+            // Arrange
+            string pullRequestUri = ConfigurationManager.AppSettings["pullRequestUri"];
+            var api = this.GetGitHubApi();
+
+            // Act
+            var result = await api.IsPullRequestExists(
+                this.configurationComponentsManager.UserAgent,
+                this.configurationComponentsManager.AuthorizationToken,
+                pullRequestUri).ConfigureAwait(false);
+
+            // Assert
+            Console.WriteLine(result);
+        }
+
+        [Test]
+        public async Task IsPullRequestMerged_Execute_ProperResult()
+        {
+            // Arrange
+            string pullRequestUri = ConfigurationManager.AppSettings["pullRequestUri"];
+            var api = this.GetGitHubApi();
+
+            // Act
+            var result = await api.IsPullRequestMerged(
+                this.configurationComponentsManager.UserAgent,
+                this.configurationComponentsManager.AuthorizationToken,
+                pullRequestUri).ConfigureAwait(false);
+
+            // Assert
+            Console.WriteLine(result);
         }
 
         private GitHubApi GetGitHubApi()

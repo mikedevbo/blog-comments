@@ -11,6 +11,16 @@
             string repositoryName,
             string branchName);
 
+        Task<bool> IsPullRequestExists(
+            string userAgent,
+            string authorizationToken,
+            string pullRequestUrl);
+
+        Task<bool> IsPullRequestMerged(
+            string userAgent,
+            string authorizationToken,
+            string pullRequestUrl);
+
         Task CreateRepositoryBranch(
             string userAgent,
             string authorizationToken,

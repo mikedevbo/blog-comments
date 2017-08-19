@@ -6,6 +6,6 @@
     {
         public Guid CommentId { get; set; }
 
-        public string BranchName { get; set; }
+        public string PullRequestUri { get; set; }
     }
 }

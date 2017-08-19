@@ -1,6 +1,7 @@
 ﻿namespace Components.GitHub
 {
     using System;
+    using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
@@ -26,6 +27,44 @@
 
             var repo = await response.Content.ReadtAsJsonAsync<RepositoryResponse>().ConfigureAwait(false);
             return repo;
+        }
+
+        public async Task<bool> IsPullRequestExists(
+            string userAgent,
+            string authorizationToken,
+            string pullRequestUrl)
+        {
+            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
+
+            HttpResponseMessage response = await httpClient.GetAsync(pullRequestUrl).ConfigureAwait(false);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> IsPullRequestMerged(
+            string userAgent,
+            string authorizationToken,
+            string pullRequestUrl)
+        {
+            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
+
+            var requestUri = string.Format(@"{0}/merge", pullRequestUrl);
+            HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
+
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                return true;
+            }
+            else if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+
+            var exception = new HttpRequestException(string.Format(@"Response bad satus code: {0}", response.StatusCode));
+            exception.Data.Add("response", response);
+            throw exception;
         }
 
         public async Task CreateRepositoryBranch(

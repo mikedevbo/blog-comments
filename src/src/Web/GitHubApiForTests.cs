@@ -1,5 +1,6 @@
 ﻿namespace Web
 {
+    using System;
     using System.Threading.Tasks;
     using Components.GitHub;
     using Components.GitHub.Dto;
@@ -16,15 +17,25 @@
             this.configurationManacger = configurationManacger;
         }
 
-        public Task<PullRequestResponse> CreatePullRequest(string userAgent, string authorizationToken, string repositoryName, string headBranchName, string baseBranchName)
+        public Task<RepositoryResponse> GetRepository(string userAgent, string authorizationToken, string repositoryName, string branchName)
         {
             Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
                     .SagaTestResults
-                    .Insert(Result: 1);
+                    .Insert(Result: 3);
 
-            log.Info("CreatePullRequest");
+            log.Info("GetRepository");
 
-            return new Task<PullRequestResponse>(() => new PullRequestResponse { Location = @"https://test/test" });
+            return new Task<RepositoryResponse>(() => new RepositoryResponse());
+        }
+
+        public Task<bool> IsPullRequestExists(string userAgent, string authorizationToken, string pullRequestUrl)
+        {
+            return new Task<bool>(() => false);
+        }
+
+        public Task<bool> IsPullRequestMerged(string userAgent, string authorizationToken, string pullRequestUrl)
+        {
+            return new Task<bool>(() => true);
         }
 
         public Task CreateRepositoryBranch(string userAgent, string authorizationToken, string repositoryName, string masterBranchName, string newBranchName)
@@ -38,17 +49,6 @@
             return Task.CompletedTask;
         }
 
-        public Task<RepositoryResponse> GetRepository(string userAgent, string authorizationToken, string repositoryName, string branchName)
-        {
-            Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
-                    .SagaTestResults
-                    .Insert(Result: 3);
-
-            log.Info("GetRepository");
-
-            return new Task<RepositoryResponse>(() => new RepositoryResponse());
-        }
-
         public Task UpdateFile(string userAgent, string authorizationToken, string repositoryName, string branchName, string fileName, string content)
         {
             Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
@@ -58,6 +58,17 @@
             log.Info("UpdateFile");
 
             return Task.CompletedTask;
+        }
+
+        public Task<PullRequestResponse> CreatePullRequest(string userAgent, string authorizationToken, string repositoryName, string headBranchName, string baseBranchName)
+        {
+            Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
+                    .SagaTestResults
+                    .Insert(Result: 1);
+
+            log.Info("CreatePullRequest");
+
+            return new Task<PullRequestResponse>(() => new PullRequestResponse { Location = @"https://test/test" });
         }
     }
 }

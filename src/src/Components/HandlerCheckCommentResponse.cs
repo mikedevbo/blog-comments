@@ -1,6 +1,5 @@
 ﻿namespace Components
 {
-    using System;
     using System.Threading.Tasks;
     using Components.GitHub;
     using Messages;
@@ -19,31 +18,42 @@
             this.gitHubApi = gitHubApi;
         }
 
-        public Task Handle(CheckCommentResponse message, IMessageHandlerContext context)
+        public async Task Handle(CheckCommentResponse message, IMessageHandlerContext context)
         {
             CommentResponseState responseState = CommentResponseState.Approved;
 
-            try
-            {
-                var repo = this.gitHubApi.GetRepository(
-                    this.componentsConfigurationManager.UserAgent,
-                    this.componentsConfigurationManager.AuthorizationToken,
-                    this.componentsConfigurationManager.RepositoryName,
-                    message.BranchName);
+            var result = await this.gitHubApi.IsPullRequestExists(
+                this.componentsConfigurationManager.UserAgent,
+                this.componentsConfigurationManager.AuthorizationToken,
+                message.PullRequestUri).ConfigureAwait(false);
 
+            if (result)
+            {
                 responseState = CommentResponseState.NotAddded;
             }
-            catch (Exception)
+            else
             {
-                ////TODO: add proper exception type to recognize that there is no branch
+                result = await this.gitHubApi.IsPullRequestMerged(
+                    this.componentsConfigurationManager.UserAgent,
+                    this.componentsConfigurationManager.AuthorizationToken,
+                    message.PullRequestUri).ConfigureAwait(false);
+
+                if (result)
+                {
+                    responseState = CommentResponseState.Approved;
+                }
+                else
+                {
+                    responseState = CommentResponseState.Rejected;
+                }
             }
 
-            return context.Publish<ICommentResponseAdded>(
+            await context.Publish<ICommentResponseAdded>(
                 evt =>
                 {
                     evt.CommentId = message.CommentId;
                     evt.CommentResponseState = responseState;
-                });
+                }).ConfigureAwait(false);
         }
     }
 }
