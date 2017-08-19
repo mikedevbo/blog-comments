@@ -91,7 +91,7 @@
         public void Handle_CommentResponseAdded_WhenCommentAddedThenSendEmailWithProperDataAndCompleteSaga()
         {
             var message = Substitute.For<ICommentResponseAdded>();
-            message.CommentResponseState = CommentResponseState.Added;
+            message.CommentResponseState = CommentResponseState.Approved;
 
             Test.Saga<HandlerCommentSaga>()
                 .ExpectSend<SendEmail>()

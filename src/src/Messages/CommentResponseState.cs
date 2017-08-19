@@ -4,6 +4,8 @@
     {
         NotAddded = 0,
 
-        Added = 1
+        Approved = 1,
+
+        Rejected = 2
     }
 }

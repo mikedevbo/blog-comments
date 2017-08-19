@@ -81,12 +81,12 @@
 
         public Task Timeout(CheckCommentResponseTimeout state, IMessageHandlerContext context)
         {
-            return context.Send<CheckCommentResponse>(command => command.CommentId = state.CommentId);
+            return context.Send<CheckCommentResponse>(command => command.CommentId = this.Data.CommentId);
         }
 
         public async Task Handle(ICommentResponseAdded message, IMessageHandlerContext context)
         {
-            if (message.CommentResponseState == CommentResponseState.Added)
+            if (message.CommentResponseState == CommentResponseState.Approved)
             {
                 await context.Send<SendEmail>(command => command.EmailAddress = this.Data.UserEmail)
                     .ConfigureAwait(false);

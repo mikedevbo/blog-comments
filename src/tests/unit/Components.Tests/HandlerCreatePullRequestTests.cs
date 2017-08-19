@@ -3,12 +3,12 @@
     using System;
     using System.Threading.Tasks;
     using Components.GitHub;
+    using Components.GitHub.Dto;
     using Messages.Commands;
     using Messages.Events;
     using NServiceBus.Testing;
     using NSubstitute;
     using NUnit.Framework;
-    using Components.GitHub.Dto;
 
     [TestFixture]
     public class HandlerCreatePullRequestTests
