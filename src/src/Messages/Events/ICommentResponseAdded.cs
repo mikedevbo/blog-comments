@@ -6,6 +6,6 @@
     {
         Guid CommentId { get; set; }
 
-        CommentResponseState CommentResponseState { get; set; }
+        CommentResponseStatus CommentResponseStatus { get; set; }
     }
 }

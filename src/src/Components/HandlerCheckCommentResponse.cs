@@ -1,5 +1,6 @@
 ﻿namespace Components
 {
+    using System;
     using System.Threading.Tasks;
     using Components.GitHub;
     using Messages;
@@ -20,40 +21,43 @@
 
         public async Task Handle(CheckCommentResponse message, IMessageHandlerContext context)
         {
-            CommentResponseState responseState = CommentResponseState.Approved;
+            string userAgent = this.componentsConfigurationManager.UserAgent;
+            string authorizationToken = this.componentsConfigurationManager.AuthorizationToken;
+            string pullRequestUri = message.PullRequestUri;
 
-            var result = await this.gitHubApi.IsPullRequestExists(
-                this.componentsConfigurationManager.UserAgent,
-                this.componentsConfigurationManager.AuthorizationToken,
-                message.PullRequestUri).ConfigureAwait(false);
-
-            if (result)
-            {
-                responseState = CommentResponseState.NotAddded;
-            }
-            else
-            {
-                result = await this.gitHubApi.IsPullRequestMerged(
-                    this.componentsConfigurationManager.UserAgent,
-                    this.componentsConfigurationManager.AuthorizationToken,
-                    message.PullRequestUri).ConfigureAwait(false);
-
-                if (result)
-                {
-                    responseState = CommentResponseState.Approved;
-                }
-                else
-                {
-                    responseState = CommentResponseState.Rejected;
-                }
-            }
+            CommentResponseStatus responseStatus = await this.GetCommentResponseStatus(
+                () => this.gitHubApi.IsPullRequestExists(
+                    userAgent,
+                    authorizationToken,
+                    pullRequestUri),
+                () => this.gitHubApi.IsPullRequestMerged(
+                    userAgent,
+                    authorizationToken,
+                    pullRequestUri)).ConfigureAwait(false);
 
             await context.Publish<ICommentResponseAdded>(
                 evt =>
                 {
                     evt.CommentId = message.CommentId;
-                    evt.CommentResponseState = responseState;
+                    evt.CommentResponseStatus = responseStatus;
                 }).ConfigureAwait(false);
+        }
+
+        public async Task<CommentResponseStatus> GetCommentResponseStatus(
+            Func<Task<bool>> isPullRequestExists,
+            Func<Task<bool>> isPullRequestMerged)
+        {
+            if (await isPullRequestExists().ConfigureAwait(false))
+            {
+                return CommentResponseStatus.NotAddded;
+            }
+
+            if (await isPullRequestMerged().ConfigureAwait(false))
+            {
+                return CommentResponseStatus.Approved;
+            }
+
+            return CommentResponseStatus.Rejected;
         }
     }
 }

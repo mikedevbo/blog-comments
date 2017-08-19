@@ -56,7 +56,7 @@
     <Compile Include="Commands\SendEmail.cs" />
     <Compile Include="Commands\CreatePullRequest.cs" />
     <Compile Include="Commands\StartAddingComment.cs" />
-    <Compile Include="CommentResponseState.cs" />
+    <Compile Include="CommentResponseStatus.cs" />
     <Compile Include="Events\ICommentAdded.cs" />
     <Compile Include="Events\ICommentResponseAdded.cs" />
     <Compile Include="Events\IBranchCreated.cs" />

@@ -91,7 +91,7 @@
         public void Handle_CommentResponseAdded_WhenCommentAddedThenSendEmailWithProperDataAndCompleteSaga()
         {
             var message = Substitute.For<ICommentResponseAdded>();
-            message.CommentResponseState = CommentResponseState.Approved;
+            message.CommentResponseStatus = CommentResponseStatus.Approved;
 
             Test.Saga<HandlerCommentSaga>()
                 .ExpectSend<SendEmail>()
@@ -107,7 +107,7 @@
         public void Handle_CommentResponseAdded_WhenCommentNotAddedThenSendCheckCommentResponseTimeoutWithProperData()
         {
             var message = Substitute.For<ICommentResponseAdded>();
-            message.CommentResponseState = CommentResponseState.NotAddded;
+            message.CommentResponseStatus = CommentResponseStatus.NotAddded;
 
             Test.Saga<HandlerCommentSaga>()
                 .ExpectTimeoutToBeSetIn<ICommentResponseAdded>((state, span) =>

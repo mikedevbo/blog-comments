@@ -1,6 +1,6 @@
 ﻿namespace Messages
 {
-    public enum CommentResponseState
+    public enum CommentResponseStatus
     {
         NotAddded = 0,
 
