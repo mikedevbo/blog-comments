@@ -120,7 +120,7 @@
             return response.Headers.Location.AbsoluteUri;
         }
 
-        public async Task<bool> IsPullRequestExists(
+        public async Task<bool> IsPullRequestOpen(
             string userAgent,
             string authorizationToken,
             string pullRequestUrl)
@@ -129,8 +129,10 @@
             this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
 
             HttpResponseMessage response = await httpClient.GetAsync(pullRequestUrl).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
 
-            return response.IsSuccessStatusCode;
+            var pullRequestResponse = await response.Content.ReadAsJsonAsync<IsPullRequestExistsResponse>().ConfigureAwait(false);
+            return pullRequestResponse.State == @"open";
         }
 
         public async Task<bool> IsPullRequestMerged(

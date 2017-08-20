@@ -33,7 +33,7 @@
             string headBranchName,
             string baseBranchName);
 
-        Task<bool> IsPullRequestExists(
+        Task<bool> IsPullRequestOpen(
             string userAgent,
             string authorizationToken,
             string pullRequestUrl);

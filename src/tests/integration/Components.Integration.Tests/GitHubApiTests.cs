@@ -100,14 +100,14 @@
         }
 
         [Test]
-        public async Task IsPullRequestExists_Execute_ProperResult()
+        public async Task IsPullRequestOpen_Execute_ProperResult()
         {
             // Arrange
             string pullRequestUri = ConfigurationManager.AppSettings["pullRequestUri"];
             var api = this.GetGitHubApi();
 
             // Act
-            var result = await api.IsPullRequestExists(
+            var result = await api.IsPullRequestOpen(
                 this.configurationComponentsManager.UserAgent,
                 this.configurationComponentsManager.AuthorizationToken,
                 pullRequestUri).ConfigureAwait(false);

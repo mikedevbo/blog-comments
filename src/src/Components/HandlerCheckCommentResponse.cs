@@ -26,7 +26,7 @@
             string pullRequestUri = message.PullRequestUri;
 
             CommentResponseStatus responseStatus = await this.GetCommentResponseStatus(
-                () => this.gitHubApi.IsPullRequestExists(
+                () => this.gitHubApi.IsPullRequestOpen(
                     userAgent,
                     authorizationToken,
                     pullRequestUri),
@@ -44,10 +44,10 @@
         }
 
         public async Task<CommentResponseStatus> GetCommentResponseStatus(
-            Func<Task<bool>> isPullRequestExists,
+            Func<Task<bool>> isPullRequestOpen,
             Func<Task<bool>> isPullRequestMerged)
         {
-            if (await isPullRequestExists().ConfigureAwait(false))
+            if (await isPullRequestOpen().ConfigureAwait(false))
             {
                 return CommentResponseStatus.NotAddded;
             }

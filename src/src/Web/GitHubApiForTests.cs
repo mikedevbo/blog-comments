@@ -61,7 +61,7 @@
             return new Task<string>(() => @"https://test/test");
         }
 
-        public Task<bool> IsPullRequestExists(string userAgent, string authorizationToken, string pullRequestUrl)
+        public Task<bool> IsPullRequestOpen(string userAgent, string authorizationToken, string pullRequestUrl)
         {
             return new Task<bool>(() => false);
         }

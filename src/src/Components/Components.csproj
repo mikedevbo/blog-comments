@@ -72,6 +72,7 @@
     <Compile Include="GitHub\Dto\FileContentResponse.cs" />
     <Compile Include="GitHub\Dto\FileContentRequest.cs" />
     <Compile Include="GitHub\Dto\BranchRequest.cs" />
+    <Compile Include="GitHub\Dto\IsPullRequestExistsResponse.cs" />
     <Compile Include="GitHub\Dto\PullRequestResponse.cs" />
     <Compile Include="GitHub\Dto\RefObjectResponse.cs" />
     <Compile Include="GitHub\Dto\PullRequestRequest.cs" />

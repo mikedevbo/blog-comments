@@ -39,12 +39,12 @@
         [TestCase(true, false, CommentResponseStatus.NotAddded)]
         [TestCase(true, true, CommentResponseStatus.NotAddded)]
         public async Task GetCommentResponseStatus_input_expectedResult(
-            bool isPullRequestExists,
+            bool isPullRequestOpen,
             bool isPullRequestMerged,
             CommentResponseStatus expectedResult)
         {
             // Arrange
-            Func<Task<bool>> f1 = () => Task.Run(() => isPullRequestExists);
+            Func<Task<bool>> f1 = () => Task.Run(() => isPullRequestOpen);
             Func<Task<bool>> f2 = () => Task.Run(() => isPullRequestMerged);
             var handler = this.GetHandler();
 
