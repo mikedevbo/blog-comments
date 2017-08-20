@@ -11,16 +11,6 @@
             string repositoryName,
             string branchName);
 
-        Task<bool> IsPullRequestExists(
-            string userAgent,
-            string authorizationToken,
-            string pullRequestUrl);
-
-        Task<bool> IsPullRequestMerged(
-            string userAgent,
-            string authorizationToken,
-            string pullRequestUrl);
-
         Task CreateRepositoryBranch(
             string userAgent,
             string authorizationToken,
@@ -36,11 +26,21 @@
             string fileName,
             string content);
 
-        Task<PullRequestResponse> CreatePullRequest(
+        Task<string> CreatePullRequest(
             string userAgent,
             string authorizationToken,
             string repositoryName,
             string headBranchName,
             string baseBranchName);
+
+        Task<bool> IsPullRequestExists(
+            string userAgent,
+            string authorizationToken,
+            string pullRequestUrl);
+
+        Task<bool> IsPullRequestMerged(
+            string userAgent,
+            string authorizationToken,
+            string pullRequestUrl);
     }
 }

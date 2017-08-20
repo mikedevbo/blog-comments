@@ -83,7 +83,7 @@
         public async Task CreatePullRequest_Execute_ProperResult()
         {
             // Arrange
-            const string branchName = "c-15";
+            const string branchName = "c-12";
             var api = this.GetGitHubApi();
 
             // Act
@@ -95,8 +95,8 @@
                 "master").ConfigureAwait(false);
 
             // Assert
-            Assert.NotNull(result.Location);
-            Console.WriteLine(result.Location);
+            Assert.NotNull(result);
+            Console.WriteLine(result);
         }
 
         [Test]

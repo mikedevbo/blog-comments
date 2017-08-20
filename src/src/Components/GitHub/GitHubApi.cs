@@ -29,44 +29,6 @@
             return repo.Object.Sha;
         }
 
-        public async Task<bool> IsPullRequestExists(
-            string userAgent,
-            string authorizationToken,
-            string pullRequestUrl)
-        {
-            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
-            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
-
-            HttpResponseMessage response = await httpClient.GetAsync(pullRequestUrl).ConfigureAwait(false);
-
-            return response.IsSuccessStatusCode;
-        }
-
-        public async Task<bool> IsPullRequestMerged(
-            string userAgent,
-            string authorizationToken,
-            string pullRequestUrl)
-        {
-            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
-            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
-
-            var requestUri = string.Format(@"{0}/merge", pullRequestUrl);
-            HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
-
-            if (response.StatusCode == HttpStatusCode.NoContent)
-            {
-                return true;
-            }
-            else if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                return false;
-            }
-
-            var exception = new HttpRequestException(string.Format(@"Response bad satus code: {0}", response.StatusCode));
-            exception.Data.Add("response", response);
-            throw exception;
-        }
-
         public async Task CreateRepositoryBranch(
             string userAgent,
             string authorizationToken,
@@ -132,7 +94,7 @@
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<PullRequestResponse> CreatePullRequest(
+        public async Task<string> CreatePullRequest(
             string userAgent,
             string authorizationToken,
             string repositoryName,
@@ -155,7 +117,45 @@
             HttpResponseMessage response = await httpClient.PostAsJsonAsync(requestUri, pullRequest).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
-            return new PullRequestResponse { Location = response.Headers.Location.AbsoluteUri };
+            return response.Headers.Location.AbsoluteUri;
+        }
+
+        public async Task<bool> IsPullRequestExists(
+            string userAgent,
+            string authorizationToken,
+            string pullRequestUrl)
+        {
+            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
+
+            HttpResponseMessage response = await httpClient.GetAsync(pullRequestUrl).ConfigureAwait(false);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> IsPullRequestMerged(
+            string userAgent,
+            string authorizationToken,
+            string pullRequestUrl)
+        {
+            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
+
+            var requestUri = string.Format(@"{0}/merge", pullRequestUrl);
+            HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
+
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                return true;
+            }
+            else if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+
+            var exception = new HttpRequestException(string.Format(@"Response bad satus code: {0}", response.StatusCode));
+            exception.Data.Add("response", response);
+            throw exception;
         }
 
         private void SetRequestHeaders(HttpRequestHeaders httpRequestHeaders, string userAgent, string authorizationToken)

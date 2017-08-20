@@ -28,16 +28,6 @@
             return new Task<string>(() => @"1234");
         }
 
-        public Task<bool> IsPullRequestExists(string userAgent, string authorizationToken, string pullRequestUrl)
-        {
-            return new Task<bool>(() => false);
-        }
-
-        public Task<bool> IsPullRequestMerged(string userAgent, string authorizationToken, string pullRequestUrl)
-        {
-            return new Task<bool>(() => true);
-        }
-
         public Task CreateRepositoryBranch(string userAgent, string authorizationToken, string repositoryName, string masterBranchName, string newBranchName)
         {
             Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
@@ -60,7 +50,7 @@
             return Task.CompletedTask;
         }
 
-        public Task<PullRequestResponse> CreatePullRequest(string userAgent, string authorizationToken, string repositoryName, string headBranchName, string baseBranchName)
+        public Task<string> CreatePullRequest(string userAgent, string authorizationToken, string repositoryName, string headBranchName, string baseBranchName)
         {
             Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
                     .SagaTestResults
@@ -68,7 +58,17 @@
 
             log.Info("CreatePullRequest");
 
-            return new Task<PullRequestResponse>(() => new PullRequestResponse { Location = @"https://test/test" });
+            return new Task<string>(() => @"https://test/test");
+        }
+
+        public Task<bool> IsPullRequestExists(string userAgent, string authorizationToken, string pullRequestUrl)
+        {
+            return new Task<bool>(() => false);
+        }
+
+        public Task<bool> IsPullRequestMerged(string userAgent, string authorizationToken, string pullRequestUrl)
+        {
+            return new Task<bool>(() => true);
         }
     }
 }

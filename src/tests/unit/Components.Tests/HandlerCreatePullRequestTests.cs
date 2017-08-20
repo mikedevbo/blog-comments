@@ -27,7 +27,7 @@
 
             this.gitHubApi
                 .CreatePullRequest(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty)
-                .ReturnsForAnyArgs(new PullRequestResponse { Location = @"https://test/test" });
+                .ReturnsForAnyArgs(@"https://test/test");
 
             // Act
             await handler.Handle(message, context).ConfigureAwait(false);

@@ -29,7 +29,7 @@
             await context.Publish<IPullRequestCreated>(evt =>
             {
                 evt.CommentId = message.CommentId;
-                evt.PullRequestLocation = result.Location;
+                evt.PullRequestLocation = result;
             })
             .ConfigureAwait(false);
         }
