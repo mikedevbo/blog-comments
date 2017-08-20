@@ -118,6 +118,7 @@
             {
                 endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<GitHubApi>(DependencyLifecycle.InstancePerCall));
                 ////TODO: add emial registration
+                endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<SendEmailForTests>(DependencyLifecycle.InstancePerCall));
             }
         }
     }

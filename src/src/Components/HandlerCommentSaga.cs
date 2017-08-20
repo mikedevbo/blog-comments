@@ -81,7 +81,11 @@
 
         public Task Timeout(CheckCommentResponseTimeout state, IMessageHandlerContext context)
         {
-            return context.Send<CheckCommentResponse>(command => command.CommentId = this.Data.CommentId);
+            return context.Send<CheckCommentResponse>(command =>
+            {
+                command.CommentId = this.Data.CommentId;
+                command.PullRequestUri = this.Data.PullRequestLocation;
+            });
         }
 
         public async Task Handle(ICommentResponseAdded message, IMessageHandlerContext context)

@@ -1,6 +1,7 @@
 ﻿namespace Web
 {
     using Components;
+    using Messages;
     using NServiceBus.Logging;
     using Simple.Data;
 
@@ -14,13 +15,13 @@
             this.configurationManager = configurationManager;
         }
 
-        public void Send()
+        public void Send(string emailAddress, CommentResponseStatus status)
         {
             Database.OpenConnection(this.configurationManager.NsbTransportConnectionString)
                     .SagaTestResults
                     .Insert(Result: 5);
 
-            log.Info("send e-mail");
+            log.Info(string.Format("send e-mail: {0}", status));
         }
     }
 }

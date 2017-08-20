@@ -16,7 +16,7 @@
         public Task Handle(SendEmail message, IMessageHandlerContext context)
         {
             ////TODO: to implement -> can be awaitable ?
-            this.sendEmail.Send();
+            this.sendEmail.Send(message.EmailAddress, message.CommentResponseStatus);
             return Task.CompletedTask;
         }
     }
