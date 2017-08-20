@@ -88,7 +88,7 @@
         }
 
         [Test]
-        public void Handle_CommentResponseAdded_WhenCommentAddedThenSendEmailWithProperDataAndCompleteSaga()
+        public void Handle_CommentResponseStatusApproved_SendEmailWithProperDataAndCompleteSaga()
         {
             var message = Substitute.For<ICommentResponseAdded>();
             message.CommentResponseStatus = CommentResponseStatus.Approved;
@@ -104,7 +104,7 @@
         }
 
         [Test]
-        public void Handle_CommentResponseAdded_WhenCommentNotAddedThenSendCheckCommentResponseTimeoutWithProperData()
+        public void Handle_CommentResponseStatusNotAdded_SendCheckCommentResponseTimeoutWithProperData()
         {
             var message = Substitute.For<ICommentResponseAdded>();
             message.CommentResponseStatus = CommentResponseStatus.NotAddded;
@@ -114,6 +114,22 @@
                 {
                     return span == TimeSpan.FromDays(this.timeoutMinutes);
                 });
+        }
+
+        [Test]
+        public void Handle_CommentResponseStatusRejected_SendEmailWithProperDataAndCompleteSaga()
+        {
+            var message = Substitute.For<ICommentResponseAdded>();
+            message.CommentResponseStatus = CommentResponseStatus.Rejected;
+
+            Test.Saga<HandlerCommentSaga>()
+                .ExpectSend<SendEmail>()
+                .When(
+                    sagaIsInvoked: (saga, context) =>
+                    {
+                        return saga.Handle(message, context);
+                    })
+                .AssertSagaCompletionIs(true);
         }
 
         private HandlerCommentSaga GetHandler()

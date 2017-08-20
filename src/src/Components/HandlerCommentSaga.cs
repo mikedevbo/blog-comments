@@ -86,10 +86,14 @@
 
         public async Task Handle(ICommentResponseAdded message, IMessageHandlerContext context)
         {
-            if (message.CommentResponseStatus == CommentResponseStatus.Approved)
+            if (message.CommentResponseStatus == CommentResponseStatus.Approved ||
+                message.CommentResponseStatus == CommentResponseStatus.Rejected)
             {
-                await context.Send<SendEmail>(command => command.EmailAddress = this.Data.UserEmail)
-                    .ConfigureAwait(false);
+                await context.Send<SendEmail>(command =>
+                {
+                    command.EmailAddress = this.Data.UserEmail;
+                    command.CommentResponseStatus = message.CommentResponseStatus;
+                }).ConfigureAwait(false);
 
                 this.MarkAsComplete();
             }
