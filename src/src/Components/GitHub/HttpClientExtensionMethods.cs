@@ -7,7 +7,7 @@
 
     public static class HttpClientExtensionMethods
     {
-        public static async Task<TModel> ReadtAsJsonAsync<TModel>(this HttpContent content)
+        public static async Task<TModel> ReadAsJsonAsync<TModel>(this HttpContent content)
         {
             var jsonResult = await content.ReadAsStringAsync().ConfigureAwait(false);
             var result = JsonConvert.DeserializeObject<TModel>(jsonResult);

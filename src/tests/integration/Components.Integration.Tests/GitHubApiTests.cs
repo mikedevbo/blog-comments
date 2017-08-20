@@ -14,24 +14,22 @@
             new ComponentsConfigurationManager();
 
         [Test]
-        public async Task GetRepository_Execute_ProperResult()
+        public async Task GetSha_Execute_ProperResult()
         {
             // Arrange
             var api = this.GetGitHubApi();
 
             // Act
-            var result = await api.GetRepository(
+            var result = await api.GetSha(
                 this.configurationComponentsManager.UserAgent,
                 this.configurationComponentsManager.AuthorizationToken,
                 this.configurationComponentsManager.RepositoryName,
                 this.configurationComponentsManager.MasterBranchName).ConfigureAwait(false);
 
             // Assert
-            Assert.NotNull(result.Ref);
-            Assert.NotNull(result.Url);
-            Assert.NotNull(result.Object.Sha);
+            Assert.NotNull(result);
 
-            Console.WriteLine(string.Format("{0} {1} {2}", result.Ref, result.Url, result.Object.Sha));
+            Console.WriteLine(string.Format("{0}", result));
         }
 
         [Test]
@@ -50,17 +48,15 @@
                 newBranchName).ConfigureAwait(false);
 
             // Assert
-            var result = await api.GetRepository(
+            var result = await api.GetSha(
                 this.configurationComponentsManager.UserAgent,
                 this.configurationComponentsManager.AuthorizationToken,
                 this.configurationComponentsManager.RepositoryName,
                 newBranchName).ConfigureAwait(false);
 
-            Assert.NotNull(result.Ref);
-            Assert.NotNull(result.Url);
-            Assert.NotNull(result.Object.Sha);
+            Assert.NotNull(result);
 
-            Console.WriteLine(string.Format("{0} {1} {2}", result.Ref, result.Url, result.Object.Sha));
+            Console.WriteLine(string.Format("{0}", result));
         }
 
         [Test]

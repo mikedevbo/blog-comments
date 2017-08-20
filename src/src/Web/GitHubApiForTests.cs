@@ -17,7 +17,7 @@
             this.configurationManacger = configurationManacger;
         }
 
-        public Task<RepositoryResponse> GetRepository(string userAgent, string authorizationToken, string repositoryName, string branchName)
+        public Task<string> GetSha(string userAgent, string authorizationToken, string repositoryName, string branchName)
         {
             Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
                     .SagaTestResults
@@ -25,7 +25,7 @@
 
             log.Info("GetRepository");
 
-            return new Task<RepositoryResponse>(() => new RepositoryResponse());
+            return new Task<string>(() => @"1234");
         }
 
         public Task<bool> IsPullRequestExists(string userAgent, string authorizationToken, string pullRequestUrl)

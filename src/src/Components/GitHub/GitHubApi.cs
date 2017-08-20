@@ -12,7 +12,7 @@
     {
         private const string ApiBaseUri = @"https://api.github.com/";
 
-        public async Task<RepositoryResponse> GetRepository(
+        public async Task<string> GetSha(
             string userAgent,
             string authorizationToken,
             string repositoryName,
@@ -25,8 +25,8 @@
             HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
-            var repo = await response.Content.ReadtAsJsonAsync<RepositoryResponse>().ConfigureAwait(false);
-            return repo;
+            var repo = await response.Content.ReadAsJsonAsync<RefResponse>().ConfigureAwait(false);
+            return repo.Object.Sha;
         }
 
         public async Task<bool> IsPullRequestExists(
@@ -79,7 +79,7 @@
 
             var requestUri = string.Format(@"repos/{0}/{1}/git/refs", userAgent, repositoryName);
 
-            var masterRepo = await this.GetRepository(
+            var sha = await this.GetSha(
                 userAgent,
                 authorizationToken,
                 repositoryName,
@@ -88,7 +88,7 @@
             var branchRequest = new BranchRequest
             {
                 Ref = string.Format(@"refs/heads/{0}", newBranchName),
-                Sha = masterRepo.Object.Sha
+                Sha = sha
             };
 
             HttpResponseMessage response = await httpClient.PostAsJsonAsync(requestUri, branchRequest).ConfigureAwait(false);
@@ -111,7 +111,7 @@
             HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
-            var fileToUpdate = await response.Content.ReadtAsJsonAsync<FileContentResponse>().ConfigureAwait(false);
+            var fileToUpdate = await response.Content.ReadAsJsonAsync<FileContentResponse>().ConfigureAwait(false);
             byte[] data = Convert.FromBase64String(fileToUpdate.Content);
             string decodedData = Encoding.UTF8.GetString(data);
 
