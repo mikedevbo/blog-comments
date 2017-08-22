@@ -25,7 +25,7 @@
 
             log.Info("GetRepository");
 
-            return new Task<string>(() => @"1234");
+            return Task.Run(() => @"1234");
         }
 
         public Task CreateRepositoryBranch(string userAgent, string authorizationToken, string repositoryName, string masterBranchName, string newBranchName)
@@ -58,17 +58,21 @@
 
             log.Info("CreatePullRequest");
 
-            return new Task<string>(() => @"https://test/test");
+            return Task.Run(() => @"https://test/test");
         }
 
         public Task<bool> IsPullRequestOpen(string userAgent, string authorizationToken, string pullRequestUrl)
         {
-            return new Task<bool>(() => false);
+            log.Info("IsPullRequestOpen");
+
+            return Task.Run(() => false);
         }
 
         public Task<bool> IsPullRequestMerged(string userAgent, string authorizationToken, string pullRequestUrl)
         {
-            return new Task<bool>(() => true);
+            log.Info("IsPullRequestMerged");
+
+            return Task.Run(() => true);
         }
     }
 }
