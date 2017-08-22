@@ -63,6 +63,10 @@
 
         public Task<bool> IsPullRequestOpen(string userAgent, string authorizationToken, string pullRequestUrl)
         {
+            Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
+                    .SagaTestResults
+                    .Insert(Result: 6);
+
             log.Info("IsPullRequestOpen");
 
             return Task.Run(() => false);
@@ -70,6 +74,10 @@
 
         public Task<bool> IsPullRequestMerged(string userAgent, string authorizationToken, string pullRequestUrl)
         {
+            Database.OpenConnection(this.configurationManacger.NsbTransportConnectionString)
+                    .SagaTestResults
+                    .Insert(Result: 7);
+
             log.Info("IsPullRequestMerged");
 
             return Task.Run(() => true);

@@ -64,9 +64,11 @@
 
             Assert.NotNull(result.FirstOrDefault(row => row.Result == 1));
             Assert.NotNull(result.FirstOrDefault(row => row.Result == 2));
-            Assert.NotNull(result.FirstOrDefault(row => row.Result == 3));
+            ////Assert.NotNull(result.FirstOrDefault(row => row.Result == 3));
             Assert.NotNull(result.FirstOrDefault(row => row.Result == 4));
             Assert.NotNull(result.FirstOrDefault(row => row.Result == 5));
+            Assert.NotNull(result.FirstOrDefault(row => row.Result == 6));
+            Assert.NotNull(result.FirstOrDefault(row => row.Result == 7));
         }
 
         public class ResultRow
