@@ -1,5 +1,6 @@
 ﻿namespace Web
 {
+    using System.Threading.Tasks;
     using Components;
     using Messages;
     using NServiceBus.Logging;
@@ -15,13 +16,15 @@
             this.configurationManager = configurationManager;
         }
 
-        public void Send(string userName, string userEmail, CommentResponseStatus status)
+        public Task Send(string userName, string userEmail, CommentResponseStatus status)
         {
             Database.OpenConnection(this.configurationManager.NsbTransportConnectionString)
                     .SagaTestResults
                     .Insert(Result: 5);
 
             log.Info(string.Format("send e-mail: {0}", status));
+
+            return Task.CompletedTask;
         }
     }
 }

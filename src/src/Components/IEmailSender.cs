@@ -1,9 +1,10 @@
 ﻿namespace Components
 {
+    using System.Threading.Tasks;
     using Messages;
 
     public interface IEmailSender
     {
-        void Send(string userName, string userEmail, CommentResponseStatus status);
+        Task Send(string userName, string userEmail, CommentResponseStatus status);
     }
 }

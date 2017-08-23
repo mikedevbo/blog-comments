@@ -4,6 +4,7 @@
     using System.Net;
     using System.Net.Mail;
     using System.Text;
+    using System.Threading.Tasks;
     using Messages;
 
     public class EmailSender : IEmailSender
@@ -15,7 +16,18 @@
             this.componentsConfigurationManager = componentsConfigurationManager;
         }
 
-        public void Send(string userName, string userEmail, CommentResponseStatus status)
+        public Task Send(string userName, string userEmail, CommentResponseStatus status)
+        {
+            return Task.Run(() => this.SendEmail(userName, userEmail, status));
+        }
+
+        public string GetBody(string userName, CommentResponseStatus status)
+        {
+            ////TOTO: to implement
+            return "test mail body: " + userName + " " + status;
+        }
+
+        private void SendEmail(string userName, string userEmail, CommentResponseStatus status)
         {
             var client = new SmtpClient()
             {
@@ -40,12 +52,6 @@
             };
 
             client.Send(mm);
-        }
-
-        public string GetBody(string userName, CommentResponseStatus status)
-        {
-            ////TOTO: to implement
-            return "test mail body: " + userName + " " + status;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace Components.Integration.Tests
 {
     using System.Configuration;
+    using System.Threading.Tasks;
     using Messages;
     using NUnit.Framework;
 
@@ -9,7 +10,7 @@
     public class EmailSenderTests
     {
         [Test]
-        public void Send_ForSampleData_NoException()
+        public Task Send_ForSampleData_NoException()
         {
             // Arrange
             var userName = ConfigurationManager.AppSettings["userName"];
@@ -17,7 +18,7 @@
             var sender = this.GetEmailSender();
 
             // Act
-            sender.Send(userName, userEmail, CommentResponseStatus.Approved);
+            return sender.Send(userName, userEmail, CommentResponseStatus.Approved);
 
             // Assert
         }
