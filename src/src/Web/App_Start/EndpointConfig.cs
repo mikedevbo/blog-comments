@@ -112,12 +112,19 @@
             if (configurationManager.NsbIsIntegrationTests)
             {
                 endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<GitHubApiForTests>(DependencyLifecycle.InstancePerCall));
-                endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<EmailSenderForTests>(DependencyLifecycle.InstancePerCall));
             }
             else
             {
                 endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<GitHubApi>(DependencyLifecycle.InstancePerCall));
+            }
+
+            if (configurationManager.DevMode == DevMode.Production)
+            {
                 endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<EmailSender>(DependencyLifecycle.InstancePerCall));
+            }
+            else
+            {
+                endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<EmailSenderForTests>(DependencyLifecycle.InstancePerCall));
             }
         }
     }
