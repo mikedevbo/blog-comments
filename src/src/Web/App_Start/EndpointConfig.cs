@@ -117,8 +117,7 @@
             else
             {
                 endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<GitHubApi>(DependencyLifecycle.InstancePerCall));
-                ////TODO: add emial registration
-                endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<EmailSenderForTests>(DependencyLifecycle.InstancePerCall));
+                endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<EmailSender>(DependencyLifecycle.InstancePerCall));
             }
         }
     }

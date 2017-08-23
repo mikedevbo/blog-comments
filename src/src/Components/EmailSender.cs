@@ -45,7 +45,7 @@
         public string GetBody(string userName, CommentResponseStatus status)
         {
             ////TOTO: to implement
-            return "test mail body: " + userName;
+            return "test mail body: " + userName + " " + status;
         }
     }
 }

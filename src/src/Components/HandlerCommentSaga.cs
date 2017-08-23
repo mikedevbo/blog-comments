@@ -95,6 +95,7 @@
             {
                 await context.Send<SendEmail>(command =>
                 {
+                    command.UserName = this.Data.UserName;
                     command.UserEmail = this.Data.UserEmail;
                     command.CommentResponseStatus = message.CommentResponseStatus;
                 }).ConfigureAwait(false);
