@@ -53,6 +53,7 @@
     <Compile Include="..\..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="EmailSenderTests.cs" />
     <Compile Include="GitHubApiTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,6 +65,10 @@
     <ProjectReference Include="..\..\..\src\Components\Components.csproj">
       <Project>{98b5d703-030c-497e-ba03-42b9d7373c63}</Project>
       <Name>Components</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Messages\Messages.csproj">
+      <Project>{2d2c20a5-2c6f-4fa0-a8f4-a2e452361f94}</Project>
+      <Name>Messages</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

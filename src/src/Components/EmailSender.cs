@@ -36,7 +36,7 @@
                 "[testSubject]",
                 this.GetBody(userName, status))
             {
-                BodyEncoding = Encoding.UTF8,
+                BodyEncoding = Encoding.UTF8
             };
 
             client.Send(mm);
