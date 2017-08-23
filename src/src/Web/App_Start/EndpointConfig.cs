@@ -112,13 +112,13 @@
             if (configurationManager.NsbIsIntegrationTests)
             {
                 endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<GitHubApiForTests>(DependencyLifecycle.InstancePerCall));
-                endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<SendEmailForTests>(DependencyLifecycle.InstancePerCall));
+                endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<EmailSenderForTests>(DependencyLifecycle.InstancePerCall));
             }
             else
             {
                 endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<GitHubApi>(DependencyLifecycle.InstancePerCall));
                 ////TODO: add emial registration
-                endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<SendEmailForTests>(DependencyLifecycle.InstancePerCall));
+                endpointConfiguration.RegisterComponents(reg => reg.ConfigureComponent<EmailSenderForTests>(DependencyLifecycle.InstancePerCall));
             }
         }
     }

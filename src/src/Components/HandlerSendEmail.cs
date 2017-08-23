@@ -6,9 +6,9 @@
 
     public class HandlerSendEmail : IHandleMessages<SendEmail>
     {
-        private readonly ISendEmail sendEmail;
+        private readonly IEmailSender sendEmail;
 
-        public HandlerSendEmail(ISendEmail sendEmail)
+        public HandlerSendEmail(IEmailSender sendEmail)
         {
             this.sendEmail = sendEmail;
         }
@@ -16,7 +16,7 @@
         public Task Handle(SendEmail message, IMessageHandlerContext context)
         {
             ////TODO: to implement -> can be awaitable ?
-            this.sendEmail.Send(message.EmailAddress, message.CommentResponseStatus);
+            this.sendEmail.Send(message.UserName,  message.UserEmail, message.CommentResponseStatus);
             return Task.CompletedTask;
         }
     }

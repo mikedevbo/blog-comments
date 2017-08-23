@@ -5,17 +5,17 @@
     using NServiceBus.Logging;
     using Simple.Data;
 
-    public class SendEmailForTests : ISendEmail
+    public class EmailSenderForTests : IEmailSender
     {
-        private static ILog log = LogManager.GetLogger<SendEmailForTests>();
+        private static ILog log = LogManager.GetLogger<EmailSenderForTests>();
         private readonly IConfigurationManager configurationManager;
 
-        public SendEmailForTests(IConfigurationManager configurationManager)
+        public EmailSenderForTests(IConfigurationManager configurationManager)
         {
             this.configurationManager = configurationManager;
         }
 
-        public void Send(string emailAddress, CommentResponseStatus status)
+        public void Send(string userName, string userEmail, CommentResponseStatus status)
         {
             Database.OpenConnection(this.configurationManager.NsbTransportConnectionString)
                     .SagaTestResults

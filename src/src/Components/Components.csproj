@@ -69,6 +69,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ComponentsConfigurationManager.cs" />
+    <Compile Include="EmailSender.cs" />
     <Compile Include="GitHub\Dto\FileContentResponse.cs" />
     <Compile Include="GitHub\Dto\FileContentRequest.cs" />
     <Compile Include="GitHub\Dto\BranchRequest.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="HandlerCreatePullRequest.cs" />
     <Compile Include="HandlerSendEmail.cs" />
     <Compile Include="IComponentsConfigurationManager.cs" />
-    <Compile Include="ISendEmail.cs" />
+    <Compile Include="IEmailSender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

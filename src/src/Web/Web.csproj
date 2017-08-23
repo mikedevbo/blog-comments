@@ -186,7 +186,7 @@
     <Compile Include="IConfigurationManager.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SendEmailForTests.cs" />
+    <Compile Include="EmailSenderForTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
