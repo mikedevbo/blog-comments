@@ -1,6 +1,8 @@
 
 nsb_log_*
 
+*.pubxml
+*connectionstrings.config
 nugets
 deploy
 build32
