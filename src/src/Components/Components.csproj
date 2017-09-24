@@ -96,12 +96,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Messages\Messages.csproj">
-      <Project>{2d2c20a5-2c6f-4fa0-a8f4-a2e452361f94}</Project>
-      <Name>Messages</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Analyzer Include="..\..\packages\AsyncFixer.1.1.5\analyzers\dotnet\cs\AsyncFixer.dll" />
     <Analyzer Include="..\..\packages\Particular.CodeRules.0.2.0\tools\..\analyzers\dotnet\cs\Particular.CodeRules.dll" />
     <Analyzer Include="..\..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
