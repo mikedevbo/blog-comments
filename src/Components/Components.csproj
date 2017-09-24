@@ -8,16 +8,21 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\..\bin\components</OutputPath>
+    <CodeAnalysisRuleSet>Components.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\..\bin\components</OutputPath>
+    <CodeAnalysisRuleSet>Components.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AsyncFixer" Version="1.1.5" />
     <PackageReference Include="NServiceBus" Version="6.4.0" />
     <PackageReference Include="NServiceBus.Persistence.Sql" Version="2.1.4" />
     <PackageReference Include="NServiceBus.Persistence.Sql.MsBuild" Version="2.1.4" />
+    <PackageReference Include="Particular.CodeRules" Version="0.2.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
