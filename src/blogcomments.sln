@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AAAB3226-00A8-4562-9F2B-B869B5F5278C}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Components.Unit.Tests", "Components.Unit.Tests\Components.Unit.Tests.csproj", "{818EB24C-1755-4DCC-8C45-65F70D988A35}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Components.Integration.Tests", "Components.Integration.Tests\Components.Integration.Tests.csproj", "{90DFD570-D8AB-419A-8BB0-26031BD3EBEE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{FBB05C05-8933-4139-A8A2-9CC097C11A14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{90DFD570-D8AB-419A-8BB0-26031BD3EBEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90DFD570-D8AB-419A-8BB0-26031BD3EBEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90DFD570-D8AB-419A-8BB0-26031BD3EBEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBB05C05-8933-4139-A8A2-9CC097C11A14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBB05C05-8933-4139-A8A2-9CC097C11A14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBB05C05-8933-4139-A8A2-9CC097C11A14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBB05C05-8933-4139-A8A2-9CC097C11A14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
