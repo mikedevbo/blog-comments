@@ -57,6 +57,7 @@
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="DevMode.cs" />
     <Compile Include="IConfigurationManager.cs" />
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Modules\CommentModule.cs" />
     <Content Include="Web.config" />
   </ItemGroup>
