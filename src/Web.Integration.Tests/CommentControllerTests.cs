@@ -17,6 +17,7 @@
         private IConfigurationManager configurationManager = new ConfigurationManager();
 
         [Test]
+        [Ignore("obsolete")]
         public async Task Post_ForCommentData_FullProcessShouldBeSuccess()
         {
             // Arrange
@@ -69,6 +70,45 @@
             Assert.NotNull(result.FirstOrDefault(row => row.Result == 5));
             Assert.NotNull(result.FirstOrDefault(row => row.Result == 6));
             Assert.NotNull(result.FirstOrDefault(row => row.Result == 7));
+        }
+
+        [Test]
+        public async Task Post_ForCommentData_NoException()
+        {
+            // Arrange
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:50537/");
+            var comment = new Comment
+            {
+                UserName = "testUser",
+                UserEmail = "testUser@test.com",
+                UserWebsite = "testUser.com",
+                FileName = @"test.txt",
+                Content = @"new comment",
+            };
+
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(comment);
+            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage response = await client.PostAsync("comment", stringContent)
+                .ConfigureAwait(false);
+
+            // Assert
+            try
+            {
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Assert.True(false);
+                return;
+            }
+
+            // Assert
+            Assert.True(true);
         }
 
         public class ResultRow
