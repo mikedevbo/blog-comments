@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net47</TargetFramework>
+    <RuntimeIdentifiers>win</RuntimeIdentifiers>
+    <LangVersion>7.1</LangVersion>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\bin\host</OutputPath>
+    <CodeAnalysisRuleSet>Components.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\bin\host</OutputPath>
+    <CodeAnalysisRuleSet>Components.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="AsyncFixer" Version="1.1.5" />
+    <PackageReference Include="NServiceBus" Version="6.4.0" />
+    <PackageReference Include="Particular.CodeRules" Version="0.2.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="System.ServiceProcess" />
+  </ItemGroup>  
+  
+</Project>
