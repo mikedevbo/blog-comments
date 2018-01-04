@@ -1,6 +1,7 @@
 ﻿namespace Web
 {
     using System.Data.SqlClient;
+    using Common;
     using Messages.Commands;
     using Messages.Events;
     using Nancy;

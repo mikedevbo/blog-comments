@@ -40,7 +40,6 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <PackageReference Include="AsyncFixer" Version="1.1.5" />
@@ -55,9 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstraper.cs" />
-    <Compile Include="ConfigurationManager.cs" />
-    <Compile Include="DevMode.cs" />
-    <Compile Include="IConfigurationManager.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Modules\CommentModule.cs" />
     <Content Include="Web.config" />
@@ -66,6 +62,10 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{4e3ef9b3-a697-4c59-93a8-4ea7596cfc5b}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Messages\Messages.csproj">
       <Project>{b01ff4b6-84f6-4799-8308-d689551f3315}</Project>
       <Name>Messages</Name>

@@ -1,4 +1,4 @@
-﻿namespace Web
+﻿namespace Common
 {
     using System;
 

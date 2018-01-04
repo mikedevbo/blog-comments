@@ -7,6 +7,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using System.Web.Script.Serialization;
+    using Common;
     using NUnit.Framework;
     using Simple.Data;
     using Web.Models;
