@@ -21,7 +21,6 @@
             endpointConfiguration.SendFailedMessagesTo(this.configurationManager.NsbErrorQueueName);
             endpointConfiguration.AuditProcessedMessagesTo(this.configurationManager.NsbAuditQueueName);
             endpointConfiguration.UseSerialization<JsonSerializer>();
-            endpointConfiguration.SendOnly();
 
             // conventions
             var conventions = endpointConfiguration.Conventions();
