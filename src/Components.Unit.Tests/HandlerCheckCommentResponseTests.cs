@@ -1,4 +1,4 @@
-﻿namespace Components.Tests
+﻿namespace Components.Unit.Tests
 {
     using System;
     using System.Threading.Tasks;
