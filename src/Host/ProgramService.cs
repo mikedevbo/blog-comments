@@ -1,14 +1,12 @@
 ﻿namespace Host
 {
     using System;
-    using System.Data.SqlClient;
     using System.ServiceProcess;
     using System.Threading.Tasks;
     using Common;
-    using Messages.Commands;
-    using Messages.Events;
+    using Components;
+    using Components.GitHub;
     using NServiceBus;
-    using NServiceBus.Persistence.Sql;
 
     public class ProgramService : ServiceBase
     {
@@ -47,6 +45,19 @@
 
             // initialize endpoint
             endpointInitializer.Initialize(endpointConfiguration);
+
+            // register components
+            endpointConfiguration.RegisterComponents(reg =>
+                reg.ConfigureComponent<ComponentsConfigurationManager>(DependencyLifecycle.InstancePerCall));
+
+            endpointConfiguration.RegisterComponents(reg =>
+                            reg.ConfigureComponent<GitHubApi>(DependencyLifecycle.InstancePerCall));
+
+            endpointConfiguration.RegisterComponents(reg =>
+                            reg.ConfigureComponent<ConfigurationManager>(DependencyLifecycle.InstancePerCall));
+
+            endpointConfiguration.RegisterComponents(reg =>
+                                        reg.ConfigureComponent<EmailSender>(DependencyLifecycle.InstancePerCall));
 
             // start endpoint
             this.endpointInstance = await Endpoint.Start(endpointConfiguration)
