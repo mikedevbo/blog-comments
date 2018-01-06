@@ -1,9 +1,14 @@
 ﻿namespace Common
 {
+    using System;
     using System.Data.SqlClient;
+    using System.IO;
+    using System.Net;
+    using System.Net.Mail;
     using Messages.Commands;
     using Messages.Events;
     using NServiceBus;
+    using NServiceBus.Mailer;
     using NServiceBus.Persistence.Sql;
 
     public class EndpointInitializer : IEndpointInitializer
@@ -76,6 +81,34 @@
                         delayed.NumberOfRetries(0);
                     });
             }
+
+            // mailer
+            var mailSettings = endpointConfiguration.EnableMailer();
+            mailSettings.UseSmtpBuilder(buildSmtpClient: () =>
+            {
+                var smtpClient = new SmtpClient();
+
+                if (this.configurationManager.DevMode != DevMode.Production)
+                {
+                    var directoryLocation = Path.Combine(Environment.CurrentDirectory, "Emails");
+                    Directory.CreateDirectory(directoryLocation);
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+                    smtpClient.PickupDirectoryLocation = directoryLocation;
+                }
+                else
+                {
+                    smtpClient.Host = this.configurationManager.SmtpHost;
+                    smtpClient.Port = this.configurationManager.SmtpPort;
+                    smtpClient.EnableSsl = true;
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.Credentials = new NetworkCredential(
+                        this.configurationManager.SmtpHostUserName,
+                        this.configurationManager.SmtpHostPassword);
+                }
+
+                return smtpClient;
+            });
 
             // installers
             endpointConfiguration.EnableInstallers();

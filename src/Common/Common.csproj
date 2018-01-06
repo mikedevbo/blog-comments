@@ -18,6 +18,7 @@
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.1.5" />
     <PackageReference Include="NServiceBus" Version="6.4.0" />
+    <PackageReference Include="NServiceBus.Mailer" Version="3.0.1" />
     <PackageReference Include="NServiceBus.Persistence.Sql" Version="2.1.4" />
     <PackageReference Include="NServiceBus.Persistence.Sql.MsBuild" Version="2.1.4" />
     <PackageReference Include="NServiceBus.SqlServer" Version="3.1.2" />
