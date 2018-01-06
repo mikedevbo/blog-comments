@@ -42,15 +42,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
-    <PackageReference Include="AsyncFixer" Version="1.1.5" />
     <PackageReference Include="Nancy" Version="1.4.4" />
     <PackageReference Include="Nancy.Hosting.Aspnet" Version="1.4.1" />
-    <PackageReference Include="NServiceBus" Version="6.4.0" />
-    <PackageReference Include="NServiceBus.Persistence.Sql" Version="2.1.4" />
-    <PackageReference Include="NServiceBus.Persistence.Sql.MsBuild" Version="2.1.4" />
-    <PackageReference Include="NServiceBus.SqlServer" Version="3.1.2" />
-    <PackageReference Include="Particular.CodeRules" Version="0.2.0" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstraper.cs" />
