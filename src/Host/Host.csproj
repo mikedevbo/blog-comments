@@ -20,9 +20,9 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj" />
+    <!--<ProjectReference Include="..\Common\Common.csproj" />-->
     <ProjectReference Include="..\Components\Components.csproj" />
-    <ProjectReference Include="..\Messages\Messages.csproj" />
+    <!--<ProjectReference Include="..\Messages\Messages.csproj" />-->
   </ItemGroup>
   
   <ItemGroup>
