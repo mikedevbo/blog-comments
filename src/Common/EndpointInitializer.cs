@@ -5,6 +5,7 @@
     using System.IO;
     using System.Net;
     using System.Net.Mail;
+    using System.Reflection;
     using Messages.Commands;
     using Messages.Events;
     using NServiceBus;
@@ -90,7 +91,7 @@
 
                 if (this.configurationManager.DevMode != DevMode.Production)
                 {
-                    var directoryLocation = Path.Combine(Environment.CurrentDirectory, "Emails");
+                    var directoryLocation = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Emails");
                     Directory.CreateDirectory(directoryLocation);
                     smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
                     smtpClient.PickupDirectoryLocation = directoryLocation;

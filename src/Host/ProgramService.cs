@@ -50,14 +50,22 @@
             endpointConfiguration.RegisterComponents(reg =>
                 reg.ConfigureComponent<ComponentsConfigurationManager>(DependencyLifecycle.InstancePerCall));
 
-            endpointConfiguration.RegisterComponents(reg =>
-                            reg.ConfigureComponent<GitHubApi>(DependencyLifecycle.InstancePerCall));
+            if (configurationManager.NsbIsIntegrationTests)
+            {
+                endpointConfiguration.RegisterComponents(reg =>
+                    reg.ConfigureComponent<GitHubApiForTests>(DependencyLifecycle.InstancePerCall));
+            }
+            else
+            {
+                endpointConfiguration.RegisterComponents(reg =>
+                    reg.ConfigureComponent<GitHubApi>(DependencyLifecycle.InstancePerCall));
+            }
 
             endpointConfiguration.RegisterComponents(reg =>
-                            reg.ConfigureComponent<ConfigurationManager>(DependencyLifecycle.InstancePerCall));
+                    reg.ConfigureComponent<ConfigurationManager>(DependencyLifecycle.InstancePerCall));
 
             endpointConfiguration.RegisterComponents(reg =>
-                                        reg.ConfigureComponent<EmailSender>(DependencyLifecycle.InstancePerCall));
+                    reg.ConfigureComponent<EmailSender>(DependencyLifecycle.InstancePerCall));
 
             // start endpoint
             this.endpointInstance = await Endpoint.Start(endpointConfiguration)
