@@ -54,7 +54,7 @@
 
             // persistence
             var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
-            persistence.SqlVariant(SqlVariant.MsSqlServer);
+            persistence.SqlDialect<SqlDialect.MsSqlServer>();
             persistence.ConnectionBuilder(
                 connectionBuilder: () =>
                 {
