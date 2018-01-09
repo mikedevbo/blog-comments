@@ -64,9 +64,6 @@
             endpointConfiguration.RegisterComponents(reg =>
                     reg.ConfigureComponent<ConfigurationManager>(DependencyLifecycle.InstancePerCall));
 
-            endpointConfiguration.RegisterComponents(reg =>
-                    reg.ConfigureComponent<EmailSender>(DependencyLifecycle.InstancePerCall));
-
             // start endpoint
             this.endpointInstance = await Endpoint.Start(endpointConfiguration)
                 .ConfigureAwait(false);
