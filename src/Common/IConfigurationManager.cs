@@ -4,6 +4,16 @@
 
     public interface IConfigurationManager
     {
+        string UserAgent { get; }
+
+        string AuthorizationToken { get; }
+
+        string RepositoryName { get; }
+
+        string MasterBranchName { get; }
+
+        int CommentResponseAddedSagaTimeoutInSeconds { get; }
+
         string NsbEndpointName { get; }
 
         string NsbTransportConnectionString { get; }

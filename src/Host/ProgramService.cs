@@ -47,9 +47,6 @@
             endpointInitializer.Initialize(endpointConfiguration);
 
             // register components
-            endpointConfiguration.RegisterComponents(reg =>
-                reg.ConfigureComponent<ComponentsConfigurationManager>(DependencyLifecycle.InstancePerCall));
-
             if (configurationManager.NsbIsIntegrationTests)
             {
                 endpointConfiguration.RegisterComponents(reg =>

@@ -22,8 +22,11 @@
         public async Task Post_ForCommentData_FullProcessShouldBeSuccess()
         {
             // Arrange
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:49866/");
+            HttpClient client = new HttpClient
+            {
+                BaseAddress = new Uri("http://localhost:49866/")
+            };
+
             var comment = new Comment
             {
                 UserName = "testUser",
@@ -77,8 +80,11 @@
         public async Task Post_ForCommentData_NoException()
         {
             // Arrange
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:50537/");
+            HttpClient client = new HttpClient
+            {
+                BaseAddress = new Uri("http://localhost:50537/")
+            };
+
             var comment = new Comment
             {
                 UserName = "testUser",

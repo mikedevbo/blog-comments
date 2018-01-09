@@ -3,6 +3,7 @@
     using System;
     using System.Configuration;
     using System.Threading.Tasks;
+    using Common;
     using Components.GitHub;
     using NUnit.Framework;
 
@@ -10,8 +11,8 @@
     [Ignore("only for manual tests")]
     public class GitHubApiTests
     {
-        private readonly IComponentsConfigurationManager configurationComponentsManager =
-            new ComponentsConfigurationManager();
+        private readonly IConfigurationManager configurationManager =
+            new Common.ConfigurationManager();
 
         [Test]
         public async Task GetSha_Execute_ProperResult()
@@ -21,10 +22,10 @@
 
             // Act
             var result = await api.GetSha(
-                this.configurationComponentsManager.UserAgent,
-                this.configurationComponentsManager.AuthorizationToken,
-                this.configurationComponentsManager.RepositoryName,
-                this.configurationComponentsManager.MasterBranchName).ConfigureAwait(false);
+                this.configurationManager.UserAgent,
+                this.configurationManager.AuthorizationToken,
+                this.configurationManager.RepositoryName,
+                this.configurationManager.MasterBranchName).ConfigureAwait(false);
 
             // Assert
             Assert.NotNull(result);
@@ -41,17 +42,17 @@
 
             // Act
             await api.CreateRepositoryBranch(
-                this.configurationComponentsManager.UserAgent,
-                this.configurationComponentsManager.AuthorizationToken,
-                this.configurationComponentsManager.RepositoryName,
-                this.configurationComponentsManager.MasterBranchName,
+                this.configurationManager.UserAgent,
+                this.configurationManager.AuthorizationToken,
+                this.configurationManager.RepositoryName,
+                this.configurationManager.MasterBranchName,
                 newBranchName).ConfigureAwait(false);
 
             // Assert
             var result = await api.GetSha(
-                this.configurationComponentsManager.UserAgent,
-                this.configurationComponentsManager.AuthorizationToken,
-                this.configurationComponentsManager.RepositoryName,
+                this.configurationManager.UserAgent,
+                this.configurationManager.AuthorizationToken,
+                this.configurationManager.RepositoryName,
                 newBranchName).ConfigureAwait(false);
 
             Assert.NotNull(result);
@@ -68,9 +69,9 @@
 
             // Act
             return api.UpdateFile(
-                this.configurationComponentsManager.UserAgent,
-                this.configurationComponentsManager.AuthorizationToken,
-                this.configurationComponentsManager.RepositoryName,
+                this.configurationManager.UserAgent,
+                this.configurationManager.AuthorizationToken,
+                this.configurationManager.RepositoryName,
                 branchName,
                 "test.txt",
                 "\nnew comment - " + DateTime.Now);
@@ -88,9 +89,9 @@
 
             // Act
             var result = await api.CreatePullRequest(
-                this.configurationComponentsManager.UserAgent,
-                this.configurationComponentsManager.AuthorizationToken,
-                this.configurationComponentsManager.RepositoryName,
+                this.configurationManager.UserAgent,
+                this.configurationManager.AuthorizationToken,
+                this.configurationManager.RepositoryName,
                 branchName,
                 "master").ConfigureAwait(false);
 
@@ -103,13 +104,13 @@
         public async Task IsPullRequestOpen_Execute_ProperResult()
         {
             // Arrange
-            string pullRequestUri = ConfigurationManager.AppSettings["pullRequestUri"];
+            string pullRequestUri = System.Configuration.ConfigurationManager.AppSettings["pullRequestUri"];
             var api = this.GetGitHubApi();
 
             // Act
             var result = await api.IsPullRequestOpen(
-                this.configurationComponentsManager.UserAgent,
-                this.configurationComponentsManager.AuthorizationToken,
+                this.configurationManager.UserAgent,
+                this.configurationManager.AuthorizationToken,
                 pullRequestUri).ConfigureAwait(false);
 
             // Assert
@@ -120,13 +121,13 @@
         public async Task IsPullRequestMerged_Execute_ProperResult()
         {
             // Arrange
-            string pullRequestUri = ConfigurationManager.AppSettings["pullRequestUri"];
+            string pullRequestUri = System.Configuration.ConfigurationManager.AppSettings["pullRequestUri"];
             var api = this.GetGitHubApi();
 
             // Act
             var result = await api.IsPullRequestMerged(
-                this.configurationComponentsManager.UserAgent,
-                this.configurationComponentsManager.AuthorizationToken,
+                this.configurationManager.UserAgent,
+                this.configurationManager.AuthorizationToken,
                 pullRequestUri).ConfigureAwait(false);
 
             // Assert

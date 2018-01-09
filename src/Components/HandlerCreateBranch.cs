@@ -3,6 +3,7 @@
     using System;
     using System.Text;
     using System.Threading.Tasks;
+    using Common;
     using Components.GitHub;
     using Messages.Commands;
     using Messages.Events;
@@ -10,12 +11,12 @@
 
     public class HandlerCreateBranch : IHandleMessages<CreateBranch>
     {
-        private readonly IComponentsConfigurationManager componentsConfigurationManager;
+        private readonly IConfigurationManager configurationManager;
         private readonly IGitHubApi gitHubApi;
 
-        public HandlerCreateBranch(IComponentsConfigurationManager componentsConfigurationManager, IGitHubApi gitHubApi)
+        public HandlerCreateBranch(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
         {
-            this.componentsConfigurationManager = componentsConfigurationManager;
+            this.configurationManager = configurationManager;
             this.gitHubApi = gitHubApi;
         }
 
@@ -26,10 +27,10 @@
             string branchName = sb.ToString();
 
             await this.gitHubApi.CreateRepositoryBranch(
-                this.componentsConfigurationManager.UserAgent,
-                this.componentsConfigurationManager.AuthorizationToken,
-                this.componentsConfigurationManager.RepositoryName,
-                this.componentsConfigurationManager.MasterBranchName,
+                this.configurationManager.UserAgent,
+                this.configurationManager.AuthorizationToken,
+                this.configurationManager.RepositoryName,
+                this.configurationManager.MasterBranchName,
                 branchName).ConfigureAwait(false);
 
             await context.Publish<IBranchCreated>(

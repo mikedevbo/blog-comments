@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Common;
     using Messages;
     using Messages.Commands;
     using Messages.Events;
@@ -14,7 +15,7 @@
     {
         private readonly Guid id = Guid.Parse(@"0C242B08-7704-499D-A9D8-184ED6D93988");
         private readonly int timeoutMinutes = 30;
-        private IComponentsConfigurationManager componentsConfigurationManager;
+        private IConfigurationManager configurationManager;
 
         [Test]
         public async Task Handle_StartAddingComment_SendCreateBranchWithProperData()
@@ -134,9 +135,9 @@
 
         private HandlerCommentSaga GetHandler()
         {
-            this.componentsConfigurationManager = Substitute.For<IComponentsConfigurationManager>();
+            this.configurationManager = Substitute.For<IConfigurationManager>();
 
-            return new HandlerCommentSaga(this.componentsConfigurationManager)
+            return new HandlerCommentSaga(this.configurationManager)
             {
                 Data = new CommentSagaData
                 {

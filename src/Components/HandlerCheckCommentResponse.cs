@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Common;
     using Components.GitHub;
     using Messages;
     using Messages.Commands;
@@ -10,19 +11,19 @@
 
     public class HandlerCheckCommentResponse : IHandleMessages<CheckCommentResponse>
     {
-        private readonly IComponentsConfigurationManager componentsConfigurationManager;
+        private readonly IConfigurationManager configurationManager;
         private readonly IGitHubApi gitHubApi;
 
-        public HandlerCheckCommentResponse(IComponentsConfigurationManager componentsConfigurationManager, IGitHubApi gitHubApi)
+        public HandlerCheckCommentResponse(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
         {
-            this.componentsConfigurationManager = componentsConfigurationManager;
+            this.configurationManager = configurationManager;
             this.gitHubApi = gitHubApi;
         }
 
         public async Task Handle(CheckCommentResponse message, IMessageHandlerContext context)
         {
-            string userAgent = this.componentsConfigurationManager.UserAgent;
-            string authorizationToken = this.componentsConfigurationManager.AuthorizationToken;
+            string userAgent = this.configurationManager.UserAgent;
+            string authorizationToken = this.configurationManager.AuthorizationToken;
             string pullRequestUri = message.PullRequestUri;
 
             CommentResponseStatus responseStatus = await this.GetCommentResponseStatus(

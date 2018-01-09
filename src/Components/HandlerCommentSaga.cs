@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Common;
     using Messages;
     using Messages.Commands;
     using Messages.Events;
@@ -18,7 +19,7 @@
         IHandleTimeouts<CheckCommentResponseTimeout>,
         IHandleMessages<ICommentResponseAdded>
     {
-        private readonly IComponentsConfigurationManager componentsConfigurationManager;
+        private readonly IConfigurationManager configurationManager;
         private ILog log = LogManager.GetLogger<HandlerCommentSaga>();
 
         public HandlerCommentSaga()
@@ -26,9 +27,9 @@
             ////for unit tests only
         }
 
-        public HandlerCommentSaga(IComponentsConfigurationManager componentsConfigurationManager)
+        public HandlerCommentSaga(IConfigurationManager configurationManager)
         {
-            this.componentsConfigurationManager = componentsConfigurationManager;
+            this.configurationManager = configurationManager;
         }
 
         protected override string CorrelationPropertyName => nameof(CommentSagaData.CommentId);
@@ -65,7 +66,7 @@
              {
                  command.CommentId = this.Data.CommentId;
                  command.CommentBranchName = this.Data.BranchName;
-                 command.BaseBranchName = this.componentsConfigurationManager.MasterBranchName;
+                 command.BaseBranchName = this.configurationManager.MasterBranchName;
              });
         }
 
@@ -75,7 +76,7 @@
 
             return this.RequestTimeout(
                 context,
-                TimeSpan.FromSeconds(this.componentsConfigurationManager.CommentResponseAddedSagaTimeoutInSeconds),
+                TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds),
                 new CheckCommentResponseTimeout { CommentId = this.Data.CommentId });
         }
 
@@ -106,7 +107,7 @@
             {
                 await this.RequestTimeout(
                     context,
-                    TimeSpan.FromSeconds(this.componentsConfigurationManager.CommentResponseAddedSagaTimeoutInSeconds),
+                    TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds),
                     new CheckCommentResponseTimeout { CommentId = this.Data.CommentId })
                     .ConfigureAwait(false);
             }

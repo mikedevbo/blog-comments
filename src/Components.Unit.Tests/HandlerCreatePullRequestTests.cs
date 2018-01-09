@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Common;
     using Components.GitHub;
     using Components.GitHub.Dto;
     using Messages.Commands;
@@ -14,7 +15,7 @@
     public class HandlerCreatePullRequestTests
     {
         private readonly Guid id = Guid.Parse(@"0C242B08-7704-499D-A9D8-184ED6D93988");
-        private IComponentsConfigurationManager componentsConfigurationManager;
+        private IConfigurationManager configurationManager;
         private IGitHubApi gitHubApi;
 
         [Test]
@@ -40,10 +41,10 @@
 
         private HandlerCreatePullRequest GetHandler()
         {
-            this.componentsConfigurationManager = Substitute.For<IComponentsConfigurationManager>();
+            this.configurationManager = Substitute.For<IConfigurationManager>();
             this.gitHubApi = Substitute.For<IGitHubApi>();
 
-            return new HandlerCreatePullRequest(this.componentsConfigurationManager, this.gitHubApi);
+            return new HandlerCreatePullRequest(this.configurationManager, this.gitHubApi);
         }
 
         private TestableMessageHandlerContext GetContext()

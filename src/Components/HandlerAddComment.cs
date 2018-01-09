@@ -2,6 +2,7 @@
 {
     using System.Text;
     using System.Threading.Tasks;
+    using Common;
     using Components.GitHub;
     using Messages.Commands;
     using Messages.Events;
@@ -9,12 +10,12 @@
 
     public class HandlerAddComment : IHandleMessages<AddComment>
     {
-        private readonly IComponentsConfigurationManager componentsConfigurationManager;
+        private readonly IConfigurationManager configurationManager;
         private readonly IGitHubApi gitHubApi;
 
-        public HandlerAddComment(IComponentsConfigurationManager configurationManager, IGitHubApi gitHubApi)
+        public HandlerAddComment(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
         {
-            this.componentsConfigurationManager = configurationManager;
+            this.configurationManager = configurationManager;
             this.gitHubApi = gitHubApi;
         }
 
@@ -26,9 +27,9 @@
             string content = sb.ToString();
 
             await this.gitHubApi.UpdateFile(
-                this.componentsConfigurationManager.UserAgent,
-                this.componentsConfigurationManager.AuthorizationToken,
-                this.componentsConfigurationManager.RepositoryName,
+                this.configurationManager.UserAgent,
+                this.configurationManager.AuthorizationToken,
+                this.configurationManager.RepositoryName,
                 message.BranchName,
                 message.FileName,
                 content).ConfigureAwait(false);

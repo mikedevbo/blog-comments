@@ -6,6 +6,46 @@
 
     public class ConfigurationManager : IConfigurationManager
     {
+        public string UserAgent
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings["UserAgent"];
+            }
+        }
+
+        public string AuthorizationToken
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings["AuthorizationToken"];
+            }
+        }
+
+        public string RepositoryName
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings["RepositoryName"];
+            }
+        }
+
+        public string MasterBranchName
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings["MasterBranchName"];
+            }
+        }
+
+        public int CommentResponseAddedSagaTimeoutInSeconds
+        {
+            get
+            {
+                return Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["CommentResponseAddedSagaTimeoutInSeconds"]);
+            }
+        }
+
         public string NsbEndpointName
         {
             get
