@@ -13,15 +13,5 @@
         string MasterBranchName { get; }
 
         int CommentResponseAddedSagaTimeoutInSeconds { get; }
-
-        string SmtpHost { get; }
-
-        int SmtpPort { get; }
-
-        string SmtpHostUserName { get; }
-
-        SecureString SmtpHostPassword { get; }
-
-        string SmtpFrom { get; }
     }
 }
