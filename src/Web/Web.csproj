@@ -42,11 +42,12 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
+    <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Nancy" Version="1.4.4" />
     <PackageReference Include="Nancy.Hosting.Aspnet" Version="1.4.1" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bootstraper.cs" />
+    <Compile Include="Bootstrapper.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Modules\CommentModule.cs" />
     <Content Include="Web.config" />
