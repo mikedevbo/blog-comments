@@ -58,12 +58,5 @@
             // Assert
             Assert.True(true);
         }
-
-        public class ResultRow
-        {
-            public int Id { get; set; }
-
-            public int Result { get; set; }
-        }
     }
 }
