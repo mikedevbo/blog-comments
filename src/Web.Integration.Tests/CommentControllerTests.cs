@@ -13,6 +13,7 @@
     using Web.Models;
 
     [TestFixture]
+    [Ignore("only for manual tests")]
     public class CommentControllerTests
     {
         private IConfigurationManager configurationManager = new ConfigurationManager();

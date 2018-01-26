@@ -24,7 +24,7 @@
             pipelines.OnError += (NancyContext ctx, Exception ex) =>
             {
                 Log.Error(ex.Message, ex);
-                return ctx.Response;
+                return HttpStatusCode.InternalServerError;
             };
         }
 

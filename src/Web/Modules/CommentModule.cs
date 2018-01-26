@@ -10,6 +10,7 @@
     public class CommentModule : NancyModule
     {
         private readonly IMessageSession messageSession;
+        private CommentValidator validator = new CommentValidator();
 
         public CommentModule(IMessageSession messageSession)
             : base("/comment")
@@ -21,6 +22,13 @@
             this.Post["/", true] = async (r, c) =>
             {
                 var comment = this.Bind<Comment>();
+
+                var validationResult = this.validator.Validate(comment);
+                if (!validationResult.IsValid)
+                {
+                    return this.Negotiate.WithModel(validationResult).WithStatusCode(HttpStatusCode.BadRequest);
+                }
+
                 await this.messageSession.Send<StartAddingComment>(command =>
                 {
                     command.CommentId = Guid.NewGuid();

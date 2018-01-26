@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Components\Components.csproj" />
-    <!--<ProjectReference Include="..\Messages\Messages.csproj" />-->
   </ItemGroup>
 
 </Project>
