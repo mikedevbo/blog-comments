@@ -26,7 +26,7 @@
             string authorizationToken = this.configurationManager.AuthorizationToken;
             string pullRequestUri = message.PullRequestUri;
 
-            CommentResponseStatus responseStatus = await this.GetCommentResponseStatus(
+            CommentResponse responseStatus = await this.GetCommentResponseStatus(
                 () => this.gitHubApi.IsPullRequestOpen(
                     userAgent,
                     authorizationToken,
@@ -40,25 +40,31 @@
                 evt =>
                 {
                     evt.CommentId = message.CommentId;
-                    evt.CommentResponseStatus = responseStatus;
+                    evt.CommentResponse = responseStatus;
+                    //evt.ETag = 
                 }).ConfigureAwait(false);
         }
 
-        public async Task<CommentResponseStatus> GetCommentResponseStatus(
+        public async Task<CommentResponse> GetCommentResponseStatus(
             Func<Task<bool>> isPullRequestOpen,
             Func<Task<bool>> isPullRequestMerged)
         {
+            var response = new CommentResponse();
+
             if (await isPullRequestOpen().ConfigureAwait(false))
             {
-                return CommentResponseStatus.NotAddded;
+                response.ResponseStatus = CommentResponseStatus.NotAddded;
             }
-
-            if (await isPullRequestMerged().ConfigureAwait(false))
+            else if (await isPullRequestMerged().ConfigureAwait(false))
             {
-                return CommentResponseStatus.Approved;
+                response.ResponseStatus = CommentResponseStatus.Approved;
+            }
+            else
+            {
+                response.ResponseStatus = CommentResponseStatus.Rejected;
             }
 
-            return CommentResponseStatus.Rejected;
+            return response;
         }
     }
 }

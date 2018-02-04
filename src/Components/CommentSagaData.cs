@@ -20,5 +20,7 @@
         public string BranchName { get; set; }
 
         public string PullRequestLocation { get; set; }
+
+        public string ETag { get; set; }
     }
 }

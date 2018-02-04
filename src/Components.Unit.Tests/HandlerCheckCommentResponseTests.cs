@@ -53,7 +53,7 @@
             var result = await handler.GetCommentResponseStatus(f1, f2).ConfigureAwait(false);
 
             // Assert
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result.ResponseStatus, Is.EqualTo(expectedResult));
         }
 
         private HandlerCheckCommentResponse GetHandler()

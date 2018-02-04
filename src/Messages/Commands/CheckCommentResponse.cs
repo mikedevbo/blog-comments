@@ -7,5 +7,7 @@
         public Guid CommentId { get; set; }
 
         public string PullRequestUri { get; set; }
+
+        public string Etag { get; set; }
     }
 }

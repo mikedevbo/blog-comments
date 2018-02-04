@@ -74,10 +74,15 @@
         {
             this.Data.PullRequestLocation = message.PullRequestLocation;
 
-            return this.RequestTimeout(
+            //return this.RequestTimeout(
+            //    context,
+            //    TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds),
+            //    new CheckCommentResponseTimeout { CommentId = this.Data.CommentId });
+
+            return this.SendTimeout(
                 context,
                 TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds),
-                new CheckCommentResponseTimeout { CommentId = this.Data.CommentId });
+                this.Data.CommentId);
         }
 
         public Task Timeout(CheckCommentResponseTimeout state, IMessageHandlerContext context)
@@ -86,30 +91,37 @@
             {
                 command.CommentId = this.Data.CommentId;
                 command.PullRequestUri = this.Data.PullRequestLocation;
+                command.Etag = this.Data.ETag;
             });
         }
 
         public async Task Handle(ICommentResponseAdded message, IMessageHandlerContext context)
         {
-            if (message.CommentResponseStatus == CommentResponseStatus.Approved ||
-                message.CommentResponseStatus == CommentResponseStatus.Rejected)
+            if (message.CommentResponse.ResponseStatus == CommentResponseStatus.Approved ||
+                message.CommentResponse.ResponseStatus == CommentResponseStatus.Rejected)
             {
                 await context.Send<SendEmail>(command =>
                 {
                     command.UserName = this.Data.UserName;
                     command.UserEmail = this.Data.UserEmail;
-                    command.CommentResponseStatus = message.CommentResponseStatus;
+                    command.CommentResponseStatus = message.CommentResponse.ResponseStatus;
                 }).ConfigureAwait(false);
 
                 this.MarkAsComplete();
             }
             else
             {
-                await this.RequestTimeout(
+                //await this.RequestTimeout(
+                //    context,
+                //    TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds),
+                //    new CheckCommentResponseTimeout { CommentId = this.Data.CommentId })
+                //    .ConfigureAwait(false);
+                this.Data.ETag = message.CommentResponse.ETag;
+
+                await this.SendTimeout(
                     context,
                     TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds),
-                    new CheckCommentResponseTimeout { CommentId = this.Data.CommentId })
-                    .ConfigureAwait(false);
+                    this.Data.CommentId).ConfigureAwait(false);
             }
         }
 
@@ -121,6 +133,14 @@
             mapper.ConfigureMapping<IPullRequestCreated>(message => message.CommentId);
             mapper.ConfigureMapping<CheckCommentResponseTimeout>(message => message.CommentId);
             mapper.ConfigureMapping<ICommentResponseAdded>(message => message.CommentId);
+        }
+
+        private Task SendTimeout(IMessageHandlerContext context, TimeSpan timeoutInterval, Guid commentId)
+        {
+            return this.RequestTimeout(
+                context,
+                timeoutInterval,
+                new CheckCommentResponseTimeout { CommentId = commentId});
         }
     }
 }
