@@ -1,6 +1,7 @@
 ﻿namespace Components.Unit.Tests
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using Common;
     using Components.GitHub;
@@ -11,6 +12,8 @@
     using NSubstitute;
     using NUnit.Framework;
 
+    [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1008:OpeningParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
+    [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:OpeningParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
     [TestFixture]
     public class HandlerCheckCommentResponseTests
     {
@@ -45,8 +48,9 @@
             CommentResponseStatus expectedResult)
         {
             // Arrange
-            Func<Task<bool>> f1 = () => Task.Run(() => isPullRequestOpen);
-            Func<Task<bool>> f2 = () => Task.Run(() => isPullRequestMerged);
+            const string etagResult = "1234";
+            Func<Task<(bool result, string etag)>> f1 = () => Task.Run(() => (isPullRequestOpen, etagResult));
+            Func<Task<(bool result, string etag)>> f2 = () => Task.Run(() => (isPullRequestMerged, etagResult));
             var handler = this.GetHandler();
 
             // Act
@@ -54,6 +58,7 @@
 
             // Assert
             Assert.That(result.ResponseStatus, Is.EqualTo(expectedResult));
+            Assert.That(result.ETag, Is.EqualTo(etagResult));
         }
 
         private HandlerCheckCommentResponse GetHandler()

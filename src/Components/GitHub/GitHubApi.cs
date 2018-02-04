@@ -1,6 +1,7 @@
 ﻿namespace Components.GitHub
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
@@ -19,7 +20,7 @@
             string branchName)
         {
             HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
-            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken, null);
 
             var requestUri = string.Format(@"repos/{0}/{1}/git/refs/heads/{2}", userAgent, repositoryName, branchName);
             HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
@@ -37,7 +38,7 @@
             string newBranchName)
         {
             HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
-            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken, null);
 
             var requestUri = string.Format(@"repos/{0}/{1}/git/refs", userAgent, repositoryName);
 
@@ -66,7 +67,7 @@
             string content)
         {
             HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
-            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken, null);
 
             // get file to update
             var requestUri = string.Format(@"repos/{0}/{1}/contents/{2}?ref={3}", userAgent, repositoryName, fileName, branchName);
@@ -102,7 +103,7 @@
             string baseBranchName)
         {
             HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
-            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken, null);
 
             var requestUri = string.Format(@"repos/{0}/{1}/pulls", userAgent, repositoryName);
 
@@ -120,39 +121,27 @@
             return response.Headers.Location.AbsoluteUri;
         }
 
-        public async Task<bool> IsPullRequestOpen(
+        [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:ClosingParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
+        public async Task<(bool result, string etag)> IsPullRequestOpen(
             string userAgent,
             string authorizationToken,
-            string pullRequestUrl)
+            string pullRequestUrl,
+            string etag)
         {
             HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
-            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken, etag);
 
             HttpResponseMessage response = await httpClient.GetAsync(pullRequestUrl).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
 
-            var pullRequestResponse = await response.Content.ReadAsJsonAsync<IsPullRequestExistsResponse>().ConfigureAwait(false);
-            return pullRequestResponse.State == @"open";
-        }
-
-        public async Task<bool> IsPullRequestMerged(
-            string userAgent,
-            string authorizationToken,
-            string pullRequestUrl)
-        {
-            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
-            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken);
-
-            var requestUri = string.Format(@"{0}/merge", pullRequestUrl);
-            HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
-
-            if (response.StatusCode == HttpStatusCode.NoContent)
+            if (response.StatusCode == HttpStatusCode.NotModified)
             {
-                return true;
+                return (true, response.Headers.ETag.Tag);
             }
-            else if (response.StatusCode == HttpStatusCode.NotFound)
+
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                return false;
+                var pullRequestResponse = await response.Content.ReadAsJsonAsync<IsPullRequestExistsResponse>().ConfigureAwait(false);
+                return (pullRequestResponse.State == @"open", response.Headers.ETag.Tag);
             }
 
             var exception = new HttpRequestException(string.Format(@"Response bad satus code: {0}", response.StatusCode));
@@ -160,11 +149,44 @@
             throw exception;
         }
 
-        private void SetRequestHeaders(HttpRequestHeaders httpRequestHeaders, string userAgent, string authorizationToken)
+        [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:ClosingParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
+        public async Task<(bool result, string etag)> IsPullRequestMerged(
+            string userAgent,
+            string authorizationToken,
+            string pullRequestUrl,
+            string etag)
+        {
+            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken, etag);
+
+            var requestUri = string.Format(@"{0}/merge", pullRequestUrl);
+            HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
+
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                return (true, response.Headers.ETag.Tag);
+            }
+            else if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return (false, response.Headers.ETag.Tag);
+            }
+
+            var exception = new HttpRequestException(string.Format(@"Response bad satus code: {0}", response.StatusCode));
+            exception.Data.Add("response", response);
+            throw exception;
+        }
+
+        private void SetRequestHeaders(HttpRequestHeaders httpRequestHeaders, string userAgent, string authorizationToken, string etag)
         {
             httpRequestHeaders.Accept.Clear();
             httpRequestHeaders.Add("User-agent", userAgent);
             httpRequestHeaders.Add("Authorization", string.Format("Token {0}", authorizationToken));
+
+            if (!string.IsNullOrEmpty(etag))
+            {
+                httpRequestHeaders.Add("If-None-Match", string.Format(@"""{0}""", etag));
+            }
+
             httpRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
     }

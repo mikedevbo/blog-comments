@@ -1,6 +1,7 @@
 ﻿namespace Components
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using Common;
     using Components.GitHub;
@@ -9,6 +10,7 @@
     using Messages.Events;
     using NServiceBus;
 
+    [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:OpeningParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
     public class HandlerCheckCommentResponse : IHandleMessages<CheckCommentResponse>
     {
         private readonly IConfigurationManager configurationManager;
@@ -25,45 +27,52 @@
             string userAgent = this.configurationManager.UserAgent;
             string authorizationToken = this.configurationManager.AuthorizationToken;
             string pullRequestUri = message.PullRequestUri;
+            string etag = message.Etag;
 
-            CommentResponse responseStatus = await this.GetCommentResponseStatus(
+            CommentResponse response = await this.GetCommentResponseStatus(
                 () => this.gitHubApi.IsPullRequestOpen(
                     userAgent,
                     authorizationToken,
-                    pullRequestUri),
+                    pullRequestUri,
+                    etag),
                 () => this.gitHubApi.IsPullRequestMerged(
                     userAgent,
                     authorizationToken,
-                    pullRequestUri)).ConfigureAwait(false);
+                    pullRequestUri,
+                    etag)).ConfigureAwait(false);
 
             await context.Publish<ICommentResponseAdded>(
                 evt =>
                 {
                     evt.CommentId = message.CommentId;
-                    evt.CommentResponse = responseStatus;
-                    //evt.ETag = 
+                    evt.CommentResponse = response;
                 }).ConfigureAwait(false);
         }
 
         public async Task<CommentResponse> GetCommentResponseStatus(
-            Func<Task<bool>> isPullRequestOpen,
-            Func<Task<bool>> isPullRequestMerged)
+            Func<Task<(bool result, string etag)>> isPullRequestOpen,
+            Func<Task<(bool result, string etag)>> isPullRequestMerged)
         {
             var response = new CommentResponse();
 
-            if (await isPullRequestOpen().ConfigureAwait(false))
+            var isOpen = await isPullRequestOpen().ConfigureAwait(false);
+            if (isOpen.result)
             {
                 response.ResponseStatus = CommentResponseStatus.NotAddded;
-            }
-            else if (await isPullRequestMerged().ConfigureAwait(false))
-            {
-                response.ResponseStatus = CommentResponseStatus.Approved;
-            }
-            else
-            {
-                response.ResponseStatus = CommentResponseStatus.Rejected;
+                response.ETag = isOpen.etag;
+                return response;
             }
 
+            var isMerged = await isPullRequestMerged().ConfigureAwait(false);
+            if (isMerged.result)
+            {
+                response.ResponseStatus = CommentResponseStatus.Approved;
+                response.ETag = isOpen.etag;
+                return response;
+            }
+
+            response.ResponseStatus = CommentResponseStatus.Rejected;
+            response.ETag = isOpen.etag;
             return response;
         }
     }

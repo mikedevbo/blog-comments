@@ -74,11 +74,6 @@
         {
             this.Data.PullRequestLocation = message.PullRequestLocation;
 
-            //return this.RequestTimeout(
-            //    context,
-            //    TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds),
-            //    new CheckCommentResponseTimeout { CommentId = this.Data.CommentId });
-
             return this.SendTimeout(
                 context,
                 TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds),
@@ -111,11 +106,6 @@
             }
             else
             {
-                //await this.RequestTimeout(
-                //    context,
-                //    TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds),
-                //    new CheckCommentResponseTimeout { CommentId = this.Data.CommentId })
-                //    .ConfigureAwait(false);
                 this.Data.ETag = message.CommentResponse.ETag;
 
                 await this.SendTimeout(
@@ -140,7 +130,7 @@
             return this.RequestTimeout(
                 context,
                 timeoutInterval,
-                new CheckCommentResponseTimeout { CommentId = commentId});
+                new CheckCommentResponseTimeout { CommentId = commentId });
         }
     }
 }

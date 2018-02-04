@@ -1,8 +1,9 @@
 ﻿namespace Components.GitHub
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
-    using Components.GitHub.Dto;
 
+    [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:OpeningParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
     public interface IGitHubApi
     {
        Task<string> GetSha(
@@ -33,14 +34,16 @@
             string headBranchName,
             string baseBranchName);
 
-        Task<bool> IsPullRequestOpen(
+        Task<(bool result, string etag)> IsPullRequestOpen(
             string userAgent,
             string authorizationToken,
-            string pullRequestUrl);
+            string pullRequestUrl,
+            string etag);
 
-        Task<bool> IsPullRequestMerged(
+        Task<(bool result, string etag)> IsPullRequestMerged(
             string userAgent,
             string authorizationToken,
-            string pullRequestUrl);
+            string pullRequestUrl,
+            string etag);
     }
 }

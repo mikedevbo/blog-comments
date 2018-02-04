@@ -1,14 +1,13 @@
 ﻿namespace Components.GitHub
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using Common;
     using NServiceBus.Logging;
     using Simple.Data;
 
+    [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1008:OpeningParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
+    [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:OpeningParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
     public class GitHubApiForTests : IGitHubApi
     {
         private static ILog log = LogManager.GetLogger<GitHubApiForTests>();
@@ -63,7 +62,7 @@
             return Task.Run(() => @"https://test/test");
         }
 
-        public Task<bool> IsPullRequestOpen(string userAgent, string authorizationToken, string pullRequestUrl)
+        public Task<(bool result, string etag)> IsPullRequestOpen(string userAgent, string authorizationToken, string pullRequestUrl, string etag)
         {
             Database.OpenConnection(this.configurationManager.NsbTransportConnectionString)
                     .SagaTestResults
@@ -71,10 +70,10 @@
 
             log.Info("IsPullRequestOpen");
 
-            return Task.Run(() => false);
+            return Task.Run(() => (false, "1234"));
         }
 
-        public Task<bool> IsPullRequestMerged(string userAgent, string authorizationToken, string pullRequestUrl)
+        public Task<(bool result, string etag)> IsPullRequestMerged(string userAgent, string authorizationToken, string pullRequestUrl, string etag)
         {
             Database.OpenConnection(this.configurationManager.NsbTransportConnectionString)
                     .SagaTestResults
@@ -82,7 +81,7 @@
 
             log.Info("IsPullRequestMerged");
 
-            return Task.Run(() => true);
+            return Task.Run(() => (true, "1234"));
         }
     }
 }
