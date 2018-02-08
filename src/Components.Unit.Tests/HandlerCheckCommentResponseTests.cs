@@ -50,7 +50,7 @@
             // Arrange
             const string etagResult = "1234";
             Func<Task<(bool result, string etag)>> f1 = () => Task.Run(() => (isPullRequestOpen, etagResult));
-            Func<Task<(bool result, string etag)>> f2 = () => Task.Run(() => (isPullRequestMerged, etagResult));
+            Func<Task<bool>> f2 = () => Task.Run(() => isPullRequestMerged);
             var handler = this.GetHandler();
 
             // Act

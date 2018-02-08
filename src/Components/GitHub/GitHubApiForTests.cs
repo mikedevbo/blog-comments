@@ -73,7 +73,7 @@
             return Task.Run(() => (false, "1234"));
         }
 
-        public Task<(bool result, string etag)> IsPullRequestMerged(string userAgent, string authorizationToken, string pullRequestUrl, string etag)
+        public Task<bool> IsPullRequestMerged(string userAgent, string authorizationToken, string pullRequestUrl)
         {
             Database.OpenConnection(this.configurationManager.NsbTransportConnectionString)
                     .SagaTestResults
@@ -81,7 +81,7 @@
 
             log.Info("IsPullRequestMerged");
 
-            return Task.Run(() => (true, "1234"));
+            return Task.Run(() => true);
         }
     }
 }

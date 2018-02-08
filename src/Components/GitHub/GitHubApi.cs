@@ -150,25 +150,26 @@
         }
 
         [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:ClosingParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
-        public async Task<(bool result, string etag)> IsPullRequestMerged(
+        public async Task<bool> IsPullRequestMerged(
             string userAgent,
             string authorizationToken,
-            string pullRequestUrl,
-            string etag)
+            string pullRequestUrl)
         {
             HttpClient httpClient = new HttpClient { BaseAddress = new Uri(ApiBaseUri) };
-            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken, etag);
+
+            ////ETag returned by github api is always null so it doesn't make sense to set it
+            this.SetRequestHeaders(httpClient.DefaultRequestHeaders, userAgent, authorizationToken, null);
 
             var requestUri = string.Format(@"{0}/merge", pullRequestUrl);
             HttpResponseMessage response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
 
             if (response.StatusCode == HttpStatusCode.NoContent)
             {
-                return (true, response.Headers.ETag.Tag);
+                return true;
             }
             else if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                return (false, response.Headers.ETag.Tag);
+                return false;
             }
 
             var exception = new HttpRequestException(string.Format(@"Response bad satus code: {0}", response.StatusCode));

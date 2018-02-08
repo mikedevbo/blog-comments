@@ -38,8 +38,7 @@
                 () => this.gitHubApi.IsPullRequestMerged(
                     userAgent,
                     authorizationToken,
-                    pullRequestUri,
-                    etag)).ConfigureAwait(false);
+                    pullRequestUri)).ConfigureAwait(false);
 
             await context.Publish<ICommentResponseAdded>(
                 evt =>
@@ -51,7 +50,7 @@
 
         public async Task<CommentResponse> GetCommentResponseStatus(
             Func<Task<(bool result, string etag)>> isPullRequestOpen,
-            Func<Task<(bool result, string etag)>> isPullRequestMerged)
+            Func<Task<bool>> isPullRequestMerged)
         {
             var response = new CommentResponse();
 
@@ -64,7 +63,7 @@
             }
 
             var isMerged = await isPullRequestMerged().ConfigureAwait(false);
-            if (isMerged.result)
+            if (isMerged)
             {
                 response.ResponseStatus = CommentResponseStatus.Approved;
                 response.ETag = isOpen.etag;

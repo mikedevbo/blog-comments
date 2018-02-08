@@ -129,8 +129,7 @@
             var result = await api.IsPullRequestMerged(
                 this.configurationManager.UserAgent,
                 this.configurationManager.AuthorizationToken,
-                pullRequestUri,
-                "1234").ConfigureAwait(false);
+                pullRequestUri).ConfigureAwait(false);
 
             // Assert
             Console.WriteLine(result);

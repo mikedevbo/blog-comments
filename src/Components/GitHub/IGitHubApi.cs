@@ -40,10 +40,9 @@
             string pullRequestUrl,
             string etag);
 
-        Task<(bool result, string etag)> IsPullRequestMerged(
+        Task<bool> IsPullRequestMerged(
             string userAgent,
             string authorizationToken,
-            string pullRequestUrl,
-            string etag);
+            string pullRequestUrl);
     }
 }
