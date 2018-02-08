@@ -185,7 +185,7 @@
 
             if (!string.IsNullOrEmpty(etag))
             {
-                httpRequestHeaders.Add("If-None-Match", string.Format(@"""{0}""", etag));
+                httpRequestHeaders.Add("If-None-Match", string.Format(@"{0}", etag));
             }
 
             httpRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
