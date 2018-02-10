@@ -99,6 +99,7 @@
                 {
                     command.UserName = this.Data.UserName;
                     command.UserEmail = this.Data.UserEmail;
+                    command.FileName = this.Data.FileName;
                     command.CommentResponseStatus = message.CommentResponse.ResponseStatus;
                 }).ConfigureAwait(false);
 

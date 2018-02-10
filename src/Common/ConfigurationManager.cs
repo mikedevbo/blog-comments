@@ -154,5 +154,13 @@
                 return System.Configuration.ConfigurationManager.AppSettings["SmtpFrom"];
             }
         }
+
+        public string BlogDomainName
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings["BlogDomainName"];
+            }
+        }
     }
 }

@@ -35,5 +35,7 @@
         SecureString SmtpHostPassword { get; }
 
         string SmtpFrom { get; }
+
+        string BlogDomainName { get; }
     }
 }

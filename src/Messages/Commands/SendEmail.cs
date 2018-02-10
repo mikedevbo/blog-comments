@@ -6,6 +6,8 @@
 
         public string UserEmail { get; set; }
 
+        public string FileName { get; set; }
+
         public CommentResponseStatus CommentResponseStatus { get; set; }
     }
 }
