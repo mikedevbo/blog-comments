@@ -120,9 +120,6 @@
   <data name="Approved" xml:space="preserve">
     <value>zatwierdzony</value>
   </data>
-  <data name="BlogName" xml:space="preserve">
-    <value>ddtd.pl</value>
-  </data>
   <data name="Check" xml:space="preserve">
     <value>sprawdź</value>
   </data>
@@ -131,5 +128,8 @@
   </data>
   <data name="Rejected" xml:space="preserve">
     <value>odrzucony</value>
+  </data>
+  <data name="ResponseAdded" xml:space="preserve">
+    <value>dodano odpowiedź do komentarza</value>
   </data>
 </root>

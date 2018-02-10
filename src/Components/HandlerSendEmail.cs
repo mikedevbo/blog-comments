@@ -34,14 +34,12 @@
 
         public string GetSubject(CommentResponseStatus status)
         {
-            var subject = string.Format("{0} - {1}", Resource.BlogName, Resource.Comment);
-
             if (status == CommentResponseStatus.Approved)
             {
-                return string.Format("{0} {1}", subject, Resource.Approved);
+                return Resource.ResponseAdded;
             }
 
-            return string.Format("{0} {1}", subject, Resource.Rejected);
+            return string.Format("{0} {1}", Resource.Comment, Resource.Rejected);
         }
 
         public string GetBody(string blogDomainName, string fileName, CommentResponseStatus status)

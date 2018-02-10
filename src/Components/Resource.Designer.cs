@@ -70,15 +70,6 @@ namespace Components {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ddtd.pl.
-        /// </summary>
-        internal static string BlogName {
-            get {
-                return ResourceManager.GetString("BlogName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to sprawdź.
         /// </summary>
         internal static string Check {
@@ -102,6 +93,15 @@ namespace Components {
         internal static string Rejected {
             get {
                 return ResourceManager.GetString("Rejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dodano odpowiedź do komentarza.
+        /// </summary>
+        internal static string ResponseAdded {
+            get {
+                return ResourceManager.GetString("ResponseAdded", resourceCulture);
             }
         }
     }
