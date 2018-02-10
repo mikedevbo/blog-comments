@@ -29,7 +29,7 @@
             var handler = this.GetHandlerSetEmail();
 
             // Act
-            var result = handler.GetBody("someBlogDomainName", "2018-02-10-someFileName");
+            var result = handler.GetBody("someBlogDomainName", "2018-02-10-someFileName.md", CommentResponseStatus.Approved);
 
             // Assert
             Console.WriteLine(result);

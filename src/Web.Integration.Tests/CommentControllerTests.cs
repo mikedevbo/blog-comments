@@ -1,15 +1,12 @@
 ﻿namespace Web.Integration.Tests
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
     using System.Web.Script.Serialization;
     using Common;
     using NUnit.Framework;
-    using Simple.Data;
     using Web.Models;
 
     [TestFixture]
@@ -32,7 +29,7 @@
                 UserName = "testUser",
                 UserEmail = "testUser@test.com",
                 UserWebsite = "testUser.com",
-                FileName = @"test.txt",
+                FileName = @"2018-20-10-test.txt",
                 Content = @"new comment",
             };
 

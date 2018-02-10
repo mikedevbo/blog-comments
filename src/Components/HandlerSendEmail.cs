@@ -26,7 +26,7 @@
                 From = this.configurationManager.SmtpFrom,
                 To = message.UserEmail,
                 Subject = this.GetSubject(message.CommentResponseStatus),
-                Body = this.GetBody(this.configurationManager.BlogDomainName, message.FileName)
+                Body = this.GetBody(this.configurationManager.BlogDomainName, message.FileName, message.CommentResponseStatus)
             };
 
             return context.SendMail(mail);
@@ -44,19 +44,24 @@
             return string.Format("{0} {1}", subject, Resource.Rejected);
         }
 
-        public string GetBody(string blogDomainName, string fileName)
+        public string GetBody(string blogDomainName, string fileName, CommentResponseStatus status)
         {
+            if (status != CommentResponseStatus.Approved)
+            {
+                return string.Empty;
+            }
+
             // Depend on Jekyll file format
             var s = fileName.Split('-');
 
             return string.Format(
-                "{0} - {1}/{2}/{3}/{4}/{5}/html",
+                "{0} - {1}/{2}/{3}/{4}/{5}.html",
                 Resource.Check,
                 blogDomainName,
                 s[0],
                 s[1],
                 s[2],
-                s[3]);
+                s[3].Split('.')[0]);
         }
     }
 }
