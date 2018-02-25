@@ -77,7 +77,6 @@
                 "\nnew comment - " + DateTime.Now);
 
             // Assert
-            ////TODO: to implement
         }
 
         [Test]
