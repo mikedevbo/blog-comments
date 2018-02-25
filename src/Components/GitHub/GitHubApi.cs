@@ -55,7 +55,24 @@
             };
 
             HttpResponseMessage response = await httpClient.PostAsJsonAsync(requestUri, branchRequest).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return;
+            }
+
+            if (Convert.ToInt32(response.StatusCode) == 422)
+            {
+                var error = await response.Content.ReadAsJsonAsync<ErrorResponseDto>().ConfigureAwait(false);
+                if (error.Message == MessagesResponse.ReferenceAlreadyExists)
+                {
+                    return;
+                }
+            }
+
+            var exception = new HttpRequestException(string.Format(@"Response bad satus code: {0}", response.StatusCode));
+            exception.Data.Add("response", response);
+            throw exception;
         }
 
         public async Task UpdateFile(
