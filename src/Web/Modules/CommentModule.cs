@@ -11,7 +11,7 @@
     public class CommentModule : NancyModule
     {
         private readonly IMessageSession messageSession;
-        private IValidator validator;
+        private readonly IValidator validator;
 
         public CommentModule(IMessageSession messageSession, IValidator validator)
             : base("/comment")
