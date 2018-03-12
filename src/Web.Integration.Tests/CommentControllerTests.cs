@@ -2,6 +2,7 @@
 {
     using System;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
     using System.Web.Script.Serialization;
@@ -23,6 +24,8 @@
             {
                 BaseAddress = new Uri("http://localhost:50537/")
             };
+
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var comment = new Comment
             {

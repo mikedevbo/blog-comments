@@ -25,7 +25,7 @@
             {
                 var comment = this.Bind<Comment>();
 
-                var validationResult = this.validator.Validate(comment);
+                var validationResult = await this.validator.ValidateAsync(comment).ConfigureAwait(false);
                 if (!validationResult.IsValid)
                 {
                     return this.Negotiate.WithModel(validationResult).WithStatusCode(HttpStatusCode.BadRequest);
