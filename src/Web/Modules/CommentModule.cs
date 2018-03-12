@@ -1,6 +1,7 @@
 ﻿namespace Web.Modules
 {
     using System;
+    using FluentValidation;
     using Messages.Commands;
     using Nancy;
     using Nancy.ModelBinding;
@@ -10,12 +11,13 @@
     public class CommentModule : NancyModule
     {
         private readonly IMessageSession messageSession;
-        private CommentValidator validator = new CommentValidator();
+        private IValidator validator;
 
-        public CommentModule(IMessageSession messageSession)
+        public CommentModule(IMessageSession messageSession, IValidator validator)
             : base("/comment")
         {
             this.messageSession = messageSession;
+            this.validator = validator;
 
             this.Get["/"] = r => "test";
 

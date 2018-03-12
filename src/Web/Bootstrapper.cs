@@ -2,12 +2,14 @@
 {
     using System;
     using Common;
+    using FluentValidation;
     using log4net;
     using log4net.Config;
     using Nancy;
     using Nancy.Bootstrapper;
     using Nancy.TinyIoc;
     using NServiceBus;
+    using Web.Models;
 
     public class Bootstrapper : DefaultNancyBootstrapper
     {
@@ -42,8 +44,11 @@
             // start endpoint
             var endpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
+            var commentValidator = new CommentValidator();
+
             // dependency injection
             container.Register<IMessageSession>(endpointInstance);
+            container.Register<IValidator>(commentValidator);
         }
     }
 }
