@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net47</TargetFramework>
     <LangVersion>7.1</LangVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -17,6 +18,9 @@
 
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.1.5" />
+    <PackageReference Include="GitVersionTask" Version="3.6.5">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="NServiceBus" Version="6.4.3" />
     <PackageReference Include="NServiceBus.Mailer" Version="3.0.1" />
     <PackageReference Include="NServiceBus.Persistence.Sql" Version="3.0.4" />

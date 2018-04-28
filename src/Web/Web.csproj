@@ -43,6 +43,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <PackageReference Include="FluentValidation" Version="6.4.1" />
+    <PackageReference Include="GitVersionTask" Version="3.6.5">
+		<PrivateAssets>All</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Nancy" Version="1.4.4" />
     <PackageReference Include="Nancy.Validation.FluentValidation" Version="1.4.1" />
