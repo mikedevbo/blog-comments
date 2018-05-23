@@ -16,10 +16,10 @@ $ErrorActionPreference = "Stop"
 
 try
 {
-    Write-Host 'clean bin directory'
+    Write-Host "clean bin directory"
     Remove-Item "$binPath\*" -Recurse -Force
 
-    Write-Host 'build solution'
+    Write-Host "build solution"
     $buildLogFile = "$binPath\build.log"
     $run = $msbuildPath
     $p1 = $solutionPath
