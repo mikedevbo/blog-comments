@@ -75,12 +75,22 @@ function prepareArtifactsToDeploy(
     Copy-Item "$connectionstringsSourcePath\*" -Destination "$destination" -Recurse
 }
 
+function ftpCleanDestination($session, $ftpDestinationPath)
+{
+    Write-Host "->remove files from ftp $ftpDestinationPath"
+    
+    $removalResult = $session.RemoveFiles("$ftpDestinationPath/*")
+    if (!$removalResult.IsSuccess)
+    {
+        throw "Removing files failed"
+    }
+}
+
 try
 {
     prepareArtifactsToDeploy "$destination" "$source" "$nserviceBusLicenseSourcePath" "$settingsSourcePath" "$connectionstringsSourcePath"
 
     Add-Type -Path "$winscpDllPath"
-
     $sessionOptions = New-Object WinSCP.SessionOptions -Property @{
         Protocol = [WinSCP.Protocol]::Ftp
         HostName = "$ftpHostName"
@@ -93,13 +103,8 @@ try
     {
         Write-Host "->open ftp session"
         $session.Open($sessionOptions)
-        
-        #Write-Host "->remove files from ftp $ftpDestinationPath"
-        #$removalResult = $session.RemoveFiles("$ftpDestinationPath/*")
-        #if (!$removalResult.IsSuccess)
-        #{
-        #    throw "Removing files failed"
-        #}
+
+        ftpCleanDestination $session $ftpDestinationPath
 
         #Write-Host "->copy files to ftp $ftpDestinationPath"
         #$session.PutFiles("$destination\*", "$ftpDestinationPath/").Check()
