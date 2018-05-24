@@ -33,7 +33,7 @@ try
         throw "Buit failed see $buildLogFile for details"
     }
 }
-catch [System.Exception]
+catch
 {
     throw;
 }
