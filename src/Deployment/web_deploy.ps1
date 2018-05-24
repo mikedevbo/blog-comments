@@ -32,7 +32,19 @@ Param(
     [string]$winscpDllPath,
 
     [Parameter(Mandatory=$True)]
-    [string]$UrlToWarmUp
+    [string]$urlToWarmUp,
+
+    [Parameter(Mandatory=$True)]
+    [string]$mainWebConfigFilePath,
+
+    [Parameter(Mandatory=$True)]
+    [string]$urlRedirect,
+
+    [Parameter(Mandatory=$True)]
+    [string]$ftpMainWebConfigDestinationPath,
+
+    [Parameter(Mandatory=$True)]
+    [string]$mainUrlToWarmUp
 )
 
 $ErrorActionPreference = "Stop"
@@ -73,27 +85,54 @@ try
         Write-Host "->open ftp session"
         $session.Open($sessionOptions)
         
-        Write-Host "->remove files from ftp $ftpDestinationPath"
-        $removalResult = $session.RemoveFiles("$ftpDestinationPath/*")
-        if (!$removalResult.IsSuccess)
-        {
-            throw "Removing files failed"
-        }
+        #Write-Host "->remove files from ftp $ftpDestinationPath"
+        #$removalResult = $session.RemoveFiles("$ftpDestinationPath/*")
+        #if (!$removalResult.IsSuccess)
+        #{
+        #    throw "Removing files failed"
+        #}
 
-        Write-Host "->copy files to ftp $ftpDestinationPath"
-        $session.PutFiles("$destination\*", "$ftpDestinationPath/").Check()
+        #Write-Host "->copy files to ftp $ftpDestinationPath"
+        #$session.PutFiles("$destination\*", "$ftpDestinationPath/").Check()
 
-        Write-Host "->invoke $UrlToWarmUp"
+        Write-Host "->invoke $urlToWarmUp"
         
         try
         {
-            Invoke-WebRequest -Uri "$UrlToWarmUp" -Method HEAD
+            Invoke-WebRequest -Uri "$urlToWarmUp" -Method HEAD
         }
         catch
         {
             $responseStatusCode = $_.exception.response.statuscode.value__
             
             if ($responseStatusCode -ne 404)
+            {
+                throw "Deployed web host is broken -> response status code $responseStatusCode"
+            }
+        }
+
+        Write-Host "Set and copy main web.config"
+        $doc = New-Object System.Xml.XmlDocument
+        $doc.Load($mainWebConfigFilePath)
+
+        $book = $doc.SelectSingleNode("//action[@type = 'Redirect']")
+        $book.url = "$urlRedirect"
+
+        $doc.Save($mainWebConfigFilePath)
+
+        $session.PutFiles("$mainWebConfigFilePath", "$ftpMainWebConfigDestinationPath").Check()
+
+
+        Write-Host "->invoke $mainUrlToWarmUp"
+        try
+        {
+            Invoke-WebRequest -Uri "$mainUrlToWarmUp" -Method HEAD
+        }
+        catch
+        {
+            $responseStatusCode = $_.exception.response.statuscode.value__
+            
+            if ($responseStatusCode -ne 200)
             {
                 throw "Deployed web host is broken -> response status code $responseStatusCode"
             }
