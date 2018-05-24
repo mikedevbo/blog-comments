@@ -29,7 +29,10 @@ Param(
     [string]$ftpDestinationPath,
 
     [Parameter(Mandatory=$True)]
-    [string]$winscpDllPath
+    [string]$winscpDllPath,
+
+    [Parameter(Mandatory=$True)]
+    [string]$UrlToWarmUp
 )
 
 $ErrorActionPreference = "Stop"
@@ -79,6 +82,22 @@ try
 
         Write-Host "->copy files to ftp $ftpDestinationPath"
         $session.PutFiles("$destination\*", "$ftpDestinationPath/").Check()
+
+        Write-Host "->invoke $UrlToWarmUp"
+        
+        try
+        {
+            Invoke-WebRequest -Uri "$UrlToWarmUp" -Method HEAD
+        }
+        catch
+        {
+            $responseStatusCode = $_.exception.response.statuscode.value__
+            
+            if ($responseStatusCode -ne 404)
+            {
+                throw "Deployed web host is broken -> response status code $responseStatusCode"
+            }
+        }
     }
     catch [System.Exception]
     {
