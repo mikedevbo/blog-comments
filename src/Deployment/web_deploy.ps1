@@ -49,7 +49,12 @@ Param(
 
 $ErrorActionPreference = "Stop"
 
-try
+function prepareArtifactsToDeploy(
+    $destination,
+    $source,
+    $nserviceBusLicenseSourcePath,
+    $settingsSourcePath,
+    $connectionstringsSourcePath)
 {
     Write-Host "->clean $destination directory"
     Remove-Item "$destination\*" -Recurse -Force
@@ -68,7 +73,11 @@ try
 
     Write-Host "->copy connectionstrings"
     Copy-Item "$connectionstringsSourcePath\*" -Destination "$destination" -Recurse
+}
 
+try
+{
+    prepareArtifactsToDeploy "$destination" "$source" "$nserviceBusLicenseSourcePath" "$settingsSourcePath" "$connectionstringsSourcePath"
 
     Add-Type -Path "$winscpDllPath"
 
@@ -120,7 +129,7 @@ try
 
         $doc.Save($mainWebConfigFilePath)
 
-        $session.PutFiles("$mainWebConfigFilePath", "$ftpMainWebConfigDestinationPath").Check()
+        #$session.PutFiles("$mainWebConfigFilePath", "$ftpMainWebConfigDestinationPath").Check()
 
 
         Write-Host "->invoke $mainUrlToWarmUp"
