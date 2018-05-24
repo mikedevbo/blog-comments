@@ -86,9 +86,48 @@ function ftpCleanDestination($session, $ftpDestinationPath)
     }
 }
 
+function ftpCopyFiles($session, $from, $to)
+{
+    Write-Host "->copy files to ftp $to"
+    $session.PutFiles("$from", "$to").Check()
+}
+
+function warmUpUri($Uri, $expectedStatusCode)
+{
+    Write-Host "->invoke $Uri"
+        
+    try
+    {
+        Invoke-WebRequest -Uri "$Uri" -Method HEAD
+    }
+    catch
+    {
+        $responseStatusCode = $_.exception.response.statuscode.value__
+            
+        if ($responseStatusCode -ne $expectedStatusCode)
+        {
+            throw "Deployed web host is broken -> response status code $responseStatusCode"
+        }
+    }
+}
+
+function setMainWebConfig($mainWebConfigFilePath, $urlRedirect)
+{
+    Write-Host "->set main web.config"
+    $doc = New-Object System.Xml.XmlDocument
+    $doc.Load($mainWebConfigFilePath)
+
+    $book = $doc.SelectSingleNode("//action[@type = 'Redirect']")
+    $book.url = "$urlRedirect"
+
+    $doc.Save($mainWebConfigFilePath)
+}
+
+#main
+
 try
 {
-    prepareArtifactsToDeploy "$destination" "$source" "$nserviceBusLicenseSourcePath" "$settingsSourcePath" "$connectionstringsSourcePath"
+    prepareArtifactsToDeploy $destination $source $nserviceBusLicenseSourcePath $settingsSourcePath $connectionstringsSourcePath
 
     Add-Type -Path "$winscpDllPath"
     $sessionOptions = New-Object WinSCP.SessionOptions -Property @{
@@ -99,60 +138,23 @@ try
     }
 
     $session = New-Object WinSCP.Session
+    
     try
     {
         Write-Host "->open ftp session"
         $session.Open($sessionOptions)
 
         ftpCleanDestination $session $ftpDestinationPath
+        ftpCopyFiles $session "$destination\*" "$ftpDestinationPath/"
 
-        #Write-Host "->copy files to ftp $ftpDestinationPath"
-        #$session.PutFiles("$destination\*", "$ftpDestinationPath/").Check()
+        warmUpUri $urlToWarmUp 404
 
-        Write-Host "->invoke $urlToWarmUp"
+        setMainWebConfig $mainWebConfigFilePath $urlRedirect
+        ftpCopyFiles $session $mainWebConfigFilePath $ftpMainWebConfigDestinationPath
         
-        try
-        {
-            Invoke-WebRequest -Uri "$urlToWarmUp" -Method HEAD
-        }
-        catch
-        {
-            $responseStatusCode = $_.exception.response.statuscode.value__
-            
-            if ($responseStatusCode -ne 404)
-            {
-                throw "Deployed web host is broken -> response status code $responseStatusCode"
-            }
-        }
-
-        Write-Host "Set and copy main web.config"
-        $doc = New-Object System.Xml.XmlDocument
-        $doc.Load($mainWebConfigFilePath)
-
-        $book = $doc.SelectSingleNode("//action[@type = 'Redirect']")
-        $book.url = "$urlRedirect"
-
-        $doc.Save($mainWebConfigFilePath)
-
-        #$session.PutFiles("$mainWebConfigFilePath", "$ftpMainWebConfigDestinationPath").Check()
-
-
-        Write-Host "->invoke $mainUrlToWarmUp"
-        try
-        {
-            Invoke-WebRequest -Uri "$mainUrlToWarmUp" -Method HEAD
-        }
-        catch
-        {
-            $responseStatusCode = $_.exception.response.statuscode.value__
-            
-            if ($responseStatusCode -ne 200)
-            {
-                throw "Deployed web host is broken -> response status code $responseStatusCode"
-            }
-        }
+        warmUpUri $mainUrlToWarmUp 200
     }
-    catch [System.Exception]
+    catch
     {
         throw;
     }
@@ -162,7 +164,7 @@ try
         $session.Dispose()
     }
 }
-catch [System.Exception]
+catch
 {
     throw;
 }
