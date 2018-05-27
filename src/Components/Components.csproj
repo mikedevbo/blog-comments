@@ -21,6 +21,8 @@
     <PackageReference Include="GitVersionTask" Version="3.6.5">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="NServiceBus.Persistence.Sql" Version="3.1.0" />
+    <PackageReference Include="NServiceBus.Persistence.Sql.MsBuild" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
