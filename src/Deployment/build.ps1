@@ -14,6 +14,9 @@ Param(
     [string]$buildArtifactsPath,
 
     [Parameter(Mandatory=$True)]
+    [string]$gitRepositoryUrl,	
+	
+    [Parameter(Mandatory=$True)]
     [string]$solutionPath,
 
     [Parameter(Mandatory=$True)]
@@ -28,10 +31,10 @@ try
     Remove-Item "$buildArtifactsPath\*" -Recurse -Force
     
     Write-Host "clone repository"
-    & $gitExePath "clone" "-q" "https://github.com/mikedevbo/blog-comments.git" "$buildArtifactsPath"
+    & $gitExePath "clone" "-q" $gitRepositoryUrl $buildArtifactsPath
     
     Write-Host "restore nuget packages"
-    & $nugetExePath "restore" "$solutionPath"
+    & $nugetExePath "restore" $solutionPath
 
     Write-Host "build solution"
     $buildLogFile = "$binPath\build.log"
