@@ -1,15 +1,13 @@
 ﻿[CmdletBinding()]
 Param(
     [Parameter(Mandatory=$True)]
-    [string]$binPath,
-
+    [string]$NunitExePath,
+	
     [Parameter(Mandatory=$True)]
-    [string]$NunitExePath
+    [string]$binPath
 )
 
 $ErrorActionPreference = "Stop"
-
-#main
 
 try
 {
