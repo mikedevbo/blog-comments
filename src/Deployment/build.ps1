@@ -17,10 +17,10 @@ Param(
     [string]$gitRepositoryUrl,	
 	
     [Parameter(Mandatory=$True)]
-    [string]$solutionPath,
+    [string]$solutionRelativePath,
 
     [Parameter(Mandatory=$True)]
-    [string]$binPath
+    [string]$binRelativePath
 )
 
 $ErrorActionPreference = "Stop"
@@ -34,12 +34,12 @@ try
     & $gitExePath "clone" "-q" $gitRepositoryUrl $buildArtifactsPath
     
     Write-Host "restore nuget packages"
-    & $nugetExePath "restore" $solutionPath
+    & $nugetExePath "restore" "$buildArtifactsPath\$solutionRelativePath"
 
     Write-Host "build solution"
-    $buildLogFile = "$binPath\build.log"
+    $buildLogFile = "$buildArtifactsPath\$binRelativePath\build.log"
     $run = $msbuildExePath
-    $p1 = $solutionPath
+    $p1 = "$buildArtifactsPath\$solutionRelativePath"
     $p2 = "/p:Configuration=Release"
     $p3 = "/flp:logfile=$buildLogFile"
 
