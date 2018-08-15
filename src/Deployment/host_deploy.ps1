@@ -87,7 +87,7 @@ try
     if (!(windowsServiceExists $newWindowsServiceName))
     {
         Write-Host "create windows service $newWindowsServiceName"
-        sc.exe create $newWindowsServiceName start= auto binpath= "$windowsServiceBinPath"
+        sc.exe create $newWindowsServiceName start= demand binpath= "$windowsServiceBinPath"
         sc.exe description $newWindowsServiceName $newWindowsServiceDescription
         sc.exe failure $newWindowsServiceName reset= 3600 actions= restart/5000/restart/10000/restart/60000
     }
