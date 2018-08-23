@@ -49,7 +49,7 @@
                 return string.Empty;
             }
 
-            // Depend on Jekyll file format -> test
+            // Depend on Jekyll file format
             var s = fileName.Split('-');
 
             return string.Format(
