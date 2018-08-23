@@ -104,7 +104,7 @@
                     {
                         return saga.Handle(message, context);
                     })
-                .AssertSagaCompletionIs(true);
+                    .ExpectSagaCompleted();
         }
 
         [Test]
@@ -139,7 +139,7 @@
                     {
                         return saga.Handle(message, context);
                     })
-                .AssertSagaCompletionIs(true);
+                .ExpectSagaCompleted();
         }
 
         private HandlerCommentSaga GetHandler()

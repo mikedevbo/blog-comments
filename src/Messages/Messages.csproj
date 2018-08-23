@@ -21,7 +21,7 @@
     <PackageReference Include="GitVersionTask" Version="3.6.5">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Particular.CodeRules" Version="0.2.0" />
+    <PackageReference Include="Particular.CodeRules" Version="0.2.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
   </ItemGroup>
 
