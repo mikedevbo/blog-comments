@@ -13,11 +13,11 @@
     public class HandlerCommentSaga :
        Saga<CommentSagaData>,
         IAmStartedByMessages<StartAddingComment>,
-        IHandleMessages<IPullRequestCreated>,
         IHandleTimeouts<CheckCommentResponseTimeout>,
         IHandleMessages<ICommentResponseAdded>,
         IHandleMessages<CreateBranchResponse>,
-        IHandleMessages<AddCommentResponse>
+        IHandleMessages<AddCommentResponse>,
+        IHandleMessages<CreatePullRequestResponse>
     {
         private readonly IConfigurationManager configurationManager;
         private readonly ILog log = LogManager.GetLogger<HandlerCommentSaga>();
@@ -58,15 +58,14 @@
 
         public Task Handle(AddCommentResponse message, IMessageHandlerContext context)
         {
-            return context.Send<CreatePullRequest>(command =>
+            return context.Send<RequestCreatePullRequest>(command =>
             {
-                command.CommentId = this.Data.CommentId;
                 command.CommentBranchName = this.Data.BranchName;
                 command.BaseBranchName = this.configurationManager.MasterBranchName;
             });
         }
 
-        public Task Handle(IPullRequestCreated message, IMessageHandlerContext context)
+        public Task Handle(CreatePullRequestResponse message, IMessageHandlerContext context)
         {
             this.Data.PullRequestLocation = message.PullRequestLocation;
 
@@ -115,7 +114,6 @@
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<CommentSagaData> mapper)
         {
             mapper.ConfigureMapping<StartAddingComment>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
-            mapper.ConfigureMapping<IPullRequestCreated>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
             mapper.ConfigureMapping<CheckCommentResponseTimeout>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
             mapper.ConfigureMapping<ICommentResponseAdded>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
         }

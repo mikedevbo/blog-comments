@@ -1,6 +1,5 @@
 ﻿namespace Components
 {
-    using System.Text;
     using System.Threading.Tasks;
     using Common;
     using Messages;
@@ -11,7 +10,7 @@
 
     public class HandlerSendEmail : IHandleMessages<SendEmail>
     {
-        private static ILog log = LogManager.GetLogger<HandlerSendEmail>();
+        private static readonly ILog Log = LogManager.GetLogger<HandlerSendEmail>();
         private readonly IConfigurationManager configurationManager;
 
         public HandlerSendEmail(IConfigurationManager configurationManager)

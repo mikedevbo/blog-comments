@@ -62,16 +62,15 @@
             await saga.Handle(message, context).ConfigureAwait(false);
 
             // Assert
-            var sentMessage = this.GetSentMessage<CreatePullRequest>(context);
+            var sentMessage = this.GetSentMessage<RequestCreatePullRequest>(context);
             Assert.IsNotNull(sentMessage);
-            Assert.True(sentMessage.CommentId == this.id);
         }
 
         [Test]
-        public void Handle_PullRequestCreated_SendCheckCommentResponseTimeoutWithProperData()
+        public void Handle_CreatePullRequestResponse_SendCheckCommentResponseTimeoutWithProperData()
         {
             Test.Saga<HandlerCommentSaga>()
-                .ExpectTimeoutToBeSetIn<IPullRequestCreated>((state, span) =>
+                .ExpectTimeoutToBeSetIn<CreatePullRequestResponse>((state, span) =>
                     {
                         return span == TimeSpan.FromDays(this.timeoutMinutes);
                     });

@@ -3,22 +3,21 @@
     using System.Threading.Tasks;
     using Common;
     using Components.GitHub;
-    using Messages.Commands;
-    using Messages.Events;
+    using Messages.Messages;
     using NServiceBus;
 
-    public class HandlerCreatePullRequest : IHandleMessages<CreatePullRequest>
+    public class RequestCreatePullRequestHandler : IHandleMessages<RequestCreatePullRequest>
     {
         private readonly IConfigurationManager configurationManager;
         private readonly IGitHubApi gitHubApi;
 
-        public HandlerCreatePullRequest(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
+        public RequestCreatePullRequestHandler(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
         {
             this.configurationManager = configurationManager;
             this.gitHubApi = gitHubApi;
         }
 
-        public async Task Handle(CreatePullRequest message, IMessageHandlerContext context)
+        public async Task Handle(RequestCreatePullRequest message, IMessageHandlerContext context)
         {
             var result = await this.gitHubApi.CreatePullRequest(
                 this.configurationManager.UserAgent,
@@ -27,10 +26,9 @@
                 message.CommentBranchName,
                 message.BaseBranchName).ConfigureAwait(false);
 
-            await context.Publish<IPullRequestCreated>(evt =>
+            await context.Reply<CreatePullRequestResponse>(response =>
             {
-                evt.CommentId = message.CommentId;
-                evt.PullRequestLocation = result;
+                response.PullRequestLocation = result;
             })
             .ConfigureAwait(false);
         }
