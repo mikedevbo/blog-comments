@@ -14,7 +14,7 @@
     [Ignore("only for manual tests")]
     public class CommentControllerTests
     {
-        private IConfigurationManager configurationManager = new ConfigurationManager();
+        private readonly IConfigurationManager configurationManager = new ConfigurationManager();
 
         [Test]
         public async Task Post_ForCommentData_NoException()
