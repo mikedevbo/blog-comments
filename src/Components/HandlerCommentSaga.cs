@@ -13,11 +13,11 @@
     public class HandlerCommentSaga :
        Saga<CommentSagaData>,
         IAmStartedByMessages<StartAddingComment>,
-        IHandleTimeouts<CheckCommentResponseTimeout>,
         IHandleMessages<ICommentResponseAdded>,
         IHandleMessages<CreateBranchResponse>,
         IHandleMessages<AddCommentResponse>,
-        IHandleMessages<CreatePullRequestResponse>
+        IHandleMessages<CreatePullRequestResponse>,
+        IHandleTimeouts<CheckCommentAnswerTimeout>
     {
         private readonly IConfigurationManager configurationManager;
         private readonly ILog log = LogManager.GetLogger<HandlerCommentSaga>();
@@ -69,13 +69,12 @@
         {
             this.Data.PullRequestLocation = message.PullRequestLocation;
 
-            return this.SendTimeout(
-                context,
-                TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds),
-                this.Data.CommentId);
+            return this.RequestTimeout<CheckCommentAnswerTimeout>(
+                 context,
+                 TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds));
         }
 
-        public Task Timeout(CheckCommentResponseTimeout state, IMessageHandlerContext context)
+        public Task Timeout(CheckCommentAnswerTimeout state, IMessageHandlerContext context)
         {
             return context.Send<CheckCommentResponse>(command =>
             {
@@ -104,26 +103,16 @@
             {
                 this.Data.ETag = message.CommentResponse.ETag;
 
-                await this.SendTimeout(
+                await this.RequestTimeout<CheckCommentAnswerTimeout>(
                     context,
-                    TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds),
-                    this.Data.CommentId).ConfigureAwait(false);
+                    TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds)).ConfigureAwait(false);
             }
         }
 
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<CommentSagaData> mapper)
         {
             mapper.ConfigureMapping<StartAddingComment>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
-            mapper.ConfigureMapping<CheckCommentResponseTimeout>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
             mapper.ConfigureMapping<ICommentResponseAdded>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
-        }
-
-        private Task SendTimeout(IMessageHandlerContext context, TimeSpan timeoutInterval, Guid commentId)
-        {
-            return this.RequestTimeout(
-                context,
-                timeoutInterval,
-                new CheckCommentResponseTimeout { CommentId = commentId });
         }
     }
 }
