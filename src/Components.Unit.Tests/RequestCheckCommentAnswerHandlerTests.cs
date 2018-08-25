@@ -6,26 +6,24 @@
     using Common;
     using Components.GitHub;
     using Messages;
-    using Messages.Commands;
-    using Messages.Events;
+    using Messages.Messages;
     using NServiceBus.Testing;
     using NSubstitute;
     using NUnit.Framework;
 
+    [TestFixture]
     [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1008:OpeningParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
     [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:OpeningParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
-    [TestFixture]
-    public class HandlerCheckCommentResponseTests
+    public class RequestCheckCommentAnswerHandlerTests
     {
-        private readonly Guid id = Guid.Parse(@"0C242B08-7704-499D-A9D8-184ED6D93988");
         private IConfigurationManager configurationManager;
         private IGitHubApi gitHubApi;
 
         [Test]
-        public async Task Handle_CheckCommentResponse_PublishProperEvent()
+        public async Task Handle_RequestCheckCommentAnswer_ReplayProperEvent()
         {
             // Arrange
-            var message = new CheckCommentResponse { CommentId = this.id };
+            var message = new RequestCheckCommentAnswer();
             var handler = this.GetHandler();
             var context = this.GetContext();
 
@@ -33,19 +31,18 @@
             await handler.Handle(message, context).ConfigureAwait(false);
 
             // Assert
-            var publishedMessage = context.PublishedMessages[0].Message as ICommentResponseAdded;
-            Assert.IsNotNull(publishedMessage);
-            Assert.True(publishedMessage.CommentId == this.id);
+            var replieddMessage = context.RepliedMessages[0].Message as CheckCommentAnswerResponse;
+            Assert.IsNotNull(replieddMessage);
         }
 
-        [TestCase(false, false, CommentResponseStatus.Rejected)]
-        [TestCase(false, true, CommentResponseStatus.Approved)]
-        [TestCase(true, false, CommentResponseStatus.NotAddded)]
-        [TestCase(true, true, CommentResponseStatus.NotAddded)]
-        public async Task GetCommentResponseStatus_input_expectedResult(
+        [TestCase(false, false, CommentAnswerStatus.Rejected)]
+        [TestCase(false, true, CommentAnswerStatus.Approved)]
+        [TestCase(true, false, CommentAnswerStatus.NotAddded)]
+        [TestCase(true, true, CommentAnswerStatus.NotAddded)]
+        public async Task GetCommentAnswer_input_expectedResult(
             bool isPullRequestOpen,
             bool isPullRequestMerged,
-            CommentResponseStatus expectedResult)
+            CommentAnswerStatus expectedResult)
         {
             // Arrange
             const string etagResult = "1234";
@@ -54,19 +51,19 @@
             var handler = this.GetHandler();
 
             // Act
-            var result = await handler.GetCommentResponseStatus(f1, f2).ConfigureAwait(false);
+            var result = await handler.GetCommentAnswer(f1, f2).ConfigureAwait(false);
 
             // Assert
-            Assert.That(result.ResponseStatus, Is.EqualTo(expectedResult));
+            Assert.That(result.Status, Is.EqualTo(expectedResult));
             Assert.That(result.ETag, Is.EqualTo(etagResult));
         }
 
-        private HandlerCheckCommentResponse GetHandler()
+        private RequestCheckCommentAnswerHandler GetHandler()
         {
             this.configurationManager = Substitute.For<IConfigurationManager>();
             this.gitHubApi = Substitute.For<IGitHubApi>();
 
-            return new HandlerCheckCommentResponse(this.configurationManager, this.gitHubApi);
+            return new RequestCheckCommentAnswerHandler(this.configurationManager, this.gitHubApi);
         }
 
         private TestableMessageHandlerContext GetContext()

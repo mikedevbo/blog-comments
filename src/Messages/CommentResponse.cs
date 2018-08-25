@@ -2,7 +2,7 @@
 {
     public class CommentResponse
     {
-        public CommentResponseStatus ResponseStatus { get; set; }
+        public CommentAnswerStatus ResponseStatus { get; set; }
 
         public string ETag { get; set; }
     }

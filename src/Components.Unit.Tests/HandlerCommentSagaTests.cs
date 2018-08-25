@@ -5,7 +5,6 @@
     using Common;
     using Messages;
     using Messages.Commands;
-    using Messages.Events;
     using Messages.Messages;
     using NServiceBus.Testing;
     using NSubstitute;
@@ -15,7 +14,6 @@
     public class HandlerCommentSagaTests
     {
         private readonly Guid id = Guid.Parse(@"0C242B08-7704-499D-A9D8-184ED6D93988");
-        private readonly int timeoutMinutes = 30;
         private IConfigurationManager configurationManager;
 
         [Test]
@@ -51,7 +49,7 @@
         }
 
         [Test]
-        public async Task Handle_AddCommentResponse_CreatePullRequestWithProperData()
+        public async Task Handle_AddCommentResponse_SendRequestCreatePullRequestWithProperData()
         {
             // Arrange
             var message = Substitute.For<AddCommentResponse>();
@@ -67,75 +65,83 @@
         }
 
         [Test]
-        public void Handle_CreatePullRequestResponse_SendCheckCommentResponseTimeoutWithProperData()
+        public async Task Handle_CreatePullRequestResponse_TimeoutCheckCommentAnswerTimeoutWithProperData()
         {
-            Test.Saga<HandlerCommentSaga>()
-                .ExpectTimeoutToBeSetIn<CreatePullRequestResponse>((state, span) =>
-                    {
-                        return span == TimeSpan.FromDays(this.timeoutMinutes);
-                    });
+            // Arrange
+            var message = Substitute.For<CreatePullRequestResponse>();
+            var saga = this.GetHandler();
+            var context = this.GetContext();
+
+            // Act
+            await saga.Handle(message, context).ConfigureAwait(false);
+
+            // Assert
+            var timeoutMessage = this.GetTimeoutMessage<CheckCommentAnswerTimeout>(context);
+            Assert.IsNotNull(timeoutMessage);
         }
 
         [Test]
-        public void Handle_SagaTimeout_SendCheckCommentResponseWithProperData()
+        public async Task Handle_CheckCommentAnswerTimeout_SendRequestCheckCommentAnswerWithProperData()
         {
-            Test.Saga<HandlerCommentSaga>()
-                .WhenSagaTimesOut()
-                .ExpectSend<CheckCommentResponse>();
+            // Arrange
+            var message = Substitute.For<CheckCommentAnswerTimeout>();
+            var saga = this.GetHandler();
+            saga.Data.ETag = "testETag";
+            saga.Data.PullRequestLocation = "testLocation";
+            var context = this.GetContext();
+
+            // Act
+            await saga.Timeout(message, context).ConfigureAwait(false);
+
+            // Assert
+            var sentMessage = this.GetSentMessage<RequestCheckCommentAnswer>(context);
+            Assert.IsNotNull(sentMessage);
+            Assert.True(sentMessage.Etag == saga.Data.ETag);
+            Assert.True(sentMessage.PullRequestUri == saga.Data.PullRequestLocation);
         }
 
-        [Test]
-        public void Handle_CommentResponseStatusApproved_SendEmailWithProperDataAndCompleteSaga()
+        [TestCase(CommentAnswerStatus.Approved)]
+        [TestCase(CommentAnswerStatus.Rejected)]
+        public async Task Handle_CheckCommentAnswerResponse_SendEmailWithProperDataAndCompleteSaga(CommentAnswerStatus status)
         {
-            var message = Substitute.For<ICommentResponseAdded>();
-            message.CommentResponse = new CommentResponse
-            {
-                ResponseStatus = CommentResponseStatus.Approved
-            };
+            // Arrange
+            var message = Substitute.For<CheckCommentAnswerResponse>();
+            message.Status = status;
+            var saga = this.GetHandler();
+            saga.Data.UserName = "testUser";
+            saga.Data.UserEmail = "testEmail";
+            saga.Data.FileName = "testFileName";
+            var context = this.GetContext();
 
-            Test.Saga<HandlerCommentSaga>()
-                .ExpectSend<SendEmail>()
-                .When(
-                    sagaIsInvoked: (saga, context) =>
-                    {
-                        return saga.Handle(message, context);
-                    })
-                    .ExpectSagaCompleted();
+            // Act
+            await saga.Handle(message, context).ConfigureAwait(false);
+
+            // Assert
+            var sentMessage = this.GetSentMessage<SendEmail>(context);
+            Assert.IsNotNull(sentMessage);
+            Assert.True(sentMessage.UserName == saga.Data.UserName);
+            Assert.True(sentMessage.UserEmail == saga.Data.UserEmail);
+            Assert.True(sentMessage.FileName == saga.Data.FileName);
+            Assert.True(sentMessage.CommentResponseStatus == message.Status);
+            Assert.True(saga.Completed);
         }
 
-        [Test]
-        public void Handle_CommentResponseStatusNotAdded_SendCheckCommentResponseTimeoutWithProperData()
+        [TestCase(CommentAnswerStatus.NotAddded)]
+        public async Task Handle_CheckCommentAnswerResponse_TimeoutCheckCommentAnswerTimeoutWithProperDataAndContinueSaga(CommentAnswerStatus status)
         {
-            var message = Substitute.For<ICommentResponseAdded>();
-            message.CommentResponse = new CommentResponse
-            {
-                ResponseStatus = CommentResponseStatus.NotAddded
-            };
+            // Arrange
+            var message = Substitute.For<CheckCommentAnswerResponse>();
+            message.Status = status;
+            var saga = this.GetHandler();
+            var context = this.GetContext();
 
-            Test.Saga<HandlerCommentSaga>()
-                .ExpectTimeoutToBeSetIn<ICommentResponseAdded>((state, span) =>
-                {
-                    return span == TimeSpan.FromDays(this.timeoutMinutes);
-                });
-        }
+            // Act
+            await saga.Handle(message, context).ConfigureAwait(false);
 
-        [Test]
-        public void Handle_CommentResponseStatusRejected_SendEmailWithProperDataAndCompleteSaga()
-        {
-            var message = Substitute.For<ICommentResponseAdded>();
-            message.CommentResponse = new CommentResponse
-            {
-                ResponseStatus = CommentResponseStatus.Rejected
-            };
-
-            Test.Saga<HandlerCommentSaga>()
-                .ExpectSend<SendEmail>()
-                .When(
-                    sagaIsInvoked: (saga, context) =>
-                    {
-                        return saga.Handle(message, context);
-                    })
-                .ExpectSagaCompleted();
+            // Assert
+            var timeoutMessage = this.GetTimeoutMessage<CheckCommentAnswerTimeout>(context);
+            Assert.IsNotNull(timeoutMessage);
+            Assert.False(saga.Completed);
         }
 
         private HandlerCommentSaga GetHandler()
@@ -166,6 +172,12 @@
             where TSentMessage : class
         {
             return context.SentMessages[0].Message as TSentMessage;
+        }
+
+        private TSentMessage GetTimeoutMessage<TSentMessage>(TestableMessageHandlerContext context)
+            where TSentMessage : class
+        {
+            return context.TimeoutMessages[0].Message as TSentMessage;
         }
     }
 }

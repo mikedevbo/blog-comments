@@ -8,9 +8,9 @@
     [Ignore("only for manual tests")]
     public class HandlerSendEmailTests
     {
-        [TestCase(CommentResponseStatus.Approved)]
-        [TestCase(CommentResponseStatus.Rejected)]
-        public void GetSubject_Execute_ShowResult(CommentResponseStatus responseStatus)
+        [TestCase(CommentAnswerStatus.Approved)]
+        [TestCase(CommentAnswerStatus.Rejected)]
+        public void GetSubject_Execute_ShowResult(CommentAnswerStatus responseStatus)
         {
             // Arrange
             var handler = this.GetHandlerSetEmail();
@@ -29,7 +29,7 @@
             var handler = this.GetHandlerSetEmail();
 
             // Act
-            var result = handler.GetBody("someBlogDomainName", "2018-02-10-someFileName.md", CommentResponseStatus.Approved);
+            var result = handler.GetBody("someBlogDomainName", "2018-02-10-someFileName.md", CommentAnswerStatus.Approved);
 
             // Assert
             Console.WriteLine(result);

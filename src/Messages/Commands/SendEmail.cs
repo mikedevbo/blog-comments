@@ -8,6 +8,6 @@
 
         public string FileName { get; set; }
 
-        public CommentResponseStatus CommentResponseStatus { get; set; }
+        public CommentAnswerStatus CommentResponseStatus { get; set; }
     }
 }

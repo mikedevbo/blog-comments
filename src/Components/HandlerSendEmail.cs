@@ -31,9 +31,9 @@
             return context.SendMail(mail);
         }
 
-        public string GetSubject(CommentResponseStatus status)
+        public string GetSubject(CommentAnswerStatus status)
         {
-            if (status == CommentResponseStatus.Approved)
+            if (status == CommentAnswerStatus.Approved)
             {
                 return Resource.ResponseAdded;
             }
@@ -41,9 +41,9 @@
             return string.Format("{0} {1}", Resource.Comment, Resource.Rejected);
         }
 
-        public string GetBody(string blogDomainName, string fileName, CommentResponseStatus status)
+        public string GetBody(string blogDomainName, string fileName, CommentAnswerStatus status)
         {
-            if (status != CommentResponseStatus.Approved)
+            if (status != CommentAnswerStatus.Approved)
             {
                 return string.Empty;
             }

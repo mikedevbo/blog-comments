@@ -6,7 +6,6 @@
     using System.Net.Mail;
     using System.Reflection;
     using Messages.Commands;
-    using Messages.Events;
     using Messages.Messages;
     using NServiceBus;
     using NServiceBus.Mailer;
@@ -35,11 +34,6 @@
                 {
                     return type.Namespace == typeof(StartAddingComment).Namespace;
                 });
-            conventions.DefiningEventsAs(
-                type =>
-                {
-                    return type.Namespace == typeof(ICommentResponseAdded).Namespace;
-                });
             conventions.DefiningMessagesAs(
                 type =>
                 {
@@ -52,12 +46,10 @@
             var transport = endpointConfiguration.UseTransport<SqlServerTransport>();
             transport.ConnectionString(this.configurationManager.NsbTransportConnectionString);
             var routing = transport.Routing();
+
             routing.RouteToEndpoint(
                 assembly: typeof(StartAddingComment).Assembly,
                 destination: this.configurationManager.NsbEndpointName);
-            routing.RegisterPublisher(
-                assembly: typeof(ICommentResponseAdded).Assembly,
-                publisherEndpoint: this.configurationManager.NsbEndpointName);
 
             // persistence
             var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
