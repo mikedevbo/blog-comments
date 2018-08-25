@@ -6,6 +6,7 @@
     using Messages;
     using Messages.Commands;
     using Messages.Events;
+    using Messages.Messages;
     using NServiceBus.Testing;
     using NSubstitute;
     using NUnit.Framework;
@@ -18,7 +19,7 @@
         private IConfigurationManager configurationManager;
 
         [Test]
-        public async Task Handle_StartAddingComment_SendCreateBranchWithProperData()
+        public async Task Handle_StartAddingComment_SendRequestCreateBranchWithProperData()
         {
             // Arrange
             var message = new StartAddingComment { CommentId = this.id };
@@ -29,17 +30,15 @@
             await saga.Handle(message, context).ConfigureAwait(false);
 
             // Assert
-            var sentMessage = this.GetSentMessage<CreateBranch>(context);
+            var sentMessage = this.GetSentMessage<RequestCreateBranch>(context);
             Assert.IsNotNull(sentMessage);
-            Assert.True(sentMessage.CommentId == this.id);
         }
 
         [Test]
         public async Task Handle_GitHubBranchCreated_SendAddCommentWithProperData()
         {
             // Arrange
-            var message = Substitute.For<IBranchCreated>();
-            message.CommentId = this.id;
+            var message = Substitute.For<CreateBranchResponse>();
             var saga = this.GetHandler();
             var context = this.GetContext();
 

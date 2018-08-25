@@ -1,6 +1,5 @@
 ﻿namespace Common
 {
-    using System;
     using System.Data.SqlClient;
     using System.IO;
     using System.Net;
@@ -8,6 +7,7 @@
     using System.Reflection;
     using Messages.Commands;
     using Messages.Events;
+    using Messages.Messages;
     using NServiceBus;
     using NServiceBus.Mailer;
     using NServiceBus.Persistence.Sql;
@@ -33,12 +33,19 @@
             conventions.DefiningCommandsAs(
                 type =>
                 {
-                    return type.Namespace == typeof(CreateBranch).Namespace;
+                    return type.Namespace == typeof(StartAddingComment).Namespace;
                 });
             conventions.DefiningEventsAs(
                 type =>
                 {
-                    return type.Namespace == typeof(IBranchCreated).Namespace;
+                    return type.Namespace == typeof(ICommentResponseAdded).Namespace;
+                });
+            conventions.DefiningMessagesAs(
+                type =>
+                {
+                    return
+                        type.Namespace == typeof(RequestCreateBranch).Namespace ||
+                        type == typeof(NServiceBus.Mailer.MailMessage);
                 });
 
             // transport
@@ -46,10 +53,10 @@
             transport.ConnectionString(this.configurationManager.NsbTransportConnectionString);
             var routing = transport.Routing();
             routing.RouteToEndpoint(
-                assembly: typeof(CreateBranch).Assembly,
+                assembly: typeof(StartAddingComment).Assembly,
                 destination: this.configurationManager.NsbEndpointName);
             routing.RegisterPublisher(
-                assembly: typeof(IBranchCreated).Assembly,
+                assembly: typeof(ICommentResponseAdded).Assembly,
                 publisherEndpoint: this.configurationManager.NsbEndpointName);
 
             // persistence

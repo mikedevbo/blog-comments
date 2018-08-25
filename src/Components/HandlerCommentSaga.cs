@@ -6,17 +6,18 @@
     using Messages;
     using Messages.Commands;
     using Messages.Events;
+    using Messages.Messages;
     using NServiceBus;
     using NServiceBus.Logging;
 
     public class HandlerCommentSaga :
        Saga<CommentSagaData>,
         IAmStartedByMessages<StartAddingComment>,
-        IHandleMessages<IBranchCreated>,
         IHandleMessages<ICommentAdded>,
         IHandleMessages<IPullRequestCreated>,
         IHandleTimeouts<CheckCommentResponseTimeout>,
-        IHandleMessages<ICommentResponseAdded>
+        IHandleMessages<ICommentResponseAdded>,
+        IHandleMessages<CreateBranchResponse>
     {
         private readonly IConfigurationManager configurationManager;
         private readonly ILog log = LogManager.GetLogger<HandlerCommentSaga>();
@@ -33,28 +34,27 @@
 
         public Task Handle(StartAddingComment message, IMessageHandlerContext context)
         {
-            this.Data.CommentId = message.CommentId;
             this.Data.UserName = message.UserName;
             this.Data.UserEmail = message.UserEmail;
             this.Data.UserWebsite = message.UserWebsite;
             this.Data.FileName = message.FileName;
             this.Data.Content = message.Content;
 
-            return context.Send<CreateBranch>(command => command.CommentId = this.Data.CommentId);
+            return context.Send(new RequestCreateBranch());
         }
 
-        public Task Handle(IBranchCreated message, IMessageHandlerContext context)
+        public Task Handle(CreateBranchResponse message, IMessageHandlerContext context)
         {
             this.Data.BranchName = message.CreatedBranchName;
 
             return context.Send<AddComment>(command =>
-             {
-                 command.CommentId = this.Data.CommentId;
-                 command.UserName = this.Data.UserName;
-                 command.BranchName = this.Data.BranchName;
-                 command.FileName = this.Data.FileName;
-                 command.Content = this.Data.Content;
-             });
+            {
+                command.CommentId = this.Data.CommentId;
+                command.UserName = this.Data.UserName;
+                command.BranchName = this.Data.BranchName;
+                command.FileName = this.Data.FileName;
+                command.Content = this.Data.Content;
+            });
         }
 
         public Task Handle(ICommentAdded message, IMessageHandlerContext context)
@@ -116,7 +116,6 @@
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<CommentSagaData> mapper)
         {
             mapper.ConfigureMapping<StartAddingComment>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
-            mapper.ConfigureMapping<IBranchCreated>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
             mapper.ConfigureMapping<ICommentAdded>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
             mapper.ConfigureMapping<IPullRequestCreated>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
             mapper.ConfigureMapping<CheckCommentResponseTimeout>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);

@@ -5,22 +5,21 @@
     using System.Threading.Tasks;
     using Common;
     using Components.GitHub;
-    using Messages.Commands;
-    using Messages.Events;
+    using Messages.Messages;
     using NServiceBus;
 
-    public class HandlerCreateBranch : IHandleMessages<CreateBranch>
+    public class RequestCreateBranchHandler : IHandleMessages<RequestCreateBranch>
     {
         private readonly IConfigurationManager configurationManager;
         private readonly IGitHubApi gitHubApi;
 
-        public HandlerCreateBranch(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
+        public RequestCreateBranchHandler(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
         {
             this.configurationManager = configurationManager;
             this.gitHubApi = gitHubApi;
         }
 
-        public async Task Handle(CreateBranch message, IMessageHandlerContext context)
+        public async Task Handle(RequestCreateBranch message, IMessageHandlerContext context)
         {
             var sb = new StringBuilder();
             sb.Append("c-").Append(DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss-fff"));
@@ -33,11 +32,10 @@
                 this.configurationManager.MasterBranchName,
                 branchName).ConfigureAwait(false);
 
-            await context.Publish<IBranchCreated>(
-                evt =>
+            await context.Reply<CreateBranchResponse>(
+                response =>
                 {
-                    evt.CommentId = message.CommentId;
-                    evt.CreatedBranchName = branchName;
+                    response.CreatedBranchName = branchName;
                 })
                 .ConfigureAwait(false);
         }
