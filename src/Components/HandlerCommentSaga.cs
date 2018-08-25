@@ -13,11 +13,11 @@
     public class HandlerCommentSaga :
        Saga<CommentSagaData>,
         IAmStartedByMessages<StartAddingComment>,
-        IHandleMessages<ICommentAdded>,
         IHandleMessages<IPullRequestCreated>,
         IHandleTimeouts<CheckCommentResponseTimeout>,
         IHandleMessages<ICommentResponseAdded>,
-        IHandleMessages<CreateBranchResponse>
+        IHandleMessages<CreateBranchResponse>,
+        IHandleMessages<AddCommentResponse>
     {
         private readonly IConfigurationManager configurationManager;
         private readonly ILog log = LogManager.GetLogger<HandlerCommentSaga>();
@@ -47,9 +47,8 @@
         {
             this.Data.BranchName = message.CreatedBranchName;
 
-            return context.Send<AddComment>(command =>
+            return context.Send<RequestAddComment>(command =>
             {
-                command.CommentId = this.Data.CommentId;
                 command.UserName = this.Data.UserName;
                 command.BranchName = this.Data.BranchName;
                 command.FileName = this.Data.FileName;
@@ -57,14 +56,14 @@
             });
         }
 
-        public Task Handle(ICommentAdded message, IMessageHandlerContext context)
+        public Task Handle(AddCommentResponse message, IMessageHandlerContext context)
         {
             return context.Send<CreatePullRequest>(command =>
-             {
-                 command.CommentId = this.Data.CommentId;
-                 command.CommentBranchName = this.Data.BranchName;
-                 command.BaseBranchName = this.configurationManager.MasterBranchName;
-             });
+            {
+                command.CommentId = this.Data.CommentId;
+                command.CommentBranchName = this.Data.BranchName;
+                command.BaseBranchName = this.configurationManager.MasterBranchName;
+            });
         }
 
         public Task Handle(IPullRequestCreated message, IMessageHandlerContext context)
@@ -116,7 +115,6 @@
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<CommentSagaData> mapper)
         {
             mapper.ConfigureMapping<StartAddingComment>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
-            mapper.ConfigureMapping<ICommentAdded>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
             mapper.ConfigureMapping<IPullRequestCreated>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
             mapper.ConfigureMapping<CheckCommentResponseTimeout>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
             mapper.ConfigureMapping<ICommentResponseAdded>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);

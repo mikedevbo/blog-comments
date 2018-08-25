@@ -1,25 +1,27 @@
 ﻿namespace Components
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
     using Common;
     using Components.GitHub;
-    using Messages.Commands;
-    using Messages.Events;
+    using Messages.Messages;
     using NServiceBus;
 
-    public class HandlerAddComment : IHandleMessages<AddComment>
+    public class RequestAddCommentHandler : IHandleMessages<RequestAddComment>
     {
         private readonly IConfigurationManager configurationManager;
         private readonly IGitHubApi gitHubApi;
 
-        public HandlerAddComment(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
+        public RequestAddCommentHandler(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
         {
             this.configurationManager = configurationManager;
             this.gitHubApi = gitHubApi;
         }
 
-        public async Task Handle(AddComment message, IMessageHandlerContext context)
+        public async Task Handle(RequestAddComment message, IMessageHandlerContext context)
         {
             var sb = new StringBuilder();
             sb.AppendLine(message.UserName);
@@ -34,8 +36,7 @@
                 message.FileName,
                 content).ConfigureAwait(false);
 
-            await context.Publish<ICommentAdded>(evt => evt.CommentId = message.CommentId)
-                .ConfigureAwait(false);
+            await context.Reply(new AddCommentResponse()).ConfigureAwait(false);
         }
     }
 }

@@ -35,7 +35,7 @@
         }
 
         [Test]
-        public async Task Handle_GitHubBranchCreated_SendAddCommentWithProperData()
+        public async Task Handle_CreateBranchResponse_SendRequestAddCommentWithProperData()
         {
             // Arrange
             var message = Substitute.For<CreateBranchResponse>();
@@ -46,17 +46,15 @@
             await saga.Handle(message, context).ConfigureAwait(false);
 
             // Assert
-            var sentMessage = this.GetSentMessage<AddComment>(context);
+            var sentMessage = this.GetSentMessage<RequestAddComment>(context);
             Assert.IsNotNull(sentMessage);
-            Assert.True(sentMessage.CommentId == this.id);
         }
 
         [Test]
-        public async Task Handle_CommentAdded_CreatePullRequestWithProperData()
+        public async Task Handle_AddCommentResponse_CreatePullRequestWithProperData()
         {
             // Arrange
-            var message = Substitute.For<ICommentAdded>();
-            message.CommentId = this.id;
+            var message = Substitute.For<AddCommentResponse>();
             var saga = this.GetHandler();
             var context = this.GetContext();
 

@@ -1,11 +1,7 @@
-﻿namespace Messages.Commands
+﻿namespace Messages.Messages
 {
-    using System;
-
-    public class AddComment
+    public class RequestAddComment
     {
-        public Guid CommentId { get; set; }
-
         public string UserName { get; set; }
 
         public string BranchName { get; set; }

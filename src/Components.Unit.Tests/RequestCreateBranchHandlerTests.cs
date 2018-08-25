@@ -8,6 +8,7 @@
     using NSubstitute;
     using NUnit.Framework;
 
+    [TestFixture]
     public class RequestCreateBranchHandlerTests
     {
         private IConfigurationManager configurationManager;

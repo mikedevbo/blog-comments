@@ -4,24 +4,22 @@
     using System.Threading.Tasks;
     using Common;
     using Components.GitHub;
-    using Messages.Commands;
-    using Messages.Events;
+    using Messages.Messages;
     using NServiceBus.Testing;
     using NSubstitute;
     using NUnit.Framework;
 
     [TestFixture]
-    public class HandlerAddCommentTests
+    public class RequestAddCommentHandlerTests
     {
-        private readonly Guid id = Guid.Parse(@"0C242B08-7704-499D-A9D8-184ED6D93988");
         private IConfigurationManager configurationManager;
         private IGitHubApi gitHubApi;
 
         [Test]
-        public async Task Handle_AddComment_PublishProperEvent()
+        public async Task Handle_RequestAddComment_ReplayProperEvent()
         {
             // Arrange
-            var message = new AddComment { CommentId = this.id };
+            var message = new RequestAddComment();
             var handler = this.GetHandler();
             var context = this.GetContext();
 
@@ -29,17 +27,16 @@
             await handler.Handle(message, context).ConfigureAwait(false);
 
             // Assert
-            var publishedMessage = context.PublishedMessages[0].Message as ICommentAdded;
-            Assert.IsNotNull(publishedMessage);
-            Assert.True(publishedMessage.CommentId == this.id);
+            var repliedMessage = context.RepliedMessages[0].Message as AddCommentResponse;
+            Assert.IsNotNull(repliedMessage);
         }
 
-        private HandlerAddComment GetHandler()
+        private RequestAddCommentHandler GetHandler()
         {
             this.configurationManager = Substitute.For<IConfigurationManager>();
             this.gitHubApi = Substitute.For<IGitHubApi>();
 
-            return new HandlerAddComment(this.configurationManager, this.gitHubApi);
+            return new RequestAddCommentHandler(this.configurationManager, this.gitHubApi);
         }
 
         private TestableMessageHandlerContext GetContext()
