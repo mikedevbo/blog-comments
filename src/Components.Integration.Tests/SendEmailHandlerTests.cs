@@ -6,7 +6,7 @@
 
     [TestFixture]
     [Ignore("only for manual tests")]
-    public class HandlerSendEmailTests
+    public class SendEmailHandlerTests
     {
         [TestCase(CommentAnswerStatus.Approved)]
         [TestCase(CommentAnswerStatus.Rejected)]
@@ -35,9 +35,9 @@
             Console.WriteLine(result);
         }
 
-        private HandlerSendEmail GetHandlerSetEmail()
+        private SendEmailHandler GetHandlerSetEmail()
         {
-            return new HandlerSendEmail(new Common.ConfigurationManager());
+            return new SendEmailHandler(new Common.ConfigurationManager());
         }
     }
 }

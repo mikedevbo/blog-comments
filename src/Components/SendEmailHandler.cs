@@ -8,12 +8,12 @@
     using NServiceBus.Logging;
     using NServiceBus.Mailer;
 
-    public class HandlerSendEmail : IHandleMessages<SendEmail>
+    public class SendEmailHandler : IHandleMessages<SendEmail>
     {
-        private static readonly ILog Log = LogManager.GetLogger<HandlerSendEmail>();
+        private static readonly ILog Log = LogManager.GetLogger<SendEmailHandler>();
         private readonly IConfigurationManager configurationManager;
 
-        public HandlerSendEmail(IConfigurationManager configurationManager)
+        public SendEmailHandler(IConfigurationManager configurationManager)
         {
             this.configurationManager = configurationManager;
         }
