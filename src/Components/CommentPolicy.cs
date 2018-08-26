@@ -9,8 +9,8 @@
     using NServiceBus;
     using NServiceBus.Logging;
 
-    public class HandlerCommentSaga :
-       Saga<CommentSagaData>,
+    public class CommentPolicy :
+       Saga<CommentPolicyData>,
         IAmStartedByMessages<StartAddingComment>,
         IHandleMessages<CreateBranchResponse>,
         IHandleMessages<AddCommentResponse>,
@@ -19,14 +19,14 @@
         IHandleMessages<CheckCommentAnswerResponse>
     {
         private readonly IConfigurationManager configurationManager;
-        private readonly ILog log = LogManager.GetLogger<HandlerCommentSaga>();
+        private readonly ILog log = LogManager.GetLogger<CommentPolicy>();
 
-        public HandlerCommentSaga()
+        public CommentPolicy()
         {
             ////for unit tests only
         }
 
-        public HandlerCommentSaga(IConfigurationManager configurationManager)
+        public CommentPolicy(IConfigurationManager configurationManager)
         {
             this.configurationManager = configurationManager;
         }
@@ -107,7 +107,7 @@
             }
         }
 
-        protected override void ConfigureHowToFindSaga(SagaPropertyMapper<CommentSagaData> mapper)
+        protected override void ConfigureHowToFindSaga(SagaPropertyMapper<CommentPolicyData> mapper)
         {
             mapper.ConfigureMapping<StartAddingComment>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
         }

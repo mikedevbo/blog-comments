@@ -11,7 +11,7 @@
     using NUnit.Framework;
 
     [TestFixture]
-    public class HandlerCommentSagaTests
+    public class CommentPolicyTests
     {
         private readonly Guid id = Guid.Parse(@"0C242B08-7704-499D-A9D8-184ED6D93988");
         private IConfigurationManager configurationManager;
@@ -144,13 +144,13 @@
             Assert.False(saga.Completed);
         }
 
-        private HandlerCommentSaga GetHandler()
+        private CommentPolicy GetHandler()
         {
             this.configurationManager = Substitute.For<IConfigurationManager>();
 
-            return new HandlerCommentSaga(this.configurationManager)
+            return new CommentPolicy(this.configurationManager)
             {
-                Data = new CommentSagaData
+                Data = new CommentPolicyData
                 {
                     CommentId = this.id,
                     UserName = @"test",

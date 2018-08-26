@@ -3,7 +3,7 @@
     using System;
     using NServiceBus;
 
-    public class CommentSagaData : ContainSagaData
+    public class CommentPolicyData : ContainSagaData
     {
         public Guid CommentId { get; set; }
 
