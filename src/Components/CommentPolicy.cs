@@ -10,7 +10,7 @@
     using NServiceBus.Logging;
 
     public class CommentPolicy :
-       Saga<CommentPolicyData>,
+        Saga<CommentPolicy.CommentPolicyData>,
         IAmStartedByMessages<StartAddingComment>,
         IHandleMessages<CreateBranchResponse>,
         IHandleMessages<AddCommentResponse>,
@@ -110,6 +110,27 @@
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<CommentPolicyData> mapper)
         {
             mapper.ConfigureMapping<StartAddingComment>(message => message.CommentId).ToSaga(sagaData => sagaData.CommentId);
+        }
+
+        public class CommentPolicyData : ContainSagaData
+        {
+            public Guid CommentId { get; set; }
+
+            public string UserName { get; set; }
+
+            public string UserEmail { get; set; }
+
+            public string UserWebsite { get; set; }
+
+            public string FileName { get; set; }
+
+            public string Content { get; set; }
+
+            public string BranchName { get; set; }
+
+            public string PullRequestLocation { get; set; }
+
+            public string ETag { get; set; }
         }
     }
 }

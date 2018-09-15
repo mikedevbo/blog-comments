@@ -150,7 +150,7 @@
 
             return new CommentPolicy(this.configurationManager)
             {
-                Data = new CommentPolicyData
+                Data = new CommentPolicy.CommentPolicyData
                 {
                     CommentId = this.id,
                     UserName = @"test",
