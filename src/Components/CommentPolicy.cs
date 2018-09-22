@@ -33,6 +33,7 @@
 
         public Task Handle(StartAddingComment message, IMessageHandlerContext context)
         {
+            this.Data.CommentId = message.CommentId;
             this.Data.UserName = message.UserName;
             this.Data.UserEmail = message.UserEmail;
             this.Data.UserWebsite = message.UserWebsite;
