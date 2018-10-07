@@ -66,7 +66,7 @@ function prepareArtifactsToDeploy(
     New-Item -ItemType directory -Path "$destination\app_data"
 
     Write-Host "->copy NServiceBusLicense"
-    Copy-Item "$nserviceBusLicenseSourcePath" -Destination "$destination\nservicebus" -Recurse
+    Copy-Item "$nserviceBusLicenseSourcePath\*" -Destination "$destination" -Recurse
 
     Write-Host "->copy settings"
     Copy-Item "$settingsSourcePath\*" -Destination "$destination" -Recurse
