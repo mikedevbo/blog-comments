@@ -14,7 +14,7 @@
 
             this.RuleFor(comment => comment.Content)
                 .NotEmpty().WithMessage("You must specify a content.")
-                .Length(1, 1000).WithMessage("Comment cannot be longer than 1000 characters.");
+                .Length(1, 2000).WithMessage("Comment cannot be longer than 1000 characters.");
         }
     }
 }
