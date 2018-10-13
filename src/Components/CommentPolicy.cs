@@ -39,6 +39,7 @@
             this.Data.UserWebsite = message.UserWebsite;
             this.Data.FileName = message.FileName;
             this.Data.Content = message.Content;
+            this.Data.AddedDate = message.AddedDate;
 
             return context.Send(new RequestCreateBranch());
         }
@@ -53,6 +54,7 @@
                 command.BranchName = this.Data.BranchName;
                 command.FileName = this.Data.FileName;
                 command.Content = this.Data.Content;
+                command.AddedDate = this.Data.AddedDate;
             });
         }
 
@@ -132,6 +134,8 @@
             public string PullRequestLocation { get; set; }
 
             public string ETag { get; set; }
+
+            public DateTime AddedDate { get; set; }
         }
     }
 }
