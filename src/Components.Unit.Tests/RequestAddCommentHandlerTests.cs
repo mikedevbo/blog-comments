@@ -31,6 +31,21 @@
             Assert.IsNotNull(repliedMessage);
         }
 
+        [TestCase("user", null, "**user**")]
+        [TestCase("user", "", "**user**")]
+        [TestCase("user", "webSite", "[user](webSite)")]
+        public void FormatUserName_ForParameters_ExpectedResult(string userName, string userWebSite, string expectedResult)
+        {
+            // Arrange
+            var handler = this.GetHandler();
+
+            // Act
+            var result = handler.FormatUserName(userName, userWebSite);
+
+            // Assert
+            Assert.True(result == expectedResult);
+        }
+
         private RequestAddCommentHandler GetHandler()
         {
             this.configurationManager = Substitute.For<IConfigurationManager>();

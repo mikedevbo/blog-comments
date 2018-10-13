@@ -24,8 +24,8 @@
         public async Task Handle(RequestAddComment message, IMessageHandlerContext context)
         {
             var sb = new StringBuilder();
-            sb.AppendLine(message.UserName);
-            sb.Append("\t").AppendLine(message.Content);
+            var userName = this.FormatUserName(message.UserName, message.UserWebSite);
+            sb.Append($"begin-{userName}-{message.Content}-{message.AddedDate} UTC");
             string content = sb.ToString();
 
             await this.gitHubApi.UpdateFile(
@@ -37,6 +37,13 @@
                 content).ConfigureAwait(false);
 
             await context.Reply(new AddCommentResponse()).ConfigureAwait(false);
+        }
+
+        public string FormatUserName(string userName, string userWebSite)
+        {
+            return string.IsNullOrEmpty(userWebSite)
+                ? $"**{userName}**"
+                : $"[{userName}]({userWebSite})";
         }
     }
 }
