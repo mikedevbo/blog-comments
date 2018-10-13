@@ -48,22 +48,22 @@
         {
             this.Data.BranchName = message.CreatedBranchName;
 
-            return context.Send<RequestAddComment>(command =>
+            return context.Send<RequestAddComment>(msg =>
             {
-                command.UserName = this.Data.UserName;
-                command.BranchName = this.Data.BranchName;
-                command.FileName = this.Data.FileName;
-                command.Content = this.Data.Content;
-                command.AddedDate = this.Data.AddedDate;
+                msg.UserName = this.Data.UserName;
+                msg.BranchName = this.Data.BranchName;
+                msg.FileName = this.Data.FileName;
+                msg.Content = this.Data.Content;
+                msg.AddedDate = this.Data.AddedDate;
             });
         }
 
         public Task Handle(AddCommentResponse message, IMessageHandlerContext context)
         {
-            return context.Send<RequestCreatePullRequest>(command =>
+            return context.Send<RequestCreatePullRequest>(msg =>
             {
-                command.CommentBranchName = this.Data.BranchName;
-                command.BaseBranchName = this.configurationManager.MasterBranchName;
+                msg.CommentBranchName = this.Data.BranchName;
+                msg.BaseBranchName = this.configurationManager.MasterBranchName;
             });
         }
 
@@ -78,10 +78,10 @@
 
         public Task Timeout(CheckCommentAnswerTimeout state, IMessageHandlerContext context)
         {
-            return context.Send<RequestCheckCommentAnswer>(command =>
+            return context.Send<RequestCheckCommentAnswer>(msg =>
             {
-                command.PullRequestUri = this.Data.PullRequestLocation;
-                command.Etag = this.Data.ETag;
+                msg.PullRequestUri = this.Data.PullRequestLocation;
+                msg.Etag = this.Data.ETag;
             });
         }
 
@@ -90,12 +90,12 @@
             if (message.Status == CommentAnswerStatus.Approved ||
                 message.Status == CommentAnswerStatus.Rejected)
             {
-                await context.Send<SendEmail>(command =>
+                await context.Send<SendEmail>(msg =>
                 {
-                    command.UserName = this.Data.UserName;
-                    command.UserEmail = this.Data.UserEmail;
-                    command.FileName = this.Data.FileName;
-                    command.CommentResponseStatus = message.Status;
+                    msg.UserName = this.Data.UserName;
+                    msg.UserEmail = this.Data.UserEmail;
+                    msg.FileName = this.Data.FileName;
+                    msg.CommentResponseStatus = message.Status;
                 }).ConfigureAwait(false);
 
                 this.MarkAsComplete();
