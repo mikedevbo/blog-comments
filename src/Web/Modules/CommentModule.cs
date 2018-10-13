@@ -31,14 +31,15 @@
                     return this.Negotiate.WithModel(validationResult).WithStatusCode(HttpStatusCode.BadRequest);
                 }
 
-                await this.messageSession.Send<StartAddingComment>(command =>
+                await this.messageSession.Send<StartAddingComment>(msg =>
                 {
-                    command.CommentId = Guid.NewGuid();
-                    command.UserName = comment.UserName;
-                    command.UserEmail = comment.UserEmail;
-                    command.UserWebsite = comment.UserWebsite;
-                    command.FileName = comment.FileName;
-                    command.Content = comment.Content;
+                    msg.CommentId = Guid.NewGuid();
+                    msg.UserName = comment.UserName;
+                    msg.UserEmail = comment.UserEmail;
+                    msg.UserWebsite = comment.UserWebsite;
+                    msg.FileName = comment.FileName;
+                    msg.Content = comment.Content;
+                    msg.AddedDate = DateTime.UtcNow;
                 }).ConfigureAwait(false);
 
                 return HttpStatusCode.OK;
