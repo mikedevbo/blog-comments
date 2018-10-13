@@ -22,7 +22,7 @@
         public async Task Handle(RequestCreateBranch message, IMessageHandlerContext context)
         {
             var sb = new StringBuilder();
-            sb.Append("c-").Append(DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss-fff"));
+            sb.Append("c-").Append(message.AddedDate.ToString("yyyy-MM-dd-HH-mm-ss-fff"));
             string branchName = sb.ToString();
 
             await this.gitHubApi.CreateRepositoryBranch(

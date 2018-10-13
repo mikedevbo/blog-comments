@@ -41,7 +41,7 @@
             this.Data.Content = message.Content;
             this.Data.AddedDate = message.AddedDate;
 
-            return context.Send(new RequestCreateBranch());
+            return context.Send<RequestCreateBranch>(msg => msg.AddedDate = this.Data.AddedDate);
         }
 
         public Task Handle(CreateBranchResponse message, IMessageHandlerContext context)
