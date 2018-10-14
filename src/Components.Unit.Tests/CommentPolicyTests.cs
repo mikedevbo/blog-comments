@@ -100,8 +100,23 @@
             Assert.True(sentMessage.PullRequestUri == saga.Data.PullRequestLocation);
         }
 
-        [TestCase(CommentAnswerStatus.Approved)]
         [TestCase(CommentAnswerStatus.Rejected)]
+        public async Task Handle_CheckCommentAnswerResponse_CompleteSaga(CommentAnswerStatus status)
+        {
+            // Arrange
+            var message = Substitute.For<CheckCommentAnswerResponse>();
+            message.Status = status;
+            var saga = this.GetHandler();
+            var context = this.GetContext();
+
+            // Act
+            await saga.Handle(message, context).ConfigureAwait(false);
+
+            // Assert
+            Assert.True(saga.Completed);
+        }
+
+        [TestCase(CommentAnswerStatus.Approved)]
         public async Task Handle_CheckCommentAnswerResponse_SendEmailWithProperDataAndCompleteSaga(CommentAnswerStatus status)
         {
             // Arrange

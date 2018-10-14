@@ -87,26 +87,34 @@
 
         public async Task Handle(CheckCommentAnswerResponse message, IMessageHandlerContext context)
         {
-            if (message.Status == CommentAnswerStatus.Approved ||
-                message.Status == CommentAnswerStatus.Rejected)
+            switch (message.Status)
             {
-                await context.Send<SendEmail>(msg =>
-                {
-                    msg.UserName = this.Data.UserName;
-                    msg.UserEmail = this.Data.UserEmail;
-                    msg.FileName = this.Data.FileName;
-                    msg.CommentResponseStatus = message.Status;
-                }).ConfigureAwait(false);
+                case CommentAnswerStatus.Rejected:
+                    this.MarkAsComplete();
+                    break;
 
-                this.MarkAsComplete();
-            }
-            else
-            {
-                this.Data.ETag = message.ETag;
+                case CommentAnswerStatus.NotAddded:
+                    this.Data.ETag = message.ETag;
 
-                await this.RequestTimeout<CheckCommentAnswerTimeout>(
-                    context,
-                    TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds)).ConfigureAwait(false);
+                    await this.RequestTimeout<CheckCommentAnswerTimeout>(
+                        context,
+                        TimeSpan.FromSeconds(this.configurationManager.CommentResponseAddedSagaTimeoutInSeconds)).ConfigureAwait(false);
+                    break;
+
+                case CommentAnswerStatus.Approved:
+                    await context.Send<SendEmail>(msg =>
+                    {
+                        msg.UserName = this.Data.UserName;
+                        msg.UserEmail = this.Data.UserEmail;
+                        msg.FileName = this.Data.FileName;
+                        msg.CommentResponseStatus = message.Status;
+                    }).ConfigureAwait(false);
+
+                    this.MarkAsComplete();
+                    break;
+
+                default:
+                    throw new ArgumentException($"Not supported comment response status: {message.Status}");
             }
         }
 
