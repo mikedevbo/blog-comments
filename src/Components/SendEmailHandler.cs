@@ -1,5 +1,7 @@
 ﻿namespace Components
 {
+    using System;
+    using System.Linq;
     using System.Threading.Tasks;
     using Common;
     using Messages;
@@ -48,17 +50,19 @@
                 return string.Empty;
             }
 
-            // Depend on Jekyll file format
-            var s = fileName.Split('-');
+            // depend on Jekyll file format
+            var split = fileName.Split('-').ToList();
+            var year = split[0];
+            var month = split[1];
+            var day = split[2];
 
-            return string.Format(
-                "{0} - {1}/{2}/{3}/{4}/{5}.html",
-                Resource.Check,
-                blogDomainName,
-                s[0],
-                s[1],
-                s[2],
-                s[3].Split('.')[0]);
+            // remove year, month and day
+            split.RemoveRange(0, 3);
+
+            var join = string.Join("-", split).Split('.')[0];
+            var result = $"{Resource.Check} - {blogDomainName}/{year}/{month}/{day}/{join}.html";
+
+            return result;
         }
     }
 }

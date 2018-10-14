@@ -24,17 +24,19 @@
             Console.WriteLine(result);
         }
 
-        [Test]
-        public void GetBody_Execute_ShowResult()
+        [TestCase("blogDomainName", "2018-02-10-title_subtitle_something.md", "blogDomainName/2018/02/10/title_subtitle_something.html")]
+        [TestCase("blogDomainName", "2018-02-10-title-subtitle-something.md", "blogDomainName/2018/02/10/title-subtitle-something.html")]
+        public void GetBody_Execute_ShowResult(string blogDomainName, string fileName, string linkResult)
         {
             // Arrange
+            var expectedResult = $"{Resource.Check} - {linkResult}";
             var handler = this.GetHandlerSetEmail();
 
             // Act
-            var result = handler.GetBody("someBlogDomainName", "2018-02-10-someFileName.md", CommentAnswerStatus.Approved);
+            var result = handler.GetBody(blogDomainName, fileName, CommentAnswerStatus.Approved);
 
             // Assert
-            Console.WriteLine(result);
+            Assert.That(result, Is.EqualTo(expectedResult));
         }
 
         private SendEmailHandler GetHandlerSetEmail()

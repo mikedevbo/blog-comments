@@ -22,7 +22,7 @@ namespace Components {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource {
+    public class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Components {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Components.Resource", typeof(Resource).Assembly);
@@ -51,7 +51,7 @@ namespace Components {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Components {
         /// <summary>
         ///   Looks up a localized string similar to zatwierdzony.
         /// </summary>
-        internal static string Approved {
+        public static string Approved {
             get {
                 return ResourceManager.GetString("Approved", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Components {
         /// <summary>
         ///   Looks up a localized string similar to sprawdź.
         /// </summary>
-        internal static string Check {
+        public static string Check {
             get {
                 return ResourceManager.GetString("Check", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Components {
         /// <summary>
         ///   Looks up a localized string similar to komentarz.
         /// </summary>
-        internal static string Comment {
+        public static string Comment {
             get {
                 return ResourceManager.GetString("Comment", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Components {
         /// <summary>
         ///   Looks up a localized string similar to odrzucony.
         /// </summary>
-        internal static string Rejected {
+        public static string Rejected {
             get {
                 return ResourceManager.GetString("Rejected", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Components {
         /// <summary>
         ///   Looks up a localized string similar to dodano odpowiedź do komentarza.
         /// </summary>
-        internal static string ResponseAdded {
+        public static string ResponseAdded {
             get {
                 return ResourceManager.GetString("ResponseAdded", resourceCulture);
             }
