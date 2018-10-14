@@ -25,7 +25,7 @@
         {
             var sb = new StringBuilder();
             var userName = this.FormatUserName(message.UserName, message.UserWebSite);
-            sb.Append($"begin-{userName}-{message.Content}-{message.AddedDate} UTC");
+            sb.Append($"begin-{userName}-{message.Content}-{message.AddedDate.ToString("yyyy-MM-dd-HH-mm-ss")} UTC");
             string content = sb.ToString();
 
             await this.gitHubApi.UpdateFile(
