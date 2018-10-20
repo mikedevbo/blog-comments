@@ -6,15 +6,21 @@
     {
         public CommentValidator()
         {
-            this.RuleFor(comment => comment.UserName)
-                .NotEmpty().WithMessage("You must specify a username.")
-                .Length(1, 20).WithMessage("Username cannot be longer than 20 characters.");
+            const int minLength = 1;
+            const int userNameMaxLength = 20;
+            const int contentMaxLength = 4000;
 
-            this.RuleFor(comment => comment.FileName).NotEmpty();
+            this.RuleFor(comment => comment.UserName)
+                .NotEmpty().WithMessage(WebResource.UserNameNotEmpty)
+                .Length(minLength, userNameMaxLength).WithMessage(string.Format(WebResource.UserNameTooLong, userNameMaxLength));
+
+            this.RuleFor(comment => comment.FileName)
+                .NotEmpty()
+                .WithMessage("File name cannot be empty.");
 
             this.RuleFor(comment => comment.Content)
-                .NotEmpty().WithMessage("You must specify a content.")
-                .Length(1, 2000).WithMessage("Comment cannot be longer than 2000 characters.");
+                .NotEmpty().WithMessage(WebResource.ContentNotEmpty)
+                .Length(minLength, contentMaxLength).WithMessage(string.Format(WebResource.ContentTooLong, contentMaxLength));
         }
     }
 }
