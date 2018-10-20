@@ -22,6 +22,11 @@
 
         public Task Handle(SendEmail message, IMessageHandlerContext context)
         {
+            if (string.IsNullOrEmpty(message.UserEmail))
+            {
+                return Task.CompletedTask;
+            }
+
             var mail = new Mail
             {
                 From = this.configurationManager.SmtpFrom,
