@@ -79,6 +79,15 @@ namespace Web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nieprawidłowy format adresu e-mail..
+        /// </summary>
+        internal static string UserEmailNotCorrect {
+            get {
+                return ResourceManager.GetString("UserEmailNotCorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nazwa użytkownika nie może być pusta..
         /// </summary>
         internal static string UserNameNotEmpty {

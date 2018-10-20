@@ -21,6 +21,9 @@
             this.RuleFor(comment => comment.Content)
                 .NotEmpty().WithMessage(WebResource.ContentNotEmpty)
                 .Length(minLength, contentMaxLength).WithMessage(string.Format(WebResource.ContentTooLong, contentMaxLength));
+
+            this.RuleFor(comment => comment.UserEmail)
+                .EmailAddress().WithMessage(WebResource.UserEmailNotCorrect);
         }
     }
 }
