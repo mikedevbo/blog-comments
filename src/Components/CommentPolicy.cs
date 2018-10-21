@@ -55,6 +55,7 @@
                 msg.FileName = this.Data.FileName;
                 msg.Content = this.Data.Content;
                 msg.AddedDate = this.Data.AddedDate;
+                msg.UserWebSite = this.Data.UserWebsite;
             });
         }
 
