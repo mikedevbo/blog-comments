@@ -8,7 +8,7 @@
         {
             const int minLength = 1;
             const int userNameMaxLength = 20;
-            const int userWebsiteMaxLength = 5;
+            const int userWebsiteMaxLength = 30;
             const int contentMaxLength = 4000;
 
             this.RuleFor(comment => comment.UserName)
