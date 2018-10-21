@@ -132,4 +132,7 @@
   <data name="UserNameTooLong" xml:space="preserve">
     <value>Nazwa użytkownika nie może mieć więcej niż {0} znaków.</value>
   </data>
+  <data name="UserWebsiteTooLong" xml:space="preserve">
+    <value>Nazwa Website nie może mieć więcej niż {0} znaków.</value>
+  </data>
 </root>

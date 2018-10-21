@@ -8,6 +8,7 @@
         {
             const int minLength = 1;
             const int userNameMaxLength = 20;
+            const int userWebsiteMaxLength = 5;
             const int contentMaxLength = 4000;
 
             this.RuleFor(comment => comment.UserName)
@@ -24,6 +25,9 @@
 
             this.RuleFor(comment => comment.UserEmail)
                 .EmailAddress().WithMessage(WebResource.UserEmailNotCorrect);
+
+            this.RuleFor(comment => comment.UserWebsite)
+                .Length(minLength, userWebsiteMaxLength).WithMessage(string.Format(WebResource.UserWebsiteTooLong, userWebsiteMaxLength));
         }
     }
 }

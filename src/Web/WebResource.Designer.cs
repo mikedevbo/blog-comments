@@ -104,5 +104,14 @@ namespace Web {
                 return ResourceManager.GetString("UserNameTooLong", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nazwa Website nie może mieć więcej niż {0} znaków..
+        /// </summary>
+        internal static string UserWebsiteTooLong {
+            get {
+                return ResourceManager.GetString("UserWebsiteTooLong", resourceCulture);
+            }
+        }
     }
 }
