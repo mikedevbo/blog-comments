@@ -2,6 +2,7 @@
 {
     using System;
     using FluentValidation;
+    using log4net;
     using Messages.Commands;
     using Nancy;
     using Nancy.ModelBinding;
@@ -24,6 +25,12 @@
             this.Post["/", true] = async (r, c) =>
             {
                 var comment = this.Bind<Comment>();
+
+                // guess what for ;)
+                if (!string.IsNullOrEmpty(comment.UserPhone))
+                {
+                    return HttpStatusCode.OK;
+                }
 
                 var validationResult = await this.validator.ValidateAsync(comment).ConfigureAwait(false);
                 if (!validationResult.IsValid)
