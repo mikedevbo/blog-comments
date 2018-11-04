@@ -28,6 +28,12 @@
             endpointConfiguration.AuditProcessedMessagesTo(this.configurationManager.NsbAuditQueueName);
             endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
 
+            // host indentifier
+            endpointConfiguration.UniquelyIdentifyRunningInstance()
+                .UsingNames(
+                    instanceName: this.configurationManager.NsbEndpointName,
+                    hostName: Environment.MachineName);
+
             // conventions
             var conventions = endpointConfiguration.Conventions();
             conventions.DefiningCommandsAs(
