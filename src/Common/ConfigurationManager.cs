@@ -126,29 +126,6 @@
             }
         }
 
-        public DevMode DevMode
-        {
-            get
-            {
-                var devMode = System.Configuration.ConfigurationManager.AppSettings["DevMode"];
-
-                switch (devMode)
-                {
-                    case "dev":
-                        return DevMode.Dev;
-
-                    case "test":
-                        return DevMode.Test;
-
-                    case "production":
-                        return DevMode.Production;
-
-                    default:
-                        throw new ArgumentException("dev mode not implemented: {0}", devMode);
-                }
-            }
-        }
-
         public bool IsSendEmail
         {
             get

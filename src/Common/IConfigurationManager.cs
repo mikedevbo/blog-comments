@@ -34,8 +34,6 @@
 
         bool NsbIsIntegrationTests { get; }
 
-        DevMode DevMode { get; }
-
         bool IsSendEmail { get; }
 
         string SmtpHost { get; }
