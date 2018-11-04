@@ -118,11 +118,11 @@
             }
         }
 
-        public bool NsbIsIntegrationTests
+        public bool IsUseFakes
         {
             get
             {
-                return Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["NsbIsIntegrationTests"]);
+                return Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["IsUseFakes"]);
             }
         }
 

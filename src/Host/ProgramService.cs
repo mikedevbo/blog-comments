@@ -47,7 +47,7 @@
             endpointInitializer.Initialize(endpointConfiguration, false);
 
             // register components
-            if (configurationManager.NsbIsIntegrationTests)
+            if (configurationManager.IsUseFakes)
             {
                 endpointConfiguration.RegisterComponents(reg =>
                     reg.ConfigureComponent<GitHubApiForTests>(DependencyLifecycle.InstancePerCall));

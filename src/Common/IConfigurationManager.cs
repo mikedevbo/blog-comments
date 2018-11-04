@@ -32,7 +32,7 @@
 
         string NsbServiceControlMetricsQueueName { get; }
 
-        bool NsbIsIntegrationTests { get; }
+        bool IsUseFakes { get; }
 
         bool IsSendEmail { get; }
 
