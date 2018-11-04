@@ -78,6 +78,22 @@
             }
         }
 
+        public bool NsbIsSendHeartbeats
+        {
+            get
+            {
+                return Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings[@"NsbIsSendHeartbeats"]);
+            }
+        }
+
+        public string NsbServiceControlQueueName
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings[@"NsbServiceControlQueueName"];
+            }
+        }
+
         public bool NsbIsIntegrationTests
         {
             get

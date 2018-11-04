@@ -1,5 +1,6 @@
 ﻿namespace Common
 {
+    using System;
     using System.Data.SqlClient;
     using System.IO;
     using System.Net;
@@ -109,6 +110,12 @@
 
                 return smtpClient;
             });
+
+            // heartbeats
+            if (this.configurationManager.NsbIsSendHeartbeats)
+            {
+                endpointConfiguration.SendHeartbeatTo(serviceControlQueue: this.configurationManager.NsbServiceControlQueueName);
+            }
 
             // installers
             endpointConfiguration.EnableInstallers();

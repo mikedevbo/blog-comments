@@ -22,6 +22,10 @@
 
         string NsbAuditQueueName { get; }
 
+        bool NsbIsSendHeartbeats { get; }
+
+        string NsbServiceControlQueueName { get; }
+
         bool NsbIsIntegrationTests { get; }
 
         DevMode DevMode { get; }
