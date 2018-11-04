@@ -149,6 +149,14 @@
             }
         }
 
+        public bool IsSendEmail
+        {
+            get
+            {
+                return Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["IsSendEmail"]);
+            }
+        }
+
         public string SmtpHost
         {
             get

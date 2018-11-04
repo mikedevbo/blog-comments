@@ -99,7 +99,7 @@
             {
                 var smtpClient = new SmtpClient();
 
-                if (this.configurationManager.DevMode != DevMode.Production)
+                if (!this.configurationManager.IsSendEmail)
                 {
                     var directoryLocation = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Emails");
                     Directory.CreateDirectory(directoryLocation);

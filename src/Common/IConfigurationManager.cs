@@ -36,6 +36,8 @@
 
         DevMode DevMode { get; }
 
+        bool IsSendEmail { get; }
+
         string SmtpHost { get; }
 
         int SmtpPort { get; }
