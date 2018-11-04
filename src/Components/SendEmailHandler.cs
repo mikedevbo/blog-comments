@@ -56,7 +56,12 @@
             }
 
             // depend on Jekyll file format
-            var split = fileName.Split('-').ToList();
+
+            // the file name has format _posts/fileName.md
+            // the first step is to remove _posts prefix
+            var onlyFileName = fileName.Split('/')[1];
+
+            var split = onlyFileName.Split('-').ToList();
             var year = split[0];
             var month = split[1];
             var day = split[2];

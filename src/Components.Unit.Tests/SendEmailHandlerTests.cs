@@ -24,8 +24,8 @@
             Console.WriteLine(result);
         }
 
-        [TestCase("blogDomainName", "2018-02-10-title_subtitle_something.md", "blogDomainName/2018/02/10/title_subtitle_something.html")]
-        [TestCase("blogDomainName", "2018-02-10-title-subtitle-something.md", "blogDomainName/2018/02/10/title-subtitle-something.html")]
+        [TestCase("blogDomainName", "_posts/2018-02-10-title_subtitle_something.md", "blogDomainName/2018/02/10/title_subtitle_something.html")]
+        [TestCase("blogDomainName", "_posts/2018-02-10-title-subtitle-something.md", "blogDomainName/2018/02/10/title-subtitle-something.html")]
         public void GetBody_Execute_ShowResult(string blogDomainName, string fileName, string linkResult)
         {
             // Arrange
