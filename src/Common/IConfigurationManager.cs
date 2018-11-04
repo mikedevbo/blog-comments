@@ -22,6 +22,8 @@
 
         string NsbAuditQueueName { get; }
 
+        bool NsbIsDisableRecoverability { get; }
+
         bool NsbIsSendHeartbeats { get; }
 
         bool NsbIsSendMetrics { get; }

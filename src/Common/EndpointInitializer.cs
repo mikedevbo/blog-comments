@@ -78,7 +78,7 @@
             endpointConfiguration.EnableOutbox();
 
             // recoverability
-            if (this.configurationManager.DevMode == DevMode.Dev)
+            if (this.configurationManager.NsbIsDisableRecoverability)
             {
                 var recoverability = endpointConfiguration.Recoverability();
                 recoverability.Immediate(

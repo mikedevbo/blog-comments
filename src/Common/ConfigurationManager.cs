@@ -78,6 +78,14 @@
             }
         }
 
+        public bool NsbIsDisableRecoverability
+        {
+            get
+            {
+                return Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings[@"NsbIsDisableRecoverability"]);
+            }
+        }
+
         public bool NsbIsSendHeartbeats
         {
             get
