@@ -86,11 +86,27 @@
             }
         }
 
+        public bool NsbIsSendMetrics
+        {
+            get
+            {
+                return Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings[@"NsbIsSendMetrics"]);
+            }
+        }
+
         public string NsbServiceControlQueueName
         {
             get
             {
                 return System.Configuration.ConfigurationManager.AppSettings[@"NsbServiceControlQueueName"];
+            }
+        }
+
+        public string NsbServiceControlMetricsQueueName
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings[@"NsbServiceControlMetricsQueueName"];
             }
         }
 

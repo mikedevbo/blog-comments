@@ -127,6 +127,19 @@
                 endpointConfiguration.SendHeartbeatTo(serviceControlQueue: this.configurationManager.NsbServiceControlQueueName);
             }
 
+            // metrics
+            if (!isSendOnlyEndpoint)
+            {
+                if (this.configurationManager.NsbIsSendMetrics)
+                {
+                    var metrics = endpointConfiguration.EnableMetrics();
+
+                    metrics.SendMetricDataToServiceControl(
+                        serviceControlMetricsAddress: this.configurationManager.NsbServiceControlMetricsQueueName,
+                        interval: TimeSpan.FromSeconds(10));
+                }
+            }
+
             // installers
             endpointConfiguration.EnableInstallers();
         }

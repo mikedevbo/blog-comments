@@ -24,7 +24,11 @@
 
         bool NsbIsSendHeartbeats { get; }
 
+        bool NsbIsSendMetrics { get; }
+
         string NsbServiceControlQueueName { get; }
+
+        string NsbServiceControlMetricsQueueName { get; }
 
         bool NsbIsIntegrationTests { get; }
 
