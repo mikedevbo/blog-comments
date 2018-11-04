@@ -44,7 +44,7 @@
             var endpointConfiguration = new EndpointConfiguration(configurationManager.NsbEndpointName);
 
             // initialize endpoint
-            endpointInitializer.Initialize(endpointConfiguration);
+            endpointInitializer.Initialize(endpointConfiguration, false);
 
             // register components
             if (configurationManager.NsbIsIntegrationTests)

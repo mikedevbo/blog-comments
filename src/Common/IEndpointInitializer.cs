@@ -4,6 +4,6 @@
 
     public interface IEndpointInitializer
     {
-        void Initialize(EndpointConfiguration endpointConfiguration);
+        void Initialize(EndpointConfiguration endpointConfiguration, bool isSendOnlyEndpoint);
     }
 }

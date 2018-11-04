@@ -38,8 +38,7 @@
             var configurationManager = new ConfigurationManager();
             var endpointInitializer = new EndpointInitializer(configurationManager);
             var endpointConfiguration = new EndpointConfiguration(configurationManager.NsbEndpointName);
-            endpointInitializer.Initialize(endpointConfiguration);
-            endpointConfiguration.SendOnly();
+            endpointInitializer.Initialize(endpointConfiguration, true);
 
             // start endpoint
             var endpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();

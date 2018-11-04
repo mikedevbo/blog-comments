@@ -21,12 +21,16 @@
             this.configurationManager = configurationManager;
         }
 
-        public void Initialize(EndpointConfiguration endpointConfiguration)
+        public void Initialize(EndpointConfiguration endpointConfiguration, bool isSendOnlyEndpoint)
         {
             // endpoint configuration
             endpointConfiguration.SendFailedMessagesTo(this.configurationManager.NsbErrorQueueName);
             endpointConfiguration.AuditProcessedMessagesTo(this.configurationManager.NsbAuditQueueName);
             endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
+            if (isSendOnlyEndpoint)
+            {
+                endpointConfiguration.SendOnly();
+            }
 
             // host indentifier
             endpointConfiguration.UniquelyIdentifyRunningInstance()
