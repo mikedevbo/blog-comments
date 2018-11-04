@@ -21,11 +21,10 @@
     <PackageReference Include="GitVersionTask" Version="3.6.5">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="NServiceBus" Version="7.0.1" />
+    <PackageReference Include="NServiceBus" Version="7.1.4" />
     <PackageReference Include="NServiceBus.Mailer" Version="4.0.0" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0" />
-    <PackageReference Include="NServiceBus.Persistence.Sql" Version="4.2.0" />
-    <PackageReference Include="NServiceBus.Persistence.Sql.MsBuild" Version="4.2.0" />
+    <PackageReference Include="NServiceBus.Persistence.Sql" Version="4.3.0" />
     <PackageReference Include="NServiceBus.SqlServer" Version="4.1.0" />
     <PackageReference Include="Particular.CodeRules" Version="0.2.1" />
     <PackageReference Include="Simple.Data.SqlServer" Version="0.19.0" />
