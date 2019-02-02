@@ -59,7 +59,7 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="Nancy" Version="1.4.4" />
+    <PackageReference Include="Nancy" Version="1.4.5" />
     <PackageReference Include="Nancy.Validation.FluentValidation" Version="1.4.1" />
     <PackageReference Include="Nancy.Hosting.Aspnet" Version="1.4.1" />
   </ItemGroup>
