@@ -21,7 +21,7 @@
     <PackageReference Include="GitVersionTask" Version="3.6.5">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="NServiceBus.Testing" Version="7.0.0" />
     <PackageReference Include="NSubstitute" Version="4.0.0" />
     <PackageReference Include="NUnit" Version="3.11.0" />
