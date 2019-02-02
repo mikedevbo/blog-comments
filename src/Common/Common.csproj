@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.1.6" />
-    <PackageReference Include="GitVersionTask" Version="3.6.5">
+    <PackageReference Include="GitVersionTask" Version="4.0.0">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
