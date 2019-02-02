@@ -32,7 +32,7 @@
                 UserName = "testUser",
                 UserEmail = "testUser@test.com",
                 UserWebsite = "testUser.com",
-                FileName = @"2018-20-10-test.txt",
+                FileName = @"_posts/2018-20-10-test.md",
                 Content = @"new comment",
             };
 
