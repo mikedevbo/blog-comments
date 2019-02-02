@@ -21,7 +21,7 @@
     <PackageReference Include="GitVersionTask" Version="3.6.5">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="NServiceBus" Version="7.1.4" />
+    <PackageReference Include="NServiceBus" Version="7.1.6" />
     <PackageReference Include="NServiceBus.Heartbeat" Version="3.0.0" />
     <PackageReference Include="NServiceBus.Mailer" Version="4.0.0" />
     <PackageReference Include="NServiceBus.Metrics" Version="3.0.0" />
