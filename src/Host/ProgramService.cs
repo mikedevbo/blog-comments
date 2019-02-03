@@ -1,11 +1,12 @@
 ﻿namespace Host
 {
     using System;
+    using System.IO;
     using System.ServiceProcess;
     using System.Threading.Tasks;
     using Common;
-    using Components;
     using Components.GitHub;
+    using Microsoft.Extensions.Configuration;
     using NServiceBus;
 
     public class ProgramService : ServiceBase
@@ -39,7 +40,12 @@
 
         protected async Task AsyncOnStart()
         {
-            var configurationManager = new ConfigurationManager();
+            IConfiguration config = new ConfigurationBuilder()
+                            .SetBasePath(Directory.GetCurrentDirectory())
+                            .AddJsonFile("appsettings.json", true, true)
+                            .Build();
+
+            var configurationManager = new ConfigurationManager(config);
             var endpointInitializer = new EndpointInitializer(configurationManager);
             var endpointConfiguration = new EndpointConfiguration(configurationManager.NsbEndpointName);
 
@@ -59,7 +65,7 @@
             }
 
             endpointConfiguration.RegisterComponents(reg =>
-                    reg.ConfigureComponent<ConfigurationManager>(DependencyLifecycle.InstancePerCall));
+                    reg.ConfigureComponent(() => configurationManager, DependencyLifecycle.InstancePerCall));
 
             // start endpoint
             this.endpointInstance = await Endpoint.Start(endpointConfiguration)

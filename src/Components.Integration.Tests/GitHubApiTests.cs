@@ -1,18 +1,29 @@
 ﻿namespace Components.Integration.Tests
 {
     using System;
-    using System.Configuration;
+    using System.IO;
     using System.Threading.Tasks;
     using Common;
     using Components.GitHub;
+    using Microsoft.Extensions.Configuration;
     using NUnit.Framework;
 
     [TestFixture]
     [Ignore("only for manual tests")]
     public class GitHubApiTests
     {
-        private readonly IConfigurationManager configurationManager =
-            new Common.ConfigurationManager();
+        private readonly IConfiguration config;
+        private readonly IConfigurationManager configurationManager;
+
+        public GitHubApiTests()
+        {
+            this.config = new ConfigurationBuilder()
+                            .SetBasePath(Directory.GetCurrentDirectory())
+                            .AddJsonFile("components-integration-tests-appsettings.json", false, false)
+                            .Build();
+
+            this.configurationManager = new ConfigurationManager(this.config);
+        }
 
         [Test]
         public async Task GetSha_Execute_ProperResult()
@@ -64,7 +75,7 @@
         public Task UpdateFile_Execute_ProperResult()
         {
             // Arrange
-            const string branchName = "c-14";
+            const string branchName = "c-15";
             var api = this.GetGitHubApi();
 
             // Act
@@ -73,7 +84,7 @@
                 this.configurationManager.AuthorizationToken,
                 this.configurationManager.RepositoryName,
                 branchName,
-                "test.txt",
+                "_posts/test.md",
                 "\nnew comment - " + DateTime.Now);
 
             // Assert
@@ -83,7 +94,7 @@
         public async Task CreatePullRequest_Execute_ProperResult()
         {
             // Arrange
-            const string branchName = "c-12";
+            const string branchName = "c-15";
             var api = this.GetGitHubApi();
 
             // Act
@@ -103,7 +114,7 @@
         public async Task IsPullRequestOpen_Execute_ProperResult()
         {
             // Arrange
-            string pullRequestUri = System.Configuration.ConfigurationManager.AppSettings["pullRequestUri"];
+            string pullRequestUri = this.config["pullRequestUri"];
             var api = this.GetGitHubApi();
 
             // Act
@@ -111,7 +122,7 @@
                 this.configurationManager.UserAgent,
                 this.configurationManager.AuthorizationToken,
                 pullRequestUri,
-                "869d60120c766a9d534d53a95364d059").ConfigureAwait(false);
+                "\"7a1c9191989683a0605cc1fbdfb72f8e\"").ConfigureAwait(false);
 
             // Assert
             Console.WriteLine(result);
@@ -121,7 +132,7 @@
         public async Task IsPullRequestMerged_Execute_ProperResult()
         {
             // Arrange
-            string pullRequestUri = System.Configuration.ConfigurationManager.AppSettings["pullRequestUri"];
+            string pullRequestUri = this.config["pullRequestUri"];
             var api = this.GetGitHubApi();
 
             // Act

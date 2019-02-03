@@ -3,14 +3,22 @@
     using System;
     using System.Linq;
     using System.Security;
+    using Microsoft.Extensions.Configuration;
 
     public class ConfigurationManager : IConfigurationManager
     {
+        private readonly IConfiguration configuration;
+
+        public ConfigurationManager(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
         public string UserAgent
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings["UserAgent"];
+                return this.configuration["UserAgent"];
             }
         }
 
@@ -18,7 +26,7 @@
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings["AuthorizationToken"];
+                return this.configuration["AuthorizationToken"];
             }
         }
 
@@ -26,7 +34,7 @@
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings["RepositoryName"];
+                return this.configuration["RepositoryName"];
             }
         }
 
@@ -34,7 +42,7 @@
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings["MasterBranchName"];
+                return this.configuration["MasterBranchName"];
             }
         }
 
@@ -42,7 +50,7 @@
         {
             get
             {
-                return Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["CommentResponseAddedSagaTimeoutInSeconds"]);
+                return Convert.ToInt32(this.configuration["CommentResponseAddedSagaTimeoutInSeconds"]);
             }
         }
 
@@ -50,7 +58,7 @@
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings[@"NsbEndpointName"];
+                return this.configuration["NsbEndpointName"];
             }
         }
 
@@ -58,7 +66,7 @@
         {
             get
             {
-                return System.Configuration.ConfigurationManager.ConnectionStrings[@"NsbTransportConnectionString"].ConnectionString;
+                return this.configuration["NsbTransportConnectionString"];
             }
         }
 
@@ -66,7 +74,7 @@
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings[@"NsbErrorQueueName"];
+                return this.configuration["NsbErrorQueueName"];
             }
         }
 
@@ -74,7 +82,7 @@
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings[@"NsbAuditQueueName"];
+                return this.configuration["NsbAuditQueueName"];
             }
         }
 
@@ -82,7 +90,7 @@
         {
             get
             {
-                return Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings[@"NsbIsDisableRecoverability"]);
+                return Convert.ToBoolean(this.configuration["NsbIsDisableRecoverability"]);
             }
         }
 
@@ -90,7 +98,7 @@
         {
             get
             {
-                return Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings[@"NsbIsSendHeartbeats"]);
+                return Convert.ToBoolean(this.configuration["NsbIsSendHeartbeats"]);
             }
         }
 
@@ -98,7 +106,7 @@
         {
             get
             {
-                return Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings[@"NsbIsSendMetrics"]);
+                return Convert.ToBoolean(this.configuration["NsbIsSendMetrics"]);
             }
         }
 
@@ -106,7 +114,7 @@
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings[@"NsbServiceControlQueueName"];
+                return this.configuration["NsbServiceControlQueueName"];
             }
         }
 
@@ -114,7 +122,7 @@
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings[@"NsbServiceControlMetricsQueueName"];
+                return this.configuration["NsbServiceControlMetricsQueueName"];
             }
         }
 
@@ -122,7 +130,7 @@
         {
             get
             {
-                return Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["IsUseFakes"]);
+                return Convert.ToBoolean(this.configuration["IsUseFakes"]);
             }
         }
 
@@ -130,7 +138,7 @@
         {
             get
             {
-                return Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["IsSendEmail"]);
+                return Convert.ToBoolean(this.configuration["IsSendEmail"]);
             }
         }
 
@@ -138,7 +146,7 @@
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings["SmtpHost"];
+                return this.configuration["SmtpHost"];
             }
         }
 
@@ -146,7 +154,7 @@
         {
             get
             {
-                return Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["SmtpPort"]);
+                return Convert.ToInt32(this.configuration["SmtpPort"]);
             }
         }
 
@@ -154,7 +162,7 @@
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings["SmtpHostUserName"];
+                return this.configuration["SmtpHostUserName"];
             }
         }
 
@@ -163,7 +171,7 @@
             get
             {
                 var pass = new SecureString();
-                System.Configuration.ConfigurationManager.AppSettings["SmtpHostPassword"]
+                this.configuration["SmtpHostPassword"]
                     .ToCharArray()
                     .ToList()
                     .ForEach(c => pass.AppendChar(c));
@@ -176,7 +184,7 @@
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings["SmtpFrom"];
+                return this.configuration["SmtpFrom"];
             }
         }
 
@@ -184,7 +192,7 @@
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings["BlogDomainName"];
+                return this.configuration["BlogDomainName"];
             }
         }
     }

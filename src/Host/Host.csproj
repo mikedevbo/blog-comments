@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <RuntimeIdentifiers>win</RuntimeIdentifiers>
     <LangVersion>default</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -24,17 +24,14 @@
     <PackageReference Include="GitVersionTask" Version="3.6.5">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.5.0" />
   </ItemGroup>
   
   <ItemGroup>
-    <!--<ProjectReference Include="..\Common\Common.csproj" />-->
     <ProjectReference Include="..\Components\Components.csproj" />
-    <!--<ProjectReference Include="..\Messages\Messages.csproj" />-->
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.ServiceProcess" />
   </ItemGroup>  
   
 </Project>
