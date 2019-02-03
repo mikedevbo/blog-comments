@@ -4,7 +4,6 @@
     using System.Threading.Tasks;
     using Common;
     using NServiceBus.Logging;
-    using Simple.Data;
 
     [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1008:OpeningParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
     [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:OpeningParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]

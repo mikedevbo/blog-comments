@@ -32,7 +32,6 @@
     <PackageReference Include="NServiceBus.Persistence.Sql" Version="4.4.0" />
     <PackageReference Include="NServiceBus.SqlServer" Version="4.1.0" />
     <PackageReference Include="Particular.CodeRules" Version="0.2.1" />
-    <PackageReference Include="Simple.Data.SqlServer" Version="0.19.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
   </ItemGroup>
 

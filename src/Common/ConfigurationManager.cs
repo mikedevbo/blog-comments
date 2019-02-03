@@ -66,7 +66,7 @@
         {
             get
             {
-                return this.configuration["NsbTransportConnectionString"];
+                return this.configuration.GetConnectionString("NsbTransportConnectionString");
             }
         }
 

@@ -42,7 +42,9 @@
         {
             IConfiguration config = new ConfigurationBuilder()
                             .SetBasePath(Directory.GetCurrentDirectory())
-                            .AddJsonFile("appsettings.json", true, true)
+                            .AddJsonFile("appsettings.host.dev.json", true, true)
+                            .AddJsonFile("appsettings.host.test.json", true, true)
+                            .AddJsonFile("appsettings.host.production.json", true, true)
                             .Build();
 
             var configurationManager = new ConfigurationManager(config);

@@ -19,7 +19,7 @@
         {
             this.config = new ConfigurationBuilder()
                             .SetBasePath(Directory.GetCurrentDirectory())
-                            .AddJsonFile("components-integration-tests-appsettings.json", false, false)
+                            .AddJsonFile("appsettings.components.integration.tests.json", false, true)
                             .Build();
 
             this.configurationManager = new ConfigurationManager(this.config);
