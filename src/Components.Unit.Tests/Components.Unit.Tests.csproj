@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net47</TargetFramework>
     <RuntimeIdentifiers>win</RuntimeIdentifiers>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>default</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
