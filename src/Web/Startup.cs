@@ -12,6 +12,7 @@
     public class Startup
     {
         private readonly IConfiguration config;
+        private IEndpointInstance endpointInstance;
 
         public Startup(IHostingEnvironment env)
         {
@@ -23,20 +24,26 @@
                             .Build();
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime)
         {
             // initialize endpoint
             var configurationManager = new ConfigurationManager(this.config);
             var endpointInitializer = new EndpointInitializer(configurationManager);
             var endpointConfiguration = new EndpointConfiguration(configurationManager.NsbEndpointName);
             endpointInitializer.Initialize(endpointConfiguration, true);
+            applicationLifetime.ApplicationStopping.Register(this.OnShutdown);
 
             // start endpoint
-            var endpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+            this.endpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
             var commentValidator = new CommentValidator();
 
-            app.UseOwin(x => x.UseNancy(opt => opt.Bootstrapper = new Bootstrapper(endpointInstance, commentValidator)));
+            app.UseOwin(x => x.UseNancy(opt => opt.Bootstrapper = new Bootstrapper(this.endpointInstance, commentValidator)));
+        }
+
+        private void OnShutdown()
+        {
+            this.endpointInstance?.Stop().GetAwaiter().GetResult();
         }
     }
 }
