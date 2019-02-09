@@ -1,10 +1,12 @@
 ﻿namespace Web
 {
     using System;
+    using System.IO;
     using Common;
     using FluentValidation;
     using log4net;
     using log4net.Config;
+    using Microsoft.Extensions.Configuration;
     using Nancy;
     using Nancy.Bootstrapper;
     using Nancy.TinyIoc;
@@ -13,21 +15,27 @@
 
     public class Bootstrapper : DefaultNancyBootstrapper
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(Bootstrapper));
+        private readonly IConfiguration config;
+        //private static readonly ILog Log = LogManager.GetLogger(typeof(Bootstrapper));
+
+        public Bootstrapper(IConfiguration config)
+        {
+            this.config = config;
+        }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
             base.ApplicationStartup(container, pipelines);
 
             // initializae log
-            XmlConfigurator.Configure();
+            //XmlConfigurator.Configure();
 
             // handle errors
-            pipelines.OnError += (NancyContext ctx, Exception ex) =>
-            {
-                Log.Error(ex.Message, ex);
-                return HttpStatusCode.InternalServerError;
-            };
+            //pipelines.OnError += (NancyContext ctx, Exception ex) =>
+            //{
+            //    Log.Error(ex.Message, ex);
+            //    return HttpStatusCode.InternalServerError;
+            //};
         }
 
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
@@ -35,7 +43,7 @@
             base.ConfigureApplicationContainer(container);
 
             // initialize endpoint
-            var configurationManager = new ConfigurationManager();
+            var configurationManager = new ConfigurationManager(this.config);
             var endpointInitializer = new EndpointInitializer(configurationManager);
             var endpointConfiguration = new EndpointConfiguration(configurationManager.NsbEndpointName);
             endpointInitializer.Initialize(endpointConfiguration, true);

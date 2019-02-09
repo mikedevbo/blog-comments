@@ -20,9 +20,9 @@
             this.messageSession = messageSession;
             this.validator = validator;
 
-            this.Get["/"] = r => "test";
+            this.Get("/", r => "test");
 
-            this.Post["/", true] = async (r, c) =>
+            this.Post("/", async (r, c) =>
             {
                 var comment = this.Bind<Comment>();
 
@@ -50,7 +50,7 @@
                 }).ConfigureAwait(false);
 
                 return HttpStatusCode.OK;
-            };
+            });
         }
     }
 }
