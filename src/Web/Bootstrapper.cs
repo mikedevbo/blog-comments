@@ -1,26 +1,20 @@
 ﻿namespace Web
 {
-    using System;
-    using System.IO;
-    using Common;
     using FluentValidation;
-    using log4net;
-    using log4net.Config;
-    using Microsoft.Extensions.Configuration;
     using Nancy;
     using Nancy.Bootstrapper;
     using Nancy.TinyIoc;
     using NServiceBus;
-    using Web.Models;
 
     public class Bootstrapper : DefaultNancyBootstrapper
     {
-        private readonly IConfiguration config;
-        //private static readonly ILog Log = LogManager.GetLogger(typeof(Bootstrapper));
+        private readonly IMessageSession messageSession;
+        private readonly IValidator validator;
 
-        public Bootstrapper(IConfiguration config)
+        public Bootstrapper(IMessageSession messageSession, IValidator validator)
         {
-            this.config = config;
+            this.messageSession = messageSession;
+            this.validator = validator;
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
@@ -42,20 +36,9 @@
         {
             base.ConfigureApplicationContainer(container);
 
-            // initialize endpoint
-            var configurationManager = new ConfigurationManager(this.config);
-            var endpointInitializer = new EndpointInitializer(configurationManager);
-            var endpointConfiguration = new EndpointConfiguration(configurationManager.NsbEndpointName);
-            endpointInitializer.Initialize(endpointConfiguration, true);
-
-            // start endpoint
-            var endpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
-
-            var commentValidator = new CommentValidator();
-
             // dependency injection
-            container.Register<IMessageSession>(endpointInstance);
-            container.Register<IValidator>(commentValidator);
+            container.Register(this.messageSession);
+            container.Register(this.validator);
         }
     }
 }
