@@ -2,6 +2,7 @@
 App_Data
 nsb_log_*
 
+*.dev.json
 *.pubxml
 appsettings.config
 connectionstrings.config
