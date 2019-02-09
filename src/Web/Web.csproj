@@ -16,13 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="App_Data\**" />
-    <Content Remove="App_Data\**" />
-    <EmbeddedResource Remove="App_Data\**" />
-    <None Remove="App_Data\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="appsettings.web.dev.json" />
   </ItemGroup>
     
@@ -30,10 +23,6 @@
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
-  
-  <!-- <ItemGroup> -->
-	<!-- <Folder Include="App_Data\" /> -->
- <!-- </ItemGroup> -->
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.0" />
