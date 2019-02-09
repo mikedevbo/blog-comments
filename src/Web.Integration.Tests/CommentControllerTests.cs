@@ -5,8 +5,7 @@
     using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
-    using System.Web.Script.Serialization;
-    using Common;
+    using Newtonsoft.Json;
     using NUnit.Framework;
     using Web.Models;
 
@@ -14,15 +13,13 @@
     [Ignore("only for manual tests")]
     public class CommentControllerTests
     {
-        private readonly IConfigurationManager configurationManager = new ConfigurationManager();
-
         [Test]
         public async Task Post_ForCommentData_NoException()
         {
             // Arrange
             HttpClient client = new HttpClient
             {
-                BaseAddress = new Uri("http://localhost:50537/")
+                BaseAddress = new Uri("http://localhost:62974/")
             };
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -36,8 +33,7 @@
                 Content = @"new comment",
             };
 
-            var serializer = new JavaScriptSerializer();
-            var json = serializer.Serialize(comment);
+            var json = JsonConvert.SerializeObject(comment);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Act
