@@ -14,7 +14,7 @@
     public class CommentControllerTests
     {
         [Test]
-        public async Task Post_ForCommentData_NoException()
+        public async Task Post_ForCommentData_NoException_Async()
         {
             // Arrange
             HttpClient client = new HttpClient
