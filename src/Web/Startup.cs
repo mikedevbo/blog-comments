@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
     using Nancy.Owin;
     using NServiceBus;
     using Web.Models;
@@ -24,7 +25,7 @@
                             .Build();
         }
 
-        public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime, ILoggerFactory loggerFactory)
         {
             // initialize endpoint
             var configurationManager = new ConfigurationManager(this.config);
@@ -36,9 +37,16 @@
             // start endpoint
             this.endpointInstance = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
+            // initialize validator
             var commentValidator = new CommentValidator();
 
-            app.UseOwin(x => x.UseNancy(opt => opt.Bootstrapper = new Bootstrapper(this.endpointInstance, commentValidator)));
+            // initialize logger
+            var legger = loggerFactory.AddLog4Net().CreateLogger("Web");
+
+            app.UseOwin(x => x.UseNancy(opt => opt.Bootstrapper = new Bootstrapper(
+                this.endpointInstance,
+                commentValidator,
+                legger)));
         }
 
         private void OnShutdown()
