@@ -20,6 +20,7 @@
     <PackageReference Include="AsyncFixer" Version="1.1.6" />
     <PackageReference Include="GitVersionTask" Version="4.0.0">
       <PrivateAssets>All</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Particular.CodeRules" Version="0.2.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
