@@ -14,9 +14,6 @@ Param(
     [string]$settingsSourcePath,
 
     [Parameter(Mandatory=$True)]
-    [string]$connectionstringsSourcePath,
-
-    [Parameter(Mandatory=$True)]
     [string]$ftpHostName,
 
     [Parameter(Mandatory=$True)]
@@ -53,26 +50,19 @@ function prepareArtifactsToDeploy(
     $destination,
     $source,
     $nserviceBusLicenseSourcePath,
-    $settingsSourcePath,
-    $connectionstringsSourcePath)
+    $settingsSourcePath)
 {
     Write-Host "->clean $destination directory"
     Remove-Item "$destination\*" -Recurse -Force
     
     Write-Host "->copy artifacts for $source to $destination"
-    Copy-Item "$source" -Destination "$destination\bin" -Recurse
-    
-    Write-Host "->create app_data directory"
-    New-Item -ItemType directory -Path "$destination\app_data"
+    Copy-Item "$source\*" -Destination "$destination" -Recurse
 
     Write-Host "->copy NServiceBusLicense"
     Copy-Item "$nserviceBusLicenseSourcePath\*" -Destination "$destination" -Recurse
 
     Write-Host "->copy settings"
     Copy-Item "$settingsSourcePath\*" -Destination "$destination" -Recurse
-
-    Write-Host "->copy connectionstrings"
-    Copy-Item "$connectionstringsSourcePath\*" -Destination "$destination" -Recurse
 }
 
 function ftpCleanDestination($session, $ftpDestinationPath)
@@ -127,7 +117,7 @@ function setMainWebConfig($mainWebConfigFilePath, $urlRedirect)
 
 try
 {
-    prepareArtifactsToDeploy $destination $source $nserviceBusLicenseSourcePath $settingsSourcePath $connectionstringsSourcePath
+    prepareArtifactsToDeploy $destination $source $nserviceBusLicenseSourcePath $settingsSourcePath
 
     Add-Type -Path "$winscpDllPath"
     $sessionOptions = New-Object WinSCP.SessionOptions -Property @{
