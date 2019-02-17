@@ -1,19 +1,22 @@
 ﻿[CmdletBinding()]
 Param(
     [Parameter(Mandatory=$True)]
-    [string]$NunitExePath,
+    [string]$dotnetExePath,
 	
     [Parameter(Mandatory=$True)]
-    [string]$binPath
+    [string]$solutionPath
 )
 
 $ErrorActionPreference = "Stop"
 
 try
 {
-    $tests = (Get-ChildItem $binPath -Recurse -Include *unit.tests.dll)
-
-    & $NunitExePath $tests --noheader --work=$binPath
+    & $dotnetExePath test $solutionPath --no-build --configuration Release
+	
+    if(!$?)
+    {
+        throw "Unit tests failed."
+    }	
 }
 catch
 {

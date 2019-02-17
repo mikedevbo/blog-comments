@@ -10,8 +10,8 @@ Param(
     [Parameter(Mandatory=$True)]
     [string]$settingsSourcePath,
 
-    [Parameter(Mandatory=$True)]
-    [string]$connectionstringsSourcePath,
+    ##[Parameter(Mandatory=$True)]
+    ##[string]$connectionstringsSourcePath,
 
     [Parameter(Mandatory=$True)]
     [string]$previousWindowsServiceName,
@@ -31,8 +31,8 @@ $ErrorActionPreference = "Stop"
 function prepareArtifactsToDeploy(
     $destination,
     $source,
-    $settingsSourcePath,
-    $connectionstringsSourcePath)
+    $settingsSourcePath)
+    ##$connectionstringsSourcePath)
 {
     Write-Host "->clean $destination directory"
     Remove-Item "$destination\*" -Recurse -Force
@@ -43,8 +43,8 @@ function prepareArtifactsToDeploy(
     Write-Host "->copy settings"
     Copy-Item "$settingsSourcePath\*" -Destination "$destination" -Recurse
 
-    Write-Host "->copy connectionstrings"
-    Copy-Item "$connectionstringsSourcePath\*" -Destination "$destination" -Recurse
+    ##Write-Host "->copy connectionstrings"
+    ##Copy-Item "$connectionstringsSourcePath\*" -Destination "$destination" -Recurse
 }
 
 function windowsServiceExists($serviceName)
@@ -81,7 +81,7 @@ function stopWindowService($serviceName)
 
 try
 {
-    prepareArtifactsToDeploy $destination $source $settingsSourcePath $connectionstringsSourcePath
+    prepareArtifactsToDeploy $destination $source $settingsSourcePath ##$connectionstringsSourcePath
     stopWindowService $previousWindowsServiceName
 
     if (!(windowsServiceExists $newWindowsServiceName))
