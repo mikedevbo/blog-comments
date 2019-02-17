@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <DebugType>portable</DebugType>
-    <AssemblyName>Web</AssemblyName>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
