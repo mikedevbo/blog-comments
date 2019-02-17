@@ -41,7 +41,7 @@
         protected async Task AsyncOnStart()
         {
             IConfiguration config = new ConfigurationBuilder()
-                            .SetBasePath(Directory.GetCurrentDirectory())
+                            .SetBasePath(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
                             .AddJsonFile("appsettings.host.dev.json", true, true)
                             .AddJsonFile("appsettings.host.test.json", true, true)
                             .AddJsonFile("appsettings.host.production.json", true, true)
