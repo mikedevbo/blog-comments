@@ -23,11 +23,11 @@ $ErrorActionPreference = "Stop"
 
 try
 {
-    #Write-Host "clean artifacts directory"
-    #Remove-Item "$buildArtifactsPath\*" -Recurse -Force
+    Write-Host "clean artifacts directory"
+    Remove-Item "$buildArtifactsPath\*" -Recurse -Force
     
-    #Write-Host "clone repository"
-    #& $gitExePath "clone" "-q" $gitRepositoryUrl $buildArtifactsPath
+    Write-Host "clone repository"
+    & $gitExePath "clone" "-q" $gitRepositoryUrl $buildArtifactsPath
  
     Write-Host "build solution"
     $buildLogFile = "$buildArtifactsPath\$solutionRelativePath\bin\build.log"
