@@ -136,7 +136,7 @@
 
                     metrics.SendMetricDataToServiceControl(
                         serviceControlMetricsAddress: this.configurationManager.NsbServiceControlMetricsQueueName,
-                        interval: TimeSpan.FromSeconds(10));
+                        interval: TimeSpan.FromSeconds(1));
                 }
             }
 

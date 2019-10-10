@@ -27,9 +27,9 @@
             var comment = new Comment
             {
                 UserName = "testUser",
-                UserEmail = "testUser@test.com",
+                UserEmail = string.Empty,
                 UserWebsite = "testUser.com",
-                FileName = @"_posts/2018-20-10-test.md",
+                FileName = @"_posts/2018-05-27-test.md",
                 Content = @"new comment",
             };
 
