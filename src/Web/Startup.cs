@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Nancy.Owin;
     using NServiceBus;
@@ -25,8 +26,20 @@
                             .Build();
         }
 
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+        }
+
         public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime, ILoggerFactory loggerFactory)
         {
+            app.UseCors("MyPolicy");
+
             // initialize endpoint
             var configurationManager = new ConfigurationManager(this.config);
             var endpointInitializer = new EndpointInitializer(configurationManager);
