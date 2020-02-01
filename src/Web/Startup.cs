@@ -28,17 +28,17 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-            {
-                builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
-            }));
+            ////services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            ////{
+            ////    builder.AllowAnyOrigin()
+            ////           .AllowAnyMethod()
+            ////           .AllowAnyHeader();
+            ////}));
         }
 
         public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime, ILoggerFactory loggerFactory)
         {
-            app.UseCors("MyPolicy");
+            ////app.UseCors("MyPolicy");
 
             // initialize endpoint
             var configurationManager = new ConfigurationManager(this.config);
