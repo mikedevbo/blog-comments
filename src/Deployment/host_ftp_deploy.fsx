@@ -10,32 +10,39 @@ open Fake.IO
 open Fake.Net
 open WinSCP
 
-// set proper values
-let winSCPExecutablePath = @"..."
-let ftpHostName = "..."
-let ftpUserName = "..."
-let ftpPassword = "..."
-let ftpTlsHostCertificateFingerprint = "..."
-let ftpEndpointPath = "..."
-let ftpEndpointBackupPath = "..."
-let ftpOfflineHtm = "..."
-let ftpOnlineHtm = "..."
+// outsite script parameter names
+let winSCPExecutablePathParamName = "winSCPExecutablePath"
+let ftpHostNameParamName = "ftpHostName"
+let ftpUserNameParamName = "ftpUserName"
+let ftpPasswordParamName = "ftpPassword"
+let ftpTlsHostCertificateFingerprintParamName = "ftpTlsHostCertificateFingerprint"
+let ftpEndpointPathParamName = "ftpEndpointPath"
+let ftpEndpointBackupPathParamName = "ftpEndpointBackupPath"
+let ftpOfflineHtmParamName = "ftpOfflineHtm"
+let ftpOnlineHtmParamName = "ftpOnlineHtm"
 
-let buildArtifactsPath = @"..."
+let buildArtifactsPathParamName = @"buildArtifactsPath"
 
-let settingsPath = @"..."
-let nservicebusPath = @"..."
-let deployArtifactsPath = @"..."
+let settingsPathParamName = "settingsPath"
+let nservicebusPathParamName = "nservicebusPath"
+let deployArtifactsPathParamName = "deployArtifactsPath"
 
-let endpointUrl = "..."
+let endpointUrlParamName = "endpointUrl"
+
+let retrieveParam paramName =
+    Environment.environVarOrFail paramName
 
 let makeFtpAction action =
+    let winSCPExecutablePath = retrieveParam winSCPExecutablePathParamName
+    let ftpHostName = retrieveParam ftpHostNameParamName
+    let ftpUserName = retrieveParam ftpUserNameParamName
+    let ftpPassword = retrieveParam ftpPasswordParamName
+    let ftpTlsHostCertificateFingerprint = retrieveParam ftpTlsHostCertificateFingerprintParamName
+    
     let sessionOptions = new SessionOptions()
-
     sessionOptions.Protocol <- Protocol.Ftp
     sessionOptions.FtpSecure <- FtpSecure.Explicit
     sessionOptions.TlsHostCertificateFingerprint <- ftpTlsHostCertificateFingerprint
-
     sessionOptions.HostName <- ftpHostName
     sessionOptions.UserName <- ftpUserName
     sessionOptions.Password <- ftpPassword
@@ -47,7 +54,9 @@ let makeFtpAction action =
 
 // Targets
 Target.create "Create Directory" (fun _ ->
-    Trace.trace (sprintf "Start creating directory %s." ftpEndpointPath)
+    let ftpEndpointPath = retrieveParam ftpEndpointPathParamName
+    
+    Trace.trace (sprintf "Directory %s." ftpEndpointPath)
 
     let isDirectoryExists = makeFtpAction (fun ftp -> ftp.FileExists(ftpEndpointPath))
     match isDirectoryExists with
@@ -60,8 +69,12 @@ Target.create "Create Directory" (fun _ ->
 )
 
 Target.create "Stop Endpoint" (fun _ ->
-
-    Trace.trace (sprintf "Start stopping Endpoint %s." ftpEndpointPath)
+    let ftpEndpointPath = retrieveParam ftpEndpointPathParamName
+    let ftpOfflineHtm = retrieveParam ftpOfflineHtmParamName
+    let ftpOnlineHtm = retrieveParam ftpOnlineHtmParamName
+    let endpointUrl = retrieveParam endpointUrlParamName
+    
+    Trace.trace (sprintf "Endpoint %s." ftpEndpointPath)
 
     let offline = sprintf @"%s/%s" ftpEndpointPath ftpOfflineHtm
     let online = sprintf @"%s/%s" ftpEndpointPath ftpOnlineHtm
@@ -99,7 +112,10 @@ Target.create "Stop Endpoint" (fun _ ->
 )
 
 Target.create "Backup Endpoint" (fun _ ->
-    Trace.trace (sprintf "Start backuping Endpoint %s." ftpEndpointPath)
+    let ftpEndpointPath = retrieveParam ftpEndpointPathParamName
+    let ftpEndpointBackupPath = retrieveParam ftpEndpointBackupPathParamName
+    
+    Trace.trace (sprintf "Endpoint %s." ftpEndpointPath)
 
     let isDirectoryExists = makeFtpAction (fun ftp -> ftp.FileExists(ftpEndpointBackupPath))
     match isDirectoryExists with
@@ -118,7 +134,14 @@ Target.create "Backup Endpoint" (fun _ ->
 )
 
 Target.create "Deploy Endpoint" (fun _ ->
-    Trace.trace (sprintf "Start deploying Endpoint %s." ftpEndpointPath)
+    let ftpEndpointPath = retrieveParam ftpEndpointPathParamName
+    let deployArtifactsPath = retrieveParam deployArtifactsPathParamName
+    let buildArtifactsPath = retrieveParam buildArtifactsPathParamName
+    let settingsPath = retrieveParam settingsPathParamName
+    let nservicebusPath = retrieveParam nservicebusPathParamName
+    let endpointUrl = retrieveParam endpointUrlParamName
+    
+    Trace.trace (sprintf "Endpoint %s." ftpEndpointPath)
 
     Trace.trace "clean deploy arifacts path"
     Shell.cleanDir deployArtifactsPath
@@ -151,4 +174,4 @@ open Fake.Core.TargetOperators
 
 
 // start build
-Target.runOrDefault "Deploy Endpoint"
+Target.runOrDefaultWithArguments "Deploy Endpoint"
