@@ -47,21 +47,21 @@ let makeFtpAction action =
 
 // Targets
 Target.create "Create Directory" (fun _ ->
-    Trace.trace (sprintf "Start creating directory %s" ftpEndpointPath)
+    Trace.trace (sprintf "Start creating directory %s." ftpEndpointPath)
 
     let isDirectoryExists = makeFtpAction (fun ftp -> ftp.FileExists(ftpEndpointPath))
     match isDirectoryExists with
     | true ->
-        ()
+        Trace.trace (sprintf "Directory %s already exists." ftpEndpointPath)
+    
     | false ->
         makeFtpAction (fun ftp -> ftp.CreateDirectory(ftpEndpointPath))
-
-    Trace.trace (sprintf "Directory %s created successfully." ftpEndpointPath)
+        Trace.trace (sprintf "Directory %s created successfully." ftpEndpointPath)
 )
 
 Target.create "Stop Endpoint" (fun _ ->
 
-    Trace.trace (sprintf "Start stopping Endpoint %s" ftpEndpointPath)
+    Trace.trace (sprintf "Start stopping Endpoint %s." ftpEndpointPath)
 
     let offline = sprintf @"%s/%s" ftpEndpointPath ftpOfflineHtm
     let online = sprintf @"%s/%s" ftpEndpointPath ftpOnlineHtm
@@ -69,12 +69,14 @@ Target.create "Stop Endpoint" (fun _ ->
     let isDirectoryEmpty = makeFtpAction (fun ftp -> ftp.EnumerateRemoteFiles(ftpEndpointPath, null, EnumerationOptions.None) |> Seq.isEmpty)
     match isDirectoryEmpty with
     | true ->
-        ()
+        Trace.trace (sprintf "Endpoint %s is not started yet." ftpEndpointPath)
+    
     | false ->
         let isStopped = makeFtpAction (fun ftp -> ftp.FileExists(online))
         match isStopped with
         | true ->
-            ()
+            Trace.trace (sprintf "Endpoint %s is already stopped." ftpEndpointPath)
+        
         | false ->
             makeFtpAction (fun ftp -> ftp.MoveFile(offline, online))
 
@@ -89,29 +91,34 @@ Target.create "Stop Endpoint" (fun _ ->
                 match isStatusCorrect with
                 | true ->
                     ()
+                
                 | false ->
                     reraise()
 
-    Trace.trace (sprintf "Endpoint %s stopped successfully." ftpEndpointPath)
+            Trace.trace (sprintf "Endpoint %s stopped successfully." ftpEndpointPath)
 )
 
 Target.create "Backup Endpoint" (fun _ ->
-    Trace.trace (sprintf "Start backuping Endpoint %s" ftpEndpointPath)
+    Trace.trace (sprintf "Start backuping Endpoint %s." ftpEndpointPath)
 
     let isDirectoryExists = makeFtpAction (fun ftp -> ftp.FileExists(ftpEndpointBackupPath))
     match isDirectoryExists with
     | true ->
-        makeFtpAction (fun ftp -> ftp.RemoveFiles(ftpEndpointBackupPath).Check())
-        makeFtpAction (fun ftp -> ftp.MoveFile(ftpEndpointPath, ftpEndpointBackupPath))
-        makeFtpAction (fun ftp -> ftp.CreateDirectory(ftpEndpointPath))
+        ()
+    
     | false ->
         makeFtpAction (fun ftp -> ftp.CreateDirectory(ftpEndpointBackupPath))
+        Trace.trace (sprintf "Directory %s created successfully." ftpEndpointPath)
 
-    Trace.trace (sprintf "Endpoint %s backuped successfully" ftpEndpointPath)
+    makeFtpAction (fun ftp -> ftp.RemoveFiles(ftpEndpointBackupPath).Check())
+    makeFtpAction (fun ftp -> ftp.MoveFile(ftpEndpointPath, ftpEndpointBackupPath))
+    makeFtpAction (fun ftp -> ftp.CreateDirectory(ftpEndpointPath))
+    
+    Trace.trace (sprintf "Endpoint %s backuped successfully." ftpEndpointPath)
 )
 
 Target.create "Deploy Endpoint" (fun _ ->
-    Trace.trace (sprintf "Start deploying Endpoint %s" ftpEndpointPath)
+    Trace.trace (sprintf "Start deploying Endpoint %s." ftpEndpointPath)
 
     Trace.trace "clean deploy arifacts path"
     Shell.cleanDir deployArtifactsPath
@@ -131,7 +138,7 @@ Target.create "Deploy Endpoint" (fun _ ->
     Trace.trace (sprintf "call url %s" endpointUrl)
     Http.get "" "" endpointUrl |> ignore
 
-    Trace.trace (sprintf "Endpoint %s deployed successfully" ftpEndpointPath)
+    Trace.trace (sprintf "Endpoint %s deployed successfully." ftpEndpointPath)
 )
 
 // Dependencies
