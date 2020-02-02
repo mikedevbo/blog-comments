@@ -21,13 +21,17 @@ let ftpEndpointBackupPathParamName = "ftpEndpointBackupPath"
 let ftpOfflineHtmParamName = "ftpOfflineHtm"
 let ftpOnlineHtmParamName = "ftpOnlineHtm"
 
-let buildArtifactsPathParamName = @"buildArtifactsPath"
+let buildArtifactsPathParamName = "buildArtifactsPath"
+let localEndpointBackupPathParameName = "localEndpointBackupPath"
 
 let settingsPathParamName = "settingsPath"
 let nservicebusPathParamName = "nservicebusPath"
 let deployArtifactsPathParamName = "deployArtifactsPath"
 
 let endpointUrlParamName = "endpointUrl"
+//
+
+type EndpointState = NotStarted | Stopped | Running
 
 let retrieveParam paramName =
     Environment.environVarOrFail paramName
@@ -53,84 +57,68 @@ let makeFtpAction action =
     action session
 
 // Targets
-Target.create "Create Directory" (fun _ ->
-    let ftpEndpointPath = retrieveParam ftpEndpointPathParamName
-    
-    Trace.trace (sprintf "Directory %s." ftpEndpointPath)
-
-    let isDirectoryExists = makeFtpAction (fun ftp -> ftp.FileExists(ftpEndpointPath))
-    match isDirectoryExists with
-    | true ->
-        Trace.trace (sprintf "Directory %s already exists." ftpEndpointPath)
-    
-    | false ->
-        makeFtpAction (fun ftp -> ftp.CreateDirectory(ftpEndpointPath))
-        Trace.trace (sprintf "Directory %s created successfully." ftpEndpointPath)
-)
-
 Target.create "Stop Endpoint" (fun _ ->
     let ftpEndpointPath = retrieveParam ftpEndpointPathParamName
     let ftpOfflineHtm = retrieveParam ftpOfflineHtmParamName
     let ftpOnlineHtm = retrieveParam ftpOnlineHtmParamName
     let endpointUrl = retrieveParam endpointUrlParamName
     
-    Trace.trace (sprintf "Endpoint %s." ftpEndpointPath)
+    Trace.trace ("-> Endpoint " + ftpEndpointPath)
 
     let offline = sprintf @"%s/%s" ftpEndpointPath ftpOfflineHtm
     let online = sprintf @"%s/%s" ftpEndpointPath ftpOnlineHtm
 
-    let isDirectoryEmpty = makeFtpAction (fun ftp -> ftp.EnumerateRemoteFiles(ftpEndpointPath, null, EnumerationOptions.None) |> Seq.isEmpty)
-    match isDirectoryEmpty with
-    | true ->
-        Trace.trace (sprintf "Endpoint %s is not started yet." ftpEndpointPath)
-    
-    | false ->
-        let isStopped = makeFtpAction (fun ftp -> ftp.FileExists(online))
-        match isStopped with
-        | true ->
-            Trace.trace (sprintf "Endpoint %s is already stopped." ftpEndpointPath)
-        
+    let getEndpointState =
+        let isDirectoryEmpty = makeFtpAction (fun ftp -> ftp.EnumerateRemoteFiles(ftpEndpointPath, null, EnumerationOptions.None) |> Seq.isEmpty)
+        match isDirectoryEmpty with
+        | true -> NotStarted
         | false ->
-            makeFtpAction (fun ftp -> ftp.MoveFile(offline, online))
+            let isStopped = makeFtpAction (fun ftp -> ftp.FileExists(online))
+            match isStopped with
+            | true -> Stopped
+            | false -> Running
 
-            try
-                Trace.trace (sprintf "call url %s" endpointUrl)
-                Http.get "" "" endpointUrl |> ignore
-            with
-            | :? System.Net.Http.HttpRequestException as ex ->
-                Trace.trace ex.Message
+    match getEndpointState with
+    | NotStarted -> Trace.trace (sprintf "-> Endpoint %s is not started yet." ftpEndpointPath)
+    | Stopped -> Trace.trace (sprintf "-> Endpoint %s is already stopped." ftpEndpointPath)
+    | Running ->
+        Trace.trace ("-> Stop Endpoint " + ftpEndpointPath)
+        makeFtpAction (fun ftp -> ftp.MoveFile(offline, online))
+        try
+            Trace.trace ("-> Call URL " + endpointUrl)
+            Http.get "" "" endpointUrl |> ignore
+        with
+        | :? System.Net.Http.HttpRequestException as ex ->
+            Trace.trace ex.Message
 
-                let isStatusCorrect = ex.Message.Contains("503");
-                match isStatusCorrect with
-                | true ->
-                    ()
-                
-                | false ->
-                    reraise()
+            let isStatusCorrect = ex.Message.Contains("503");
+            match isStatusCorrect with
+            | true -> ()
+            | false -> reraise()
 
-            Trace.trace (sprintf "Endpoint %s stopped successfully." ftpEndpointPath)
+        Trace.trace (sprintf "-> Endpoint %s stopped successfully." ftpEndpointPath)
 )
 
 Target.create "Backup Endpoint" (fun _ ->
+    let localEndpointBackupPath = retrieveParam localEndpointBackupPathParameName
     let ftpEndpointPath = retrieveParam ftpEndpointPathParamName
     let ftpEndpointBackupPath = retrieveParam ftpEndpointBackupPathParamName
-    
-    Trace.trace (sprintf "Endpoint %s." ftpEndpointPath)
 
-    let isDirectoryExists = makeFtpAction (fun ftp -> ftp.FileExists(ftpEndpointBackupPath))
-    match isDirectoryExists with
-    | true ->
-        ()
-    
-    | false ->
-        makeFtpAction (fun ftp -> ftp.CreateDirectory(ftpEndpointBackupPath))
-        Trace.trace (sprintf "Directory %s created successfully." ftpEndpointPath)
+    Trace.trace ("-> Endpoint " + ftpEndpointPath)
 
-    makeFtpAction (fun ftp -> ftp.RemoveFiles(ftpEndpointBackupPath).Check())
-    makeFtpAction (fun ftp -> ftp.MoveFile(ftpEndpointPath, ftpEndpointBackupPath))
-    makeFtpAction (fun ftp -> ftp.CreateDirectory(ftpEndpointPath))
-    
-    Trace.trace (sprintf "Endpoint %s backuped successfully." ftpEndpointPath)
+    Trace.trace ("-> Clean " + localEndpointBackupPath)
+    Shell.cleanDir localEndpointBackupPath
+
+    Trace.trace ("-> Download files from " + ftpEndpointPath)
+    makeFtpAction (fun ftp -> ftp.GetFiles(ftpEndpointPath, localEndpointBackupPath).Check())
+
+    Trace.trace ("-> Remove files from " + ftpEndpointBackupPath)
+    makeFtpAction (fun ftp -> ftp.RemoveFiles(ftpEndpointBackupPath + "/*").Check())
+
+    Trace.trace ("-> Upload files to " + ftpEndpointBackupPath)
+    makeFtpAction (fun ftp -> ftp.PutFiles(localEndpointBackupPath, ftpEndpointBackupPath).Check())
+
+    Trace.trace (sprintf "-> Endpoint %s backuped successfully." ftpEndpointPath)
 )
 
 Target.create "Deploy Endpoint" (fun _ ->
@@ -140,38 +128,45 @@ Target.create "Deploy Endpoint" (fun _ ->
     let settingsPath = retrieveParam settingsPathParamName
     let nservicebusPath = retrieveParam nservicebusPathParamName
     let endpointUrl = retrieveParam endpointUrlParamName
-    
-    Trace.trace (sprintf "Endpoint %s." ftpEndpointPath)
 
-    Trace.trace "clean deploy arifacts path"
+    let removeRemoteItem item =
+        let isItemExists = makeFtpAction (fun ftp -> ftp.FileExists(item))
+        if isItemExists then makeFtpAction (fun ftp -> ftp.RemoveFiles(item).Check())
+    
+    Trace.trace (sprintf "-> Endpoint %s." ftpEndpointPath)
+
+    Trace.trace ("-> Clean " + deployArtifactsPath)
     Shell.cleanDir deployArtifactsPath
 
-    Trace.trace "copy artifacts"
+    Trace.trace ("-> Copy " + buildArtifactsPath)
     Shell.copyDir deployArtifactsPath buildArtifactsPath FileFilter.allFiles
 
-    Trace.trace "copy settings"
+    Trace.trace ("-> Copy " + settingsPath)
     Shell.copyDir deployArtifactsPath settingsPath FileFilter.allFiles
 
-    Trace.trace "copy nservicebus"
+    Trace.trace ("-> Copy " + nservicebusPath)
     Shell.copyDir deployArtifactsPath nservicebusPath FileFilter.allFiles
 
-    Trace.trace "upload artifacts"
+    Trace.trace ("-> Clean " + ftpEndpointPath)
+    // protects against starting Endpoint after removing offline htm
+    removeRemoteItem(ftpEndpointPath + "/web.config")
+    makeFtpAction (fun ftp -> ftp.RemoveFiles(ftpEndpointPath + "/*").Check())
+
+    Trace.trace ("-> Upload files to  " + ftpEndpointPath)
     makeFtpAction (fun ftp -> ftp.PutFiles(deployArtifactsPath, ftpEndpointPath).Check())
 
-    Trace.trace (sprintf "call url %s" endpointUrl)
+    Trace.trace ("-> Call URL " + endpointUrl)
     Http.get "" "" endpointUrl |> ignore
 
-    Trace.trace (sprintf "Endpoint %s deployed successfully." ftpEndpointPath)
+    Trace.trace (sprintf "-> Endpoint %s deployed successfully." ftpEndpointPath)
 )
 
 // Dependencies
 open Fake.Core.TargetOperators
 
-"Create Directory"
-    ==>"Stop Endpoint"
+"Stop Endpoint"
     ==> "Backup Endpoint"
     ==> "Deploy Endpoint"
-
 
 // start build
 Target.runOrDefaultWithArguments "Deploy Endpoint"
