@@ -78,11 +78,7 @@ Target.create "Stop Endpoint" (fun _ ->
             | true -> Stopped
             | false -> Running
 
-    match getEndpointState with
-    | NotStarted -> Trace.trace (sprintf "-> Endpoint %s is not started yet." ftpEndpointPath)
-    | Stopped -> Trace.trace (sprintf "-> Endpoint %s is already stopped." ftpEndpointPath)
-    | Running ->
-        Trace.trace ("-> Stop Endpoint " + ftpEndpointPath)
+    let stopEndpoint =
         makeFtpAction (fun ftp -> ftp.MoveFile(offline, online))
         try
             Trace.trace ("-> Call URL " + endpointUrl)
@@ -96,6 +92,12 @@ Target.create "Stop Endpoint" (fun _ ->
             | true -> ()
             | false -> reraise()
 
+    match getEndpointState with
+    | NotStarted -> Trace.trace (sprintf "-> Endpoint %s is not started yet." ftpEndpointPath)
+    | Stopped -> Trace.trace (sprintf "-> Endpoint %s is already stopped." ftpEndpointPath)
+    | Running ->
+        Trace.trace ("-> Stop Endpoint " + ftpEndpointPath)
+        stopEndpoint
         Trace.trace (sprintf "-> Endpoint %s stopped successfully." ftpEndpointPath)
 )
 
