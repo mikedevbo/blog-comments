@@ -31,7 +31,7 @@ let deployArtifactsPathParamName = "deployArtifactsPath"
 let endpointUrlParamName = "endpointUrl"
 //
 
-type EndpointState = NotStarted | Stopped | Running
+type EndpointState = NotExists | Stopped | Running
 
 let retrieveParam paramName =
     Environment.environVarOrFail paramName
@@ -71,7 +71,7 @@ Target.create "Stop Endpoint" (fun _ ->
     let getEndpointState =
         let isDirectoryEmpty = makeFtpAction (fun ftp -> ftp.EnumerateRemoteFiles(ftpEndpointPath, null, EnumerationOptions.None) |> Seq.isEmpty)
         match isDirectoryEmpty with
-        | true -> NotStarted
+        | true -> NotExists
         | false ->
             let isStopped = makeFtpAction (fun ftp -> ftp.FileExists(online))
             match isStopped with
@@ -93,7 +93,7 @@ Target.create "Stop Endpoint" (fun _ ->
             | false -> reraise()
 
     match getEndpointState with
-    | NotStarted -> Trace.trace (sprintf "-> Endpoint %s is not started yet." ftpEndpointPath)
+    | NotExists -> Trace.trace (sprintf "-> Endpoint %s is not exists yet." ftpEndpointPath)
     | Stopped -> Trace.trace (sprintf "-> Endpoint %s is already stopped." ftpEndpointPath)
     | Running ->
         Trace.trace ("-> Stop Endpoint " + ftpEndpointPath)
