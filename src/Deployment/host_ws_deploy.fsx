@@ -10,7 +10,7 @@ open Fake.Core
 open System.ServiceProcess
 open Fake.IO
 
-// outsite script parameter names
+// outside script parameter names
 let deployEndpointPathParamName = "deployEndpointPath"
 
 let buildArtifactsPathParamName = "buildArtifactsPath"

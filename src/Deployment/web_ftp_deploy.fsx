@@ -11,7 +11,7 @@ open Fake.Net
 open WinSCP
 open System.Xml
 
-// outsite script parameter names
+// outside script parameter names
 let winSCPExecutablePathParamName = "winSCPExecutablePath"
 let ftpHostNameParamName = "ftpHostName"
 let ftpUserNameParamName = "ftpUserName"
