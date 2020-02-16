@@ -2,14 +2,15 @@
 nuget Fake.IO.FileSystem
 nuget Fake.Core.Target
 nuget Fake.Net.Http
-nuget WinSCP //"
+nuget WinSCP
+nuget Fake.Core.Xml //"
 #load "./.fake/web_ftp_deploy.fsx/intellisense.fsx"
 
 open Fake.Core
 open Fake.IO
 open Fake.Net
 open WinSCP
-open System.Xml
+open Fake.Core.Xml
 
 // outside script parameter names
 let winSCPExecutablePathParamName = "winSCPExecutablePath"
@@ -101,11 +102,9 @@ Target.create "Deploy Web" (fun _ ->
         | false -> reraise()
 
     Trace.trace ("-> Set " + mainWebConfigFilePath)
-    let doc = new XmlDocument()
-    doc.Load(mainWebConfigFilePath)
-    let redirectNode = doc.SelectSingleNode("//action[@type = 'Redirect']")
-    redirectNode.Attributes.["url"].Value <- webUrlRedirectValue
-    doc.Save(mainWebConfigFilePath)
+    let webConfig = loadDoc(mainWebConfigFilePath)
+    let webConfigWithChangedUrl = replaceXPathAttribute "//action[@type = 'Redirect']" "url" webUrlRedirectValue webConfig
+    saveDoc mainWebConfigFilePath webConfigWithChangedUrl
 
     Trace.trace ("-> Upload file to " + ftpMainWebConfigFilePath)
     makeFtpAction (fun ftp -> ftp.PutFiles(mainWebConfigFilePath, ftpMainWebConfigFilePath).Check())
