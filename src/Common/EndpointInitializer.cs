@@ -142,7 +142,6 @@
 
                 // delayed delivery
                 var delayedDeliverySettings = transport.NativeDelayedDelivery();
-                delayedDeliverySettings.EnableTimeoutManagerCompatibility();
             }
 
             // installers
