@@ -32,7 +32,7 @@
 
             var processInfo = new PROCESSENTRY32
             {
-                dwSize = (uint)Marshal.SizeOf(typeof(PROCESSENTRY32))
+                dwSize = (uint)Marshal.SizeOf(typeof(PROCESSENTRY32)),
             };
 
             if (!Process32First(handle, ref processInfo))
@@ -57,7 +57,7 @@
             return null;
         }
 
-        private static uint TH32CS_SNAPPROCESS = 2;
+        private static readonly uint TH32CS_SNAPPROCESS = 2;
 
         [DllImport("kernel32.dll")]
         public static extern bool Process32Next(IntPtr hSnapshot, ref PROCESSENTRY32 lppe);

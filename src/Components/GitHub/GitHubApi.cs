@@ -51,7 +51,7 @@
             var branchRequest = new BranchRequest
             {
                 Ref = string.Format(@"refs/heads/{0}", newBranchName),
-                Sha = sha
+                Sha = sha,
             };
 
             HttpResponseMessage response = await httpClient.PostAsJsonAsync(requestUri, branchRequest).ConfigureAwait(false);
@@ -105,7 +105,7 @@
                 Message = "add comment",
                 Content = Convert.ToBase64String(Encoding.UTF8.GetBytes(decodedData)),
                 Sha = fileToUpdate.Sha,
-                Branch = branchName
+                Branch = branchName,
             };
 
             response = await httpClient.PutAsJsonAsync(requestUri, newFile).ConfigureAwait(false);
@@ -129,7 +129,7 @@
                 Title = headBranchName,
                 Body = "comment to merge",
                 Head = headBranchName,
-                Base = baseBranchName
+                Base = baseBranchName,
             };
 
             HttpResponseMessage response = await httpClient.PostAsJsonAsync(requestUri, pullRequest).ConfigureAwait(false);

@@ -32,7 +32,7 @@
                 From = this.configurationManager.SmtpFrom,
                 To = message.UserEmail,
                 Subject = this.GetSubject(message.CommentResponseStatus),
-                Body = this.GetBody(this.configurationManager.BlogDomainName, message.FileName, message.CommentResponseStatus)
+                Body = this.GetBody(this.configurationManager.BlogDomainName, message.FileName, message.CommentResponseStatus),
             };
 
             return context.SendMail(mail);

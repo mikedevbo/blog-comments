@@ -6,7 +6,7 @@
     [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:OpeningParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
     public interface IGitHubApi
     {
-       Task<string> GetSha(
+        Task<string> GetSha(
             string userAgent,
             string authorizationToken,
             string repositoryName,
