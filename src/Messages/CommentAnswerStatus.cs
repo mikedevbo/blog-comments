@@ -6,6 +6,6 @@
 
         Approved = 1,
 
-        Rejected = 2
+        Rejected = 2,
     }
 }

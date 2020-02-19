@@ -56,8 +56,9 @@
             // transport
             var transport = endpointConfiguration.UseTransport<SqlServerTransport>();
             transport.ConnectionString(this.configurationManager.NsbTransportConnectionString);
-            var routing = transport.Routing();
 
+            // routing
+            var routing = transport.Routing();
             routing.RouteToEndpoint(
                 assembly: typeof(StartAddingComment).Assembly,
                 destination: this.configurationManager.NsbEndpointName);
@@ -138,6 +139,10 @@
                         serviceControlMetricsAddress: this.configurationManager.NsbServiceControlMetricsQueueName,
                         interval: TimeSpan.FromSeconds(1));
                 }
+
+                // delayed delivery
+                var delayedDeliverySettings = transport.NativeDelayedDelivery();
+                delayedDeliverySettings.EnableTimeoutManagerCompatibility();
             }
 
             // installers
