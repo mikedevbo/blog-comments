@@ -173,8 +173,8 @@
                     UserWebsite = @"test.com",
                     FileName = @"test.txt",
                     Content = @"test comment",
-                    BranchName = @"testBranch"
-                }
+                    BranchName = @"testBranch",
+                },
             };
         }
 

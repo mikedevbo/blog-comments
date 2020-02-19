@@ -19,7 +19,7 @@
             // Arrange
             HttpClient client = new HttpClient
             {
-                BaseAddress = new Uri("http://localhost:62974/")
+                BaseAddress = new Uri("http://localhost:62974/"),
             };
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
