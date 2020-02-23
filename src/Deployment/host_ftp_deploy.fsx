@@ -27,6 +27,8 @@ let localEndpointBackupPathParameName = "localEndpointBackupPath"
 let settingsPathParamName = "settingsPath"
 let nservicebusPathParamName = "nservicebusPath"
 let deployArtifactsPathParamName = "deployArtifactsPath"
+let nservicebusPersistenceScriptsPathParamName = "nservicebusPersistenceScriptsPath"
+let deployNServiceBusPersistenceScriptsPathParamName = "deployNServiceBusPersistenceScriptsPath"
 
 let endpointUrlParamName = "endpointUrl"
 //
@@ -68,7 +70,7 @@ Target.create "Stop Endpoint" (fun _ ->
     let offline = sprintf @"%s/%s" ftpEndpointPath ftpOfflineHtm
     let online = sprintf @"%s/%s" ftpEndpointPath ftpOnlineHtm
 
-    let getEndpointState =
+    let getEndpointState () =
         let isDirectoryEmpty = makeFtpAction (fun ftp -> ftp.EnumerateRemoteFiles(ftpEndpointPath, null, EnumerationOptions.None) |> Seq.isEmpty)
         match isDirectoryEmpty with
         | true -> NotExists
@@ -78,7 +80,7 @@ Target.create "Stop Endpoint" (fun _ ->
             | true -> Stopped
             | false -> Running
 
-    let stopEndpoint =
+    let stopEndpoint () =
         makeFtpAction (fun ftp -> ftp.MoveFile(offline, online))
         try
             Trace.trace ("-> Call URL " + endpointUrl)
@@ -91,13 +93,14 @@ Target.create "Stop Endpoint" (fun _ ->
             match isStatusCorrect with
             | true -> ()
             | false -> reraise()
-
-    match getEndpointState with
+    
+    Trace.trace "done"
+    match getEndpointState () with
     | NotExists -> Trace.trace (sprintf "-> Endpoint %s is not exists yet." ftpEndpointPath)
     | Stopped -> Trace.trace (sprintf "-> Endpoint %s is already stopped." ftpEndpointPath)
     | Running ->
         Trace.trace ("-> Stop Endpoint " + ftpEndpointPath)
-        stopEndpoint
+        stopEndpoint ()
         Trace.trace (sprintf "-> Endpoint %s stopped successfully." ftpEndpointPath)
 )
 
@@ -130,6 +133,8 @@ Target.create "Deploy Endpoint" (fun _ ->
     let settingsPath = retrieveParam settingsPathParamName
     let nservicebusPath = retrieveParam nservicebusPathParamName
     let endpointUrl = retrieveParam endpointUrlParamName
+    let nservicebusPersistenceScriptsPath = retrieveParam nservicebusPersistenceScriptsPathParamName
+    let deployNServiceBusPersistenceScriptsPath = retrieveParam deployNServiceBusPersistenceScriptsPathParamName
 
     let removeRemoteItem item =
         let isItemExists = makeFtpAction (fun ftp -> ftp.FileExists(item))
@@ -148,6 +153,9 @@ Target.create "Deploy Endpoint" (fun _ ->
 
     Trace.trace ("-> Copy " + nservicebusPath)
     Shell.copyDir deployArtifactsPath nservicebusPath FileFilter.allFiles
+
+    Trace.trace ("-> Copy " + nservicebusPersistenceScriptsPath)
+    Shell.copyDir deployNServiceBusPersistenceScriptsPath nservicebusPersistenceScriptsPath FileFilter.allFiles
 
     Trace.trace ("-> Clean " + ftpEndpointPath)
     // protects against starting Endpoint after removing offline htm
