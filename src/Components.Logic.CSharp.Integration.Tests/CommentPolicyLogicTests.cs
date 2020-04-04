@@ -71,7 +71,7 @@ namespace Components.Logic.CSharp.Integration.Tests
 
         private ICommentPolicyLogic GetCommentPolicyLogic()
         {
-            return new CommentPolicyLogic();
+            return new CommentPolicyLogicFake();
         }
     }
 }

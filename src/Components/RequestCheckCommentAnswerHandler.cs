@@ -14,6 +14,7 @@
     {
         private readonly IConfigurationManager configurationManager;
         private readonly IGitHubApi gitHubApi;
+        private readonly ICommentPolicyLogic logic;
 
         public RequestCheckCommentAnswerHandler(IConfigurationManager configurationManager, IGitHubApi gitHubApi)
         {
@@ -21,25 +22,34 @@
             this.gitHubApi = gitHubApi;
         }
 
+        public RequestCheckCommentAnswerHandler(IConfigurationManager configurationManager, ICommentPolicyLogic logic)
+        {
+            this.configurationManager = configurationManager;
+            this.logic = logic;
+        }
+
         public async Task Handle(RequestCheckCommentAnswer message, IMessageHandlerContext context)
         {
-            string userAgent = this.configurationManager.UserAgent;
-            string authorizationToken = this.configurationManager.AuthorizationToken;
-            string pullRequestUri = message.PullRequestUri;
-            string etag = message.Etag;
+            //string userAgent = this.configurationManager.UserAgent;
+            //string authorizationToken = this.configurationManager.AuthorizationToken;
+            //string pullRequestUri = message.PullRequestUri;
+            //string etag = message.Etag;
 
-            CheckCommentAnswerResponse answer = await this.GetCommentAnswer(
-                () => this.gitHubApi.IsPullRequestOpen(
-                    userAgent,
-                    authorizationToken,
-                    pullRequestUri,
-                    etag),
-                () => this.gitHubApi.IsPullRequestMerged(
-                    userAgent,
-                    authorizationToken,
-                    pullRequestUri)).ConfigureAwait(false);
+            //CheckCommentAnswerResponse answer = await this.GetCommentAnswer(
+            //    () => this.gitHubApi.IsPullRequestOpen(
+            //        userAgent,
+            //        authorizationToken,
+            //        pullRequestUri,
+            //        etag),
+            //    () => this.gitHubApi.IsPullRequestMerged(
+            //        userAgent,
+            //        authorizationToken,
+            //        pullRequestUri)).ConfigureAwait(false);
 
-            await context.Reply(answer).ConfigureAwait(false);
+            //await context.Reply(answer).ConfigureAwait(false);
+
+            var response = await this.logic.CheckCommentAnswer(message).ConfigureAwait(false);
+            await context.Reply(response).ConfigureAwait(false);
         }
 
         public async Task<CheckCommentAnswerResponse> GetCommentAnswer(

@@ -2,6 +2,7 @@
 {
     using Common;
     using Components.GitHub;
+    using Components.Logic;
     using Microsoft.Extensions.Configuration;
     using NServiceBus;
 
@@ -31,7 +32,12 @@
             if (configurationManager.IsUseFakes)
             {
                 endpointConfiguration.RegisterComponents(reg =>
-                    reg.ConfigureComponent<GitHubApiForTests>(DependencyLifecycle.InstancePerCall));
+                {
+                    //reg.ConfigureComponent<GitHubApiForTests>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<CommentPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
+                });
+
+
             }
             else
             {

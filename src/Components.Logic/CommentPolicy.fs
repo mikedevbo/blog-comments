@@ -12,7 +12,7 @@ module private Logic =
             return returnValue
         } |> Async.StartAsTask
 
-type CommentPolicyLogic() =
+type CommentPolicyLogicFake() =
     interface ICommentPolicyLogic with
         member this.CreateRepositoryBranch(message: RequestCreateBranch): Task<CreateBranchResponse> = 
             Logic.printfn "CreateRepositoryBranch" (new CreateBranchResponse())
@@ -23,5 +23,8 @@ type CommentPolicyLogic() =
         member this.CreatePullRequest(message: RequestCreatePullRequest): Task<CreatePullRequestResponse> = 
             Logic.printfn "CreatePullRequest" (new CreatePullRequestResponse())
 
-        member this.CheckCommentAnswer(message: RequestCheckCommentAnswer): Task<CheckCommentAnswerResponse> = 
-            Logic.printfn "CheckCommentAnswer" (new CheckCommentAnswerResponse())
+        member this.CheckCommentAnswer(message: RequestCheckCommentAnswer): Task<CheckCommentAnswerResponse> =
+            let response = new CheckCommentAnswerResponse()
+            response.Status <- CommentAnswerStatus.Approved
+            response.ETag <- "1234"
+            Logic.printfn "CheckCommentAnswer" response
