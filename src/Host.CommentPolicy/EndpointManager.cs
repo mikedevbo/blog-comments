@@ -24,6 +24,7 @@
         {
             // initialize endpoint
             var configurationManager = new ConfigurationManager(configuration);
+            var configurtionProvider = new Common.ConfigurationProvider(configuration);
             var endpointInitializer = new EndpointInitializer(configurationManager);
             var endpointConfiguration = new EndpointConfiguration(configurationManager.NsbEndpointName);
             endpointInitializer.Initialize(endpointConfiguration, false);
@@ -46,7 +47,10 @@
             }
 
             endpointConfiguration.RegisterComponents(reg =>
-                    reg.ConfigureComponent(() => configurationManager, DependencyLifecycle.InstancePerCall));
+            {
+                reg.ConfigureComponent(() => configurationManager, DependencyLifecycle.InstancePerCall);
+                reg.ConfigureComponent(() => configurtionProvider, DependencyLifecycle.InstancePerCall);
+            });
 
             // start endpoint
             return Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();

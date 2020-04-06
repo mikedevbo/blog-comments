@@ -9,7 +9,7 @@
     using NUnit.Framework;
 
     [TestFixture]
-    [Ignore("only for manual tests")]
+    //[Ignore("only for manual tests")]
     public class GitHubApiTests
     {
         private readonly IConfiguration config;

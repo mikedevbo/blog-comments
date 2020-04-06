@@ -3,7 +3,22 @@
 open Messages
 open Messages.Messages
 open System.Threading.Tasks
-open System
+
+type CommentPolicyLogic(convigurationProvider: IConfigurationProvider) =
+    member this.configurationProvider = convigurationProvider
+    interface ICommentPolicyLogic with
+        member this.CreateRepositoryBranch(message: RequestCreateBranch): Task<CreateBranchResponse> = 
+            //GitHubApi.createRepositoryBranch
+            raise (System.NotImplementedException())
+        
+        member this.UpdateFile(message: RequestAddComment): Task<AddCommentResponse> = 
+            raise (System.NotImplementedException())
+        
+        member this.CreatePullRequest(message: RequestCreatePullRequest): Task<CreatePullRequestResponse> = 
+            raise (System.NotImplementedException())
+        
+        member this.CheckCommentAnswer(message: RequestCheckCommentAnswer): Task<CheckCommentAnswerResponse> = 
+            raise (System.NotImplementedException())
 
 module private Logic =
     let printfn printValue (returnValue: 'a) =
