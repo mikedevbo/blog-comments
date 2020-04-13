@@ -3,6 +3,7 @@
 open NUnit.Framework
 open Microsoft.Extensions.Configuration
 open System.IO
+open System
 
 let getConfiguartion () =
     let config = (new ConfigurationBuilder()).SetBasePath(Directory.GetCurrentDirectory())
@@ -32,8 +33,23 @@ let createRepositoryBranch_execute_noException () =
     let config = getConfiguartion ()
 
     // Act
-    GitHubApi.CreateRepositoryBranch.execute config.UserAgent config.AuthorizationToken config.RepositoryName config.MasterBranchName newBranchName //|> Async.RunSynchronously
+    GitHubApi.CreateRepositoryBranch.execute config.UserAgent config.AuthorizationToken config.RepositoryName config.MasterBranchName newBranchName
     |> Async.RunSynchronously
+
+    // Assert
+    Assert.Pass()
+
+[<Test>]
+let updatFile_execute_noException () =
+
+    // Arrange
+    let fileName = "_posts/test.md"
+    let branchName = "c-15"
+    let content = "\nnew comment - " + DateTime.Now.ToString()
+    let config = getConfiguartion ()
+
+    // Act
+    let result = GitHubApi.UpdatFile.execute config.UserAgent config.AuthorizationToken config.RepositoryName branchName fileName content |> Async.RunSynchronously
 
     // Assert
     Assert.Pass()
