@@ -1,4 +1,5 @@
 
+.vscode
 App_Data
 nsb_log_*
 
@@ -98,3 +99,9 @@ src/scaffolding.config
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+.fake
+.ionide
+
+.fake
+.ionide
