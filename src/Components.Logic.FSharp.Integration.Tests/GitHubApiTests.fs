@@ -5,18 +5,20 @@ open Microsoft.Extensions.Configuration
 open System.IO
 open System
 
-let getConfiguartion () =
+let getConfiguration () =
     let config = (new ConfigurationBuilder()).SetBasePath(Directory.GetCurrentDirectory())
                                              .AddJsonFile("appsettings.components.integration.tests.json", false, true)
-                                             .Build();
-        
-    (new Common.ConfigurationProvider(config))
+                                             .Build()
+    config
+
+let getConfiguartionProvider () =
+    Common.ConfigurationProvider(getConfiguration ())
     
 [<Test>]
 let getSha_execute_properResult () =
 
     // Arrange
-    let config = getConfiguartion ()
+    let config = getConfiguartionProvider ()
 
     // Act
     let result = GitHubApi.GetSha.execute config.UserAgent config.RepositoryName config.MasterBranchName |> Async.RunSynchronously
@@ -31,7 +33,7 @@ let getFile_execute_properResult () =
     // Arrange
     let fileName = "_posts/test.md"
     let branchName = "c-15"
-    let config = getConfiguartion ()
+    let config = getConfiguartionProvider ()
 
     // Act
     let result = GitHubApi.GetFile.execute config.UserAgent config.RepositoryName fileName branchName |> Async.RunSynchronously
@@ -45,7 +47,7 @@ let createRepositoryBranch_execute_noException () =
 
     // Arrange
     let newBranchName = "c-15"
-    let config = getConfiguartion ()
+    let config = getConfiguartionProvider ()
 
     // Act
     GitHubApi.CreateRepositoryBranch.execute config.UserAgent config.AuthorizationToken config.RepositoryName config.MasterBranchName newBranchName
@@ -61,10 +63,10 @@ let updatFile_execute_noException () =
     let fileName = "_posts/test.md"
     let branchName = "c-15"
     let content = "new comment - " + DateTime.Now.ToString()
-    let config = getConfiguartion ()
+    let config = getConfiguartionProvider ()
 
     // Act
-    GitHubApi.UpdatFile.execute config.UserAgent config.AuthorizationToken config.RepositoryName fileName branchName content |> Async.RunSynchronously
+    GitHubApi.UpdateFile.execute config.UserAgent config.AuthorizationToken config.RepositoryName fileName branchName content |> Async.RunSynchronously
 
     // Assert
     Assert.Pass()
@@ -74,10 +76,26 @@ let createPullRequest_execute_noException () =
 
     // Arrange
     let branchName = "c-15"
-    let config = getConfiguartion ()
+    let config = getConfiguartionProvider ()
 
     // Act
     GitHubApi.CreatePullRequest.execute config.UserAgent config.AuthorizationToken config.RepositoryName branchName config.MasterBranchName |> Async.RunSynchronously
 
     // Assert
+    Assert.Pass()
+    
+[<Test>]
+let isPullRequestOpen_execute_noException () =
+
+    // Arrange
+    let config = getConfiguration ()
+    let configProvider = getConfiguartionProvider ()
+    let etag = None
+    ////let etag = Some "W/\"96ac3062f47cab793ff0aea264498eb4\""//"\"96ac3062f47cab793ff0aea264498eb4\""
+
+    // Act
+    let result = GitHubApi.IsPullRequestOpen.execute configProvider.UserAgent configProvider.AuthorizationToken config.["pullRequestUri"] etag |> Async.RunSynchronously
+
+    // Assert
+    printfn "%A" result
     Assert.Pass()

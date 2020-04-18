@@ -3,6 +3,8 @@
 open FSharp.Data
 open System.Runtime.CompilerServices
 open System
+open System.Net
+open System.Net.Http
 open System.Text
 
 [<assembly: InternalsVisibleTo("Components.Logic.FSharp.Integration.Tests")>]
@@ -11,8 +13,11 @@ do()
 [<Literal>]
 let ApiBaseUrl = @"https://api.github.com"
 
-let getBaseHeaders userAgent authorizationToken =
-     ["User-agent", userAgent; "Authorization", "Token " + authorizationToken; "Accept", "application/json"]
+let getBaseHeaders userAgent authorizationToken (etag: string option) =
+     let baseHeaders = ["User-agent", userAgent; "Authorization", "Token " + authorizationToken; "Accept", "application/json"]
+     match etag with
+     | Some etag -> baseHeaders |> List.append ["If-None-Match", etag]
+     | None -> baseHeaders
 
 module GetSha =
     [<Literal>]
@@ -72,7 +77,7 @@ module CreateRepositoryBranch =
     let execute userAgent authorizationToken repositoryName masterBranchName newBranchName =
         async {
             let url = sprintf @"%s/repos/%s/%s/git/refs" ApiBaseUrl userAgent repositoryName
-            let headers = getBaseHeaders userAgent authorizationToken
+            let headers = getBaseHeaders userAgent authorizationToken None
         
             let! sha = GetSha.execute userAgent repositoryName masterBranchName
             let post = Provider.Branch(@"refs/heads/" + newBranchName, sha)
@@ -80,7 +85,7 @@ module CreateRepositoryBranch =
             ()
         }
 
-module UpdatFile = 
+module UpdateFile = 
     [<Literal>]
     let Json = """
     {
@@ -102,7 +107,7 @@ module UpdatFile =
             let newContentBase64string = newContent |> Encoding.UTF8.GetBytes |> Convert.ToBase64String
             
             let url = sprintf @"%s/repos/%s/%s/contents/%s" ApiBaseUrl userAgent repositoryName fileName
-            let headers = getBaseHeaders userAgent authorizationToken
+            let headers = getBaseHeaders userAgent authorizationToken None
 
             let post = Provider.NewContent("add comment", newContentBase64string, file.Sha, branchName)
             let! _ = post.JsonValue.RequestAsync (url = url, httpMethod = "PUT", headers = headers)
@@ -125,46 +130,45 @@ module CreatePullRequest =
     let execute userAgent authorizationToken repositoryName headBranchName baseBranchName =
         async {
             let url = sprintf @"%s/repos/%s/%s/pulls" ApiBaseUrl userAgent repositoryName
-            let headers = getBaseHeaders userAgent authorizationToken
+            let headers = getBaseHeaders userAgent authorizationToken None
 
             let post = Provider.Pull(headBranchName, "comment to merge", headBranchName, baseBranchName)
             let! _ = post.JsonValue.RequestAsync (url = url, httpMethod = "POST", headers = headers)
             ()
         }
 
-module IsPullRequesetOpen =
+module IsPullRequestOpen =
     [<Literal>]
     let Json = """
     {
-        "title": "some_value",
-        "body": "some_value",
-        "head": "some_value",
-        "base": "some_value"
+        "state": "some_value"
     }
     """
 
-    type Provider = JsonProvider<Json, RootName="pull">
+    type Provider = JsonProvider<Json>
     type result = {isOpen: bool; etag: string}
 
     let execute userAgent authorizationToken pullRequestUrl etag =
         async {
-            let! response = Http.AsyncRequest(pullRequestUrl, silentHttpErrors = true)
+            let headers = getBaseHeaders userAgent authorizationToken etag
+            let! response = Http.AsyncRequest(pullRequestUrl, headers = headers, silentHttpErrors = true)
+            let etagHeader = response.Headers.TryFind "ETag"
+            let etagValue =
+                match etagHeader with
+                | Some etag -> etag
+                | None -> raise (ArgumentException("There is no ETag Header."))
+            
             match response.StatusCode with
             | 304 ->
-                let etag = response.Headers.TryFind "ETag"
-                match etag with
-                | Some x -> return {isOpen = true; etag = x}
-                | None -> return raise (new ArgumentException("There is no ETag Header"))
+                return {isOpen = true; etag = etagValue}
             | 200 ->
-                return {isOpen = true; etag = "aaa"}
-            
-            
-            
-            
-            //let url = sprintf @"%s/repos/%s/%s/pulls" ApiBaseUrl userAgent repositoryName
-            //let headers = getBaseHeaders userAgent authorizationToken
-
-            //let post = Provider.Pull(headBranchName, "comment to merge", headBranchName, baseBranchName)
-            //let! _ = post.JsonValue.RequestAsync (url = url, httpMethod = "POST", headers = headers)
-            //()
+                match response.Body with
+                | Text body ->
+                    let state = (Provider.Parse body).State
+                    return {isOpen = (state = "open"); etag = etagValue}
+                | _ -> return raise (ArgumentException("Invalid body format. Expected json as text."))
+            | _ ->
+                let ex = HttpRequestException(sprintf "Response bad status code: %d" response.StatusCode);
+                ex.Data.Add("response", response);
+                return raise ex
         }
