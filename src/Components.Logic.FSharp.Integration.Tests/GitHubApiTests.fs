@@ -90,8 +90,8 @@ let isPullRequestOpen_execute_noException () =
     // Arrange
     let config = getConfiguration ()
     let configProvider = getConfiguartionProvider ()
-    let etag = None
-    ////let etag = Some "W/\"96ac3062f47cab793ff0aea264498eb4\""//"\"96ac3062f47cab793ff0aea264498eb4\""
+    ////let etag = None
+    let etag = Some "W/\"96ac3062f47cab793ff0aea264498eb4\""//"\"96ac3062f47cab793ff0aea264498eb4\""
 
     // Act
     let result = GitHubApi.IsPullRequestOpen.execute configProvider.UserAgent configProvider.AuthorizationToken config.["pullRequestUri"] etag |> Async.RunSynchronously
@@ -99,3 +99,17 @@ let isPullRequestOpen_execute_noException () =
     // Assert
     printfn "%A" result
     Assert.Pass()
+    
+[<Test>]
+let isPullRequestMerged_execute_noException () =
+
+    // Arrange
+    let config = getConfiguration ()
+    let configProvider = getConfiguartionProvider ()
+
+    // Act
+    let result = GitHubApi.IsPullRequestMerged.execute configProvider.UserAgent configProvider.AuthorizationToken config.["pullRequestUri"] |> Async.RunSynchronously
+
+    // Assert
+    printfn "%b" result
+    Assert.Pass()    

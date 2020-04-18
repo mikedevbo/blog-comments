@@ -1,6 +1,7 @@
 ﻿module internal GitHubApi
 
 open FSharp.Data
+open FSharp.Data
 open System.Runtime.CompilerServices
 open System
 open System.Net
@@ -159,14 +160,32 @@ module IsPullRequestOpen =
                 | None -> raise (ArgumentException("There is no ETag Header."))
             
             match response.StatusCode with
-            | 304 ->
+            | HttpStatusCodes.NotModified ->
                 return {isOpen = true; etag = etagValue}
-            | 200 ->
+            | HttpStatusCodes.OK ->
                 match response.Body with
                 | Text body ->
                     let state = (Provider.Parse body).State
                     return {isOpen = (state = "open"); etag = etagValue}
                 | _ -> return raise (ArgumentException("Invalid body format. Expected json as text."))
+            | _ ->
+                let ex = HttpRequestException(sprintf "Response bad status code: %d" response.StatusCode);
+                ex.Data.Add("response", response);
+                return raise ex
+        }
+        
+module IsPullRequestMerged =
+    let execute userAgent authorizationToken pullRequestUrl =
+        async {
+            let headers = getBaseHeaders userAgent authorizationToken None
+            let url = sprintf "%s/merge" pullRequestUrl
+            let! response = Http.AsyncRequest(url, headers = headers, silentHttpErrors = true)
+            
+            match response.StatusCode with
+            | HttpStatusCodes.NoContent ->
+                return true
+            | HttpStatusCodes.NotFound ->
+                return false
             | _ ->
                 let ex = HttpRequestException(sprintf "Response bad status code: %d" response.StatusCode);
                 ex.Data.Add("response", response);

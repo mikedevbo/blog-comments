@@ -122,7 +122,7 @@
                 this.configurationManager.UserAgent,
                 this.configurationManager.AuthorizationToken,
                 pullRequestUri,
-                "\"7a1c9191989683a0605cc1fbdfb72f8e\"").ConfigureAwait(false);
+                "\"96ac3062f47cab793ff0aea264498eb4\"").ConfigureAwait(false);
 
             // Assert
             Console.WriteLine(result);
