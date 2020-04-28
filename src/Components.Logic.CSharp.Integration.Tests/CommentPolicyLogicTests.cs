@@ -13,7 +13,8 @@ namespace Components.Logic.CSharp.Integration.Tests
         public async Task CreateRepositoryBranch_Execute_NoException()
         {
             // Arrange
-            var message = new RequestCreateBranch();
+            var addedDate = new DateTime(2020, 4, 19, 10, 02, 01);
+            var message = new RequestCreateBranch(addedDate);
             var api = this.GetCommentPolicyLogic();
 
             // Act

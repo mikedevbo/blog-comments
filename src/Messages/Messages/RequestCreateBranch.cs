@@ -4,6 +4,11 @@
 
     public class RequestCreateBranch
     {
-        public DateTime AddedDate { get; set; }
+        public RequestCreateBranch(DateTime addedDate)
+        {
+            this.AddedDate = addedDate;
+        }
+
+        public DateTime AddedDate { get; }
     }
 }

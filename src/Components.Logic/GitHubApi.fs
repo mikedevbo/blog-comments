@@ -1,7 +1,6 @@
 ﻿module internal GitHubApi
 
 open FSharp.Data
-open FSharp.Data
 open System.Runtime.CompilerServices
 open System
 open System.Net

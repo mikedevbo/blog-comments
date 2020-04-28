@@ -2,6 +2,11 @@
 {
     public class CreateBranchResponse
     {
-        public string CreatedBranchName { get; set; }
+        public CreateBranchResponse(string createdBranchName)
+        {
+            this.CreatedBranchName = createdBranchName;
+        }
+
+        public string CreatedBranchName { get; }
     }
 }

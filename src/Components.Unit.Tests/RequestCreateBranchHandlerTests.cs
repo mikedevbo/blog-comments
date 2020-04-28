@@ -1,4 +1,6 @@
-﻿namespace Components.Unit.Tests
+﻿using System;
+
+namespace Components.Unit.Tests
 {
     using System.Threading.Tasks;
     using Common;
@@ -18,7 +20,8 @@
         public async Task Handle_RequestCreateBranch_ReplayProperResponse()
         {
             // Arrange
-            var message = new RequestCreateBranch();
+            var addedDate = new DateTime(2020, 4, 19, 10, 02, 01);
+            var message = new RequestCreateBranch(addedDate);
             var handler = this.GetHandler();
             var context = this.GetContext();
 
