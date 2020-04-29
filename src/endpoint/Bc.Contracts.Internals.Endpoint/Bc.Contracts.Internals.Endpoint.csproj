@@ -4,4 +4,11 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="CommentRegistration\Messages" />
+      <Folder Include="CommentAnswer\Messages" />
+      <Folder Include="EmailNotification\Events" />
+      <Folder Include="EmailNotification\Messages" />
+    </ItemGroup>
+
 </Project>
