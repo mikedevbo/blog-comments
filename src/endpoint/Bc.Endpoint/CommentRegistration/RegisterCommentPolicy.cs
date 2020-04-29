@@ -5,9 +5,9 @@ using NServiceBus.Logging;
 
 namespace Bc.Endpoint.CommentRegistration
 {
-    public class RegisterCommentHandler : IHandleMessages<RegisterComment>
+    public class RegisterCommentPolicy : IHandleMessages<RegisterComment>
     {
-        private static readonly ILog Log = LogManager.GetLogger<RegisterCommentHandler>();
+        private static readonly ILog Log = LogManager.GetLogger<RegisterCommentPolicy>();
         
         public Task Handle(RegisterComment message, IMessageHandlerContext context)
         {

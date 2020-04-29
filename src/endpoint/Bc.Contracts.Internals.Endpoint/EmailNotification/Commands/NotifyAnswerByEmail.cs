@@ -2,16 +2,14 @@ using System;
 
 namespace Bc.Contracts.Internals.Endpoint.EmailNotification.Commands
 {
-    public class SendEmailNotification
+    public class NotifyAnswerByEmail
     {
-        public SendEmailNotification(Guid commentId, string userEmail)
+        public NotifyAnswerByEmail(Guid commentId)
         {
             this.CommentId = commentId;
-            this.UserEmail = userEmail;
         }
 
         public Guid CommentId { get; }
-
-        public string UserEmail { get; }
+        
     }
 }

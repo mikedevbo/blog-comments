@@ -7,9 +7,9 @@ using NServiceBus.Logging;
 
 namespace Bc.Endpoint.Operations
 {
-    public class TakeCommentHandler : IHandleMessages<TakeComment>
+    public class TakeCommentPolicy : IHandleMessages<TakeComment>
     {
-        private static readonly ILog Log = LogManager.GetLogger<TakeCommentHandler>();
+        private static readonly ILog Log = LogManager.GetLogger<TakeCommentPolicy>();
         
         public async Task Handle(TakeComment message, IMessageHandlerContext context)
         {
@@ -21,7 +21,7 @@ namespace Bc.Endpoint.Operations
                 message.Content,
                 message.AddedDate)).ConfigureAwait(false);
 
-            await context.Send(new SendEmailNotification(
+            await context.Send(new NotifyByEmail(
                 message.CommentId,
                 message.UserEmail)).ConfigureAwait(false);
             
