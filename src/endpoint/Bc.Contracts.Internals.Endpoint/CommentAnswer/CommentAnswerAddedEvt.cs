@@ -4,11 +4,14 @@ namespace Bc.Contracts.Internals.Endpoint.CommentAnswer
 {
     public class CommentAnswerAddedEvt
     {
-        public CommentAnswerAddedEvt(Guid commentId)
+        public CommentAnswerAddedEvt(Guid commentId, bool isApproved)
         {
-            CommentId = commentId;
+            this.CommentId = commentId;
+            this.IsApproved = isApproved;
         }
 
-        public Guid CommentId { get; }        
+        public Guid CommentId { get; }
+
+        public bool IsApproved { get; }
     }
 }
