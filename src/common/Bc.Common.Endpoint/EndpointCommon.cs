@@ -31,31 +31,16 @@ namespace Bc.Common.Endpoint
                     instanceName: endpointName,
                     hostName: Environment.MachineName);
 
-            // // conventions
-            // var conventions = endpointConfiguration.Conventions();
-            // conventions.DefiningCommandsAs(
-            //     type =>
-            //     {
-            //         return type.Namespace == typeof(StartAddingComment).Namespace;
-            //     });
-            // conventions.DefiningMessagesAs(
-            //     type =>
-            //     {
-            //         return
-            //             type.Namespace == typeof(RequestCreateBranch).Namespace ||
-            //             type == typeof(NServiceBus.Mailer.MailMessage);
-            //     });
+            // conventions
+            var conventions = endpointConfiguration.Conventions();
+            conventions.DefiningCommandsAs(type => type.Name.EndsWith("Cmd") || type.IsAssignableFrom(typeof(ICommand)));
+            conventions.DefiningEventsAs(type => type.Name.EndsWith("Evt") || type.IsAssignableFrom(typeof(IEvent)));
+            conventions.DefiningMessagesAs(type => type.Name.EndsWith("Msg") || type.IsAssignableFrom(typeof(IMessage)));
 
             // transport
             var transport = endpointConfiguration.UseTransport<SqlServerTransport>();
             transport.ConnectionString(configurationProvider.TransportConnectionString);
             transport.DefaultSchema(Schema);
-
-            // // routing
-            // var routing = transport.Routing();
-            // routing.RouteToEndpoint(
-            //     assembly: typeof(StartAddingComment).Assembly,
-            //     destination: this.configurationManager.NsbEndpointName);
 
             // persistence
             var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
@@ -85,34 +70,6 @@ namespace Bc.Common.Endpoint
                         delayed.NumberOfRetries(0);
                     });
             }
-
-            // // mailer
-            // var mailSettings = endpointConfiguration.EnableMailer();
-            // mailSettings.UseSmtpBuilder(buildSmtpClient: () =>
-            // {
-            //     var smtpClient = new SmtpClient();
-            //
-            //     if (!this.configurationManager.IsSendEmail)
-            //     {
-            //         var directoryLocation = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Emails");
-            //         Directory.CreateDirectory(directoryLocation);
-            //         smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
-            //         smtpClient.PickupDirectoryLocation = directoryLocation;
-            //     }
-            //     else
-            //     {
-            //         smtpClient.Host = this.configurationManager.SmtpHost;
-            //         smtpClient.Port = this.configurationManager.SmtpPort;
-            //         smtpClient.EnableSsl = true;
-            //         smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            //         smtpClient.UseDefaultCredentials = false;
-            //         smtpClient.Credentials = new NetworkCredential(
-            //             this.configurationManager.SmtpHostUserName,
-            //             this.configurationManager.SmtpHostPassword);
-            //     }
-            //
-            //     return smtpClient;
-            // });
 
             // heartbeats
             if (configurationProvider.IsSendHeartbeats)
