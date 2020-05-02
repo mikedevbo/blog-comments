@@ -12,8 +12,8 @@ namespace Bc.Endpoint.EmailNotification
         
         public Task Handle(CommentAnswerAddedEvt message, IMessageHandlerContext context)
         {
-            Log.Info($"CommentId: {message.CommentId}");
-            return context.Send(new NotifyAnswerByEmailCmd(message.CommentId));
+            Log.Info($"{this.GetType().Name} {message.CommentId}");
+            return context.Send(new NotifyAnswerByEmailCmd(message.CommentId, message.IsApproved));
         }
     }
 }

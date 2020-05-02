@@ -6,13 +6,13 @@ using NServiceBus.Logging;
 
 namespace Bc.Endpoint.CommentAnswer
 {
-    public class CommentAddedHandler : IHandleMessages<CommentAddedEvt>
+    public class CommentAddedHandler : IHandleMessages<CommentRegisteredEvt>
     {
         private static readonly ILog Log = LogManager.GetLogger<CommentAddedHandler>();
         
-        public Task Handle(CommentAddedEvt message, IMessageHandlerContext context)
+        public Task Handle(CommentRegisteredEvt message, IMessageHandlerContext context)
         {
-            Log.Info($"CommentId: {message.CommentId}");
+            Log.Info($"{this.GetType().Name} {message.CommentId}");
             return context.Send(new CheckCommentAnswerCmd(message.CommentId, message.CommentUri));
         }
     }

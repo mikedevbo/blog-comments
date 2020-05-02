@@ -14,14 +14,19 @@ namespace Bc.Endpoint.Integration.Tests
         [SetUp]
         public async Task SetUp()
         {
+            const string bcEndpointAssemblyName = "Bc.Endpoint";
+
             var endpoint = EndpointCommon.GetEndpoint(
                 "Sender.Tests",
                 false,
                 new EndpointCommonConfigurationProvider());
 
+            var scanner = endpoint.AssemblyScanner();
+            scanner.ExcludeAssemblies(bcEndpointAssemblyName);
+
             var transport = endpoint.UseTransport<SqlServerTransport>();
             var routing = transport.Routing();
-            routing.RouteToEndpoint(typeof(TakeCommentCmd).Assembly, "Bc.Endpoint");
+            routing.RouteToEndpoint(typeof(TakeCommentCmd).Assembly, bcEndpointAssemblyName);
 
             this.endpointInstance = await NServiceBus.Endpoint.Start(endpoint).ConfigureAwait(false);
         }

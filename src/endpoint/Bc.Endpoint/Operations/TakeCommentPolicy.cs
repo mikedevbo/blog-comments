@@ -25,7 +25,7 @@ namespace Bc.Endpoint.Operations
                 message.CommentId,
                 message.UserEmail)).ConfigureAwait(false);
             
-            Log.Info($"Take comment data. CommentId: {message.CommentId}");
+            Log.Info($"{this.GetType().Name} {message.CommentId}");
         }
     }
 }

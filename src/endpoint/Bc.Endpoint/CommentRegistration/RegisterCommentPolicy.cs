@@ -12,7 +12,8 @@ namespace Bc.Endpoint.CommentRegistration
         public Task Handle(RegisterCommentCmd message, IMessageHandlerContext context)
         {
             ////TODO: Add logic
-            return Task.CompletedTask;
+            Log.Info($"{this.GetType().Name} {message.CommentId}");
+            return context.Publish(new CommentRegisteredEvt(message.CommentId, "uri_1234"));
         }
     }
 }

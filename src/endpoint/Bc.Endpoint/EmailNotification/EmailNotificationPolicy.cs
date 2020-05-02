@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Bc.Contracts.Internals.Endpoint.EmailNotification;
 using NServiceBus;
+using NServiceBus.Logging;
 
 namespace Bc.Endpoint.EmailNotification
 {
@@ -10,17 +11,19 @@ namespace Bc.Endpoint.EmailNotification
         IAmStartedByMessages<NotifyByEmailCmd>,
         IAmStartedByMessages<NotifyAnswerByEmailCmd>
     {
+        private static readonly ILog Log = LogManager.GetLogger<EmailNotificationPolicy>();
+
         public Task Handle(NotifyByEmailCmd message, IMessageHandlerContext context)
         {
             this.Data.UserEmail = message.UserEmail;
-            
-            ////TODO: Add logic
             return Task.CompletedTask;
         }
 
         public Task Handle(NotifyAnswerByEmailCmd message, IMessageHandlerContext context)
         {
             ////TODO: Add logic
+            Log.Info($"{this.GetType().Name} {message.CommentId}");
+            this.MarkAsComplete();
             return Task.CompletedTask;
         }
 
