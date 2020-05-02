@@ -33,7 +33,15 @@ namespace Bc.Endpoint
             endpoint.RegisterComponents(reg =>
             {
                 reg.ConfigureComponent<EndpointConfigurationProvider>(DependencyLifecycle.InstancePerCall);
-                reg.ConfigureComponent<RegisterCommentPolicyLogic>(DependencyLifecycle.InstancePerCall);
+
+                if (configurationProvider.IsUseFakes)
+                {
+                    reg.ConfigureComponent<RegisterCommentPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
+                }
+                else
+                {
+                    reg.ConfigureComponent<RegisterCommentPolicyLogic>(DependencyLifecycle.InstancePerCall);
+                }
             });
 
             // mailer

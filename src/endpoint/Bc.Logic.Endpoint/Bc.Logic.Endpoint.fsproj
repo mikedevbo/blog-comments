@@ -9,6 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\common\Bc.Common.Logic\Bc.Common.Logic.fsproj" />
       <ProjectReference Include="..\Bc.Contracts.Internals.Endpoint\Bc.Contracts.Internals.Endpoint.csproj" />
     </ItemGroup>
 

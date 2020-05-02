@@ -8,6 +8,16 @@ namespace Bc.Endpoint
 {
     public class EndpointConfigurationProvider : IEndpointConfigurationProvider
     {
+        public string UserAgent => ConfigurationManager.AppSettings["UserAgent"];
+
+        public string AuthorizationToken => ConfigurationManager.AppSettings["AuthorizationToken"];
+
+        public string RepositoryName => ConfigurationManager.AppSettings["RepositoryName"];
+
+        public string MasterBranchName => ConfigurationManager.AppSettings["MasterBranchName"];
+
+        public bool IsUseFakes => Convert.ToBoolean(ConfigurationManager.AppSettings["IsUseFakes"]);
+
         public bool IsSendEmail => Convert.ToBoolean(ConfigurationManager.AppSettings["IsSendEmail"]);
         
         public string SmtpHost => ConfigurationManager.AppSettings["SmtpHost"];

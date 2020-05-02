@@ -1,4 +1,4 @@
-﻿module internal GitHubApi
+﻿module GitHubApi
 
 open FSharp.Data
 open System.Runtime.CompilerServices
@@ -7,8 +7,8 @@ open System.Net
 open System.Net.Http
 open System.Text
 
-[<assembly: InternalsVisibleTo("Bc.Common.Logic.Integration.Tests")>]
-do()
+// [<assembly: InternalsVisibleTo("Bc.Common.Logic.Integration.Tests")>]
+// do()
 
 [<Literal>]
 let ApiBaseUrl = @"https://api.github.com"
