@@ -2,9 +2,9 @@ using System;
 
 namespace Bc.Contracts.Internals.Endpoint.CommentAnswer
 {
-    public class CheckCommentCmd
+    public class CheckCommentAnswerCmd
     {
-        public CheckCommentCmd(Guid commentId, string commentUri)
+        public CheckCommentAnswerCmd(Guid commentId, string commentUri)
         {
             this.CommentId = commentId;
             this.CommentUri = commentUri;

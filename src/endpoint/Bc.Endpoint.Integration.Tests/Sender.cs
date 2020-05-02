@@ -40,8 +40,8 @@ namespace Bc.Endpoint.Integration.Tests
             const string userName = "test_user";
             const string userEmail = "test_user_email";
             const string userWebsite = "test_user_website";
-            const string fileName = "test_file_name";
-            const string content = "test_comment";
+            const string fileName = @"_posts/2018-05-27-test.md";
+            const string content = "new_comment";
             var addedDate = DateTime.Now;
 
             var message = new TakeCommentCmd(commentId, userName, userEmail, userWebsite, fileName, content, addedDate);
