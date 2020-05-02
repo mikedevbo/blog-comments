@@ -20,7 +20,7 @@ namespace Bc.Host.AspNet.Endpoint
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
-                .UseNServiceBus(nsbBuilder => BcEndpoint.GetEndpoint(new BcEndpointConfigurationProvider()))
+                .UseNServiceBus(nsbBuilder => BcEndpoint.GetEndpoint(new EndpointConfigurationProvider()))
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }
 }

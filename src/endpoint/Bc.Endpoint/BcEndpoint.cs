@@ -3,7 +3,9 @@ using System.Net;
 using System.Net.Mail;
 using System.Reflection;
 using Bc.Common.Endpoint;
+using Bc.Contracts.Internals.Endpoint;
 using Bc.Contracts.Internals.Endpoint.Operations;
+using Bc.Logic.Endpoint;
 using NServiceBus;
 using NServiceBus.Mailer;
 
@@ -11,7 +13,7 @@ namespace Bc.Endpoint
 {
     public static class BcEndpoint
     {
-        public static EndpointConfiguration GetEndpoint(IBcEndpointConfigurationProvider configurationProvider)
+        public static EndpointConfiguration GetEndpoint(IEndpointConfigurationProvider configurationProvider)
         {
             const string endpointName = "Bc.Endpoint";
             
@@ -27,6 +29,13 @@ namespace Bc.Endpoint
                 assembly: typeof(TakeCommentCmd).Assembly,
                 destination: endpointName);
             
+            // dependency injection
+            endpoint.RegisterComponents(reg =>
+            {
+                reg.ConfigureComponent<EndpointConfigurationProvider>(DependencyLifecycle.InstancePerCall);
+                reg.ConfigureComponent<RegisterCommentPolicyLogic>(DependencyLifecycle.InstancePerCall);
+            });
+
             // mailer
             var mailSettings = endpoint.EnableMailer();
             mailSettings.UseSmtpBuilder(buildSmtpClient: () =>

@@ -8,4 +8,8 @@
         <Compile Include="CommentRegistration.fs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Bc.Contracts.Internals.Endpoint\Bc.Contracts.Internals.Endpoint.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -1,8 +1,8 @@
 using System.Security;
 
-namespace Bc.Endpoint
+namespace Bc.Contracts.Internals.Endpoint
 {
-    public interface IBcEndpointConfigurationProvider
+    public interface IEndpointConfigurationProvider
     {
         bool IsSendEmail { get; }
         
@@ -14,6 +14,6 @@ namespace Bc.Endpoint
 
         SecureString SmtpHostPassword { get; }
 
-        string SmtpFrom { get; }        
+        string SmtpFrom { get; }
     }
 }
