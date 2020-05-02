@@ -14,12 +14,13 @@ namespace Bc.Endpoint.Operations
         public async Task Handle(TakeCommentCmd message, IMessageHandlerContext context)
         {
             await context.Send(new RegisterCommentCmd(
-                message.CommentId,
-                message.UserName,
-                message.UserWebsite,
-                message.FileName,
-                message.Content,
-                message.AddedDate)).ConfigureAwait(false);
+                new CommentData(
+                    message.CommentId,
+                    message.UserName,
+                    message.UserWebsite,
+                    message.FileName,
+                    message.Content,
+                    message.AddedDate))).ConfigureAwait(false);
             
             await context.Send(new NotifyByEmailCmd(
                 message.CommentId,

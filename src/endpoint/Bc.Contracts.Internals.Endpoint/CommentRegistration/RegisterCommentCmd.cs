@@ -4,32 +4,11 @@ namespace Bc.Contracts.Internals.Endpoint.CommentRegistration
 {
     public class RegisterCommentCmd
     {
-        public RegisterCommentCmd(
-            Guid commentId,
-            string userName,
-            string userWebSite,
-            string fileName,
-            string content,
-            DateTime addedDate)
+        public RegisterCommentCmd(CommentData commentData)
         {
-            this.CommentId = commentId;
-            this.UserName = userName;
-            this.UserWebSite = userWebSite;
-            this.FileName = fileName;
-            this.Content = content;
-            this.AddedDate = addedDate;
+            CommentData = commentData;
         }
 
-        public Guid CommentId { get; }
-
-        public string UserName { get; }
-
-        public string UserWebSite { get; }
-
-        public string FileName { get; }
-
-        public string Content { get; }
-
-        public DateTime AddedDate { get; }        
+        public CommentData CommentData { get; }
     }
 }
