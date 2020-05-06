@@ -21,12 +21,24 @@ type RegisterCommentPolicyLogic(configurationProvider: IEndpointConfigurationPro
 
         member this.AddComment(branchName, commentData) =
             async {
-                ()
+                return GitHubApi.UpdateFile.execute
+                            this.configurationProvider.UserAgent
+                            this.configurationProvider.AuthorizationToken
+                            this.configurationProvider.RepositoryName
+                            commentData.FileName
+                            branchName
+                            commentData.Content
             } |> Async.StartAsTask :> Task
 
         member this.CreatePullRequest(branchName) =
             async {
-                return "uri_123"
+//                let! pullRequestUri = GitHubApi.CreatePullRequest.execute
+//                                            this.configurationProvider.UserAgent
+//                                            this.configurationProvider.AuthorizationToken
+//                                            this.configurationProvider.RepositoryName
+//                                            branchName
+//                                            this.configurationProvider.MasterBranchName
+                return "1234"// pullRequestUri
             } |> Async.StartAsTask
 
 type RegisterCommentPolicyLogicFake() =
