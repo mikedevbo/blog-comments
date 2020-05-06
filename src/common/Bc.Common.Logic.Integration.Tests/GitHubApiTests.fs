@@ -10,7 +10,7 @@ let repositoryName = ConfigurationManager.AppSettings.["RepositoryName"]
 let masterBranchName = ConfigurationManager.AppSettings.["MasterBranchName"]
 let pullRequestUri = ConfigurationManager.AppSettings.["PullRequestUri"]
 
-let branchName = "c-16"
+let branchName = "c-17"
     
 [<Test>]
 let getSha_execute_properResult () =
@@ -78,7 +78,7 @@ let isPullRequestOpen_execute_noException () =
 
     // Arrange
     ////let etag = None
-    let etag = Some "W/\"d0281e7f65cac493e85e3b3cfdaa9550\""//"\"96ac3062f47cab793ff0aea264498eb4\""
+    let etag = Some "W/\"e06d1474660cd511ae4e78da4c1389da\""//"\"96ac3062f47cab793ff0aea264498eb4\""
 
     // Act
     let result = GitHubApi.IsPullRequestOpen.execute userAgent authorizationToken pullRequestUri etag |> Async.RunSynchronously
