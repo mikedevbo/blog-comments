@@ -21,7 +21,7 @@ type RegisterCommentPolicyLogic(configurationProvider: IEndpointConfigurationPro
 
         member this.AddComment(branchName, commentData) =
             async {
-                return GitHubApi.UpdateFile.execute
+                do! GitHubApi.UpdateFile.execute
                             this.configurationProvider.UserAgent
                             this.configurationProvider.AuthorizationToken
                             this.configurationProvider.RepositoryName

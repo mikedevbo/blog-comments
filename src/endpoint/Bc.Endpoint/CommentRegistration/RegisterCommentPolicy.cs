@@ -21,7 +21,6 @@ namespace Bc.Endpoint.CommentRegistration
         
         public async Task Handle(RegisterCommentCmd message, IMessageHandlerContext context)
         {
-            // call logic
             var branchName = await this.logic.CreateBranch(message.CommentData.AddedDate).ConfigureAwait(false);
             await context.Send(new AddCommentCmd(branchName, message.CommentData)).ConfigureAwait(false);
 
@@ -30,7 +29,6 @@ namespace Bc.Endpoint.CommentRegistration
 
         public async Task Handle(AddCommentCmd message, IMessageHandlerContext context)
         {
-            // call logic
             await this.logic.AddComment(message.BranchName, message.CommentData).ConfigureAwait(false);
             await context.Send(new CreatePullRequestCmd(message.BranchName, message.CommentData)).ConfigureAwait(false);
 
@@ -39,7 +37,6 @@ namespace Bc.Endpoint.CommentRegistration
 
         public async Task Handle(CreatePullRequestCmd message, IMessageHandlerContext context)
         {
-            // call logic
             var pullRequestUri = await this.logic.CreatePullRequest(message.BranchName).ConfigureAwait(false);
             await context.Publish(new CommentRegisteredEvt(message.CommentData.CommentId, pullRequestUri)).ConfigureAwait(false);
 
