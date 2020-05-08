@@ -132,8 +132,15 @@ module CreatePullRequest =
             let headers = getBaseHeaders userAgent authorizationToken None
 
             let post = Provider.Pull(headBranchName, "comment to merge", headBranchName, baseBranchName)
-            let! _ = post.JsonValue.RequestAsync (url = url, httpMethod = "POST", headers = headers)
-            ()
+            let! response = post.JsonValue.RequestAsync (url = url, httpMethod = "POST", headers = headers)
+
+            let locationHeader = response.Headers.TryFind "Location"
+            let locationValue =
+                match locationHeader with
+                | Some location -> location
+                | None -> raise (ArgumentException("There is no Location Header."))
+
+            return locationValue
         }
 
 module IsPullRequestOpen =

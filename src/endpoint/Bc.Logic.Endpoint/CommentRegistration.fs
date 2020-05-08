@@ -32,13 +32,13 @@ type RegisterCommentPolicyLogic(configurationProvider: IEndpointConfigurationPro
 
         member this.CreatePullRequest(branchName) =
             async {
-//                let! pullRequestUri = GitHubApi.CreatePullRequest.execute
-//                                            this.configurationProvider.UserAgent
-//                                            this.configurationProvider.AuthorizationToken
-//                                            this.configurationProvider.RepositoryName
-//                                            branchName
-//                                            this.configurationProvider.MasterBranchName
-                return "1234"// pullRequestUri
+                let! pullRequestUri = GitHubApi.CreatePullRequest.execute
+                                            this.configurationProvider.UserAgent
+                                            this.configurationProvider.AuthorizationToken
+                                            this.configurationProvider.RepositoryName
+                                            branchName
+                                            this.configurationProvider.MasterBranchName
+                return pullRequestUri
             } |> Async.StartAsTask
 
 type RegisterCommentPolicyLogicFake() =
