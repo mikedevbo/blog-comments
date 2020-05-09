@@ -16,10 +16,6 @@ namespace Bc.Endpoint.EmailNotification
         public Task Handle(NotifyByEmailCmd message, IMessageHandlerContext context)
         {
             this.Data.UserEmail = message.UserEmail;
-            
-            ////TODO: add logic
-            Log.Info("Notify By Email");
-            this.MarkAsComplete();
             return Task.CompletedTask;
         }
 

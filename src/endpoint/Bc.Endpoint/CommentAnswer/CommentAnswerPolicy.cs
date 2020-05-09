@@ -35,16 +35,32 @@ namespace Bc.Endpoint.CommentAnswer
             return context.Send(new RequestCheckCommentAnswerMsg(this.Data.CommentUri, this.Data.ETag));
         }
 
-        public Task Handle(CheckCommentAnswerMsgResponseMsg message, IMessageHandlerContext context)
+        public async Task Handle(CheckCommentAnswerMsgResponseMsg message, IMessageHandlerContext context)
         {
-            ////TODO: add logic
-            ////return context.Publish(new CommentAnswerAddedEvt(this.Data.CommentId, true));
-            ////is publish specyfic event -> CommentApproved? and CommentRejected?
-            
-            Log.Info("CheckCommentAnswerMsgResponseMsg " + message.AnswerStatus);
-            return Task.CompletedTask;
-        }        
-        
+            switch (message.AnswerStatus)
+            {
+                case CommentAnswerStatus.Rejected:
+                    this.MarkAsComplete();
+                    break;
+
+                case CommentAnswerStatus.NotAdded:
+                    this.Data.ETag = message.ETag;
+
+                    await this.RequestTimeout<CheckCommentAnswerTimeoutMsg>(
+                        context,
+                        TimeSpan.FromSeconds(this.configurationProvider.CheckCommentAnswerTimeoutInSeconds));
+                    break;
+
+                case CommentAnswerStatus.Approved:
+                    await context.Publish(new CommentApprovedEvt(this.Data.CommentId)).ConfigureAwait(false);
+                    this.MarkAsComplete();
+                    break;
+
+                default:
+                    throw new ArgumentException($"Not supported comment answer status: {message.AnswerStatus}");
+            }
+        }
+
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<CommentAnswerPolicyData> mapper)
         {
             mapper.ConfigureMapping<CheckCommentAnswerCmd>(message => message.CommentId).ToSaga(data => data.CommentId);

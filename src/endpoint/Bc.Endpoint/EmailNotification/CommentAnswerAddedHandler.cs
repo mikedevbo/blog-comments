@@ -6,14 +6,14 @@ using NServiceBus.Logging;
 
 namespace Bc.Endpoint.EmailNotification
 {
-    public class CommentAnswerAddedHandler : IHandleMessages<CommentAnswerAddedEvt>
+    public class CommentAnswerAddedHandler : IHandleMessages<CommentApprovedEvt>
     {
         private static readonly ILog Log = LogManager.GetLogger<CommentAnswerAddedHandler>();
         
-        public Task Handle(CommentAnswerAddedEvt message, IMessageHandlerContext context)
+        public Task Handle(CommentApprovedEvt message, IMessageHandlerContext context)
         {
             Log.Info($"{this.GetType().Name} {message.CommentId}");
-            return context.Send(new NotifyAnswerByEmailCmd(message.CommentId, message.IsApproved));
+            return context.Send(new NotifyAnswerByEmailCmd(message.CommentId));
         }
     }
 }

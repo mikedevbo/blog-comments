@@ -4,6 +4,6 @@ namespace Bc.Contracts.Internals.Endpoint.CommentAnswer
 {
     public interface ICommentAnswerPolicyLogic
     {
-        Task<CommentAnswerStatus> CheckAnswer(string commentUri, string etag);
+        Task<CheckCommentAnswerMsgResponseMsg> CheckAnswer(string commentUri, string etag);
     }
 }

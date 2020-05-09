@@ -9,7 +9,7 @@ type CommentAnswerPolicyLogic(configurationProvider: IEndpointConfigurationProvi
         member this.CheckAnswer(commentUri, etag) =
             async {
                 ////TODO: add logic
-                return CommentAnswerStatus.Approved
+                return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.Approved, "123")
             } |> Async.StartAsTask
 
 type CommentAnswerPolicyLogicFake(configurationProvider: IEndpointConfigurationProvider) =
@@ -17,6 +17,6 @@ type CommentAnswerPolicyLogicFake(configurationProvider: IEndpointConfigurationP
     interface ICommentAnswerPolicyLogic with
         member this.CheckAnswer(commentUri, etag) =
             async {
-                return CommentAnswerStatus.Approved
+                return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.Approved, "123")
             } |> Async.StartAsTask
 

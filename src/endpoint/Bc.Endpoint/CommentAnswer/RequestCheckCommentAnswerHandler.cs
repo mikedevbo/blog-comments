@@ -18,8 +18,8 @@ namespace Bc.Endpoint.CommentAnswer
         
         public async Task Handle(RequestCheckCommentAnswerMsg message, IMessageHandlerContext context)
         {
-            var answerStatus = await this.logic.CheckAnswer(message.CommentUri, message.Etag).ConfigureAwait(false);
-            await context.Reply(new CheckCommentAnswerMsgResponseMsg(answerStatus));
+            var response = await this.logic.CheckAnswer(message.CommentUri, message.Etag).ConfigureAwait(false);
+            await context.Reply(response).ConfigureAwait(false);
         }
     }
 }
