@@ -40,5 +40,8 @@ namespace Bc.Endpoint
         }
         
         public string SmtpFrom => ConfigurationManager.AppSettings["SmtpFrom"];
+
+        public int CheckCommentAnswerTimeoutInSeconds =>
+            Convert.ToInt32(ConfigurationManager.AppSettings["CheckCommentAnswerTimeoutInSeconds"]);
     }
 }

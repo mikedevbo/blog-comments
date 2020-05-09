@@ -37,10 +37,12 @@ namespace Bc.Endpoint
                 if (configurationProvider.IsUseFakes)
                 {
                     reg.ConfigureComponent<RegisterCommentPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<CommentAnswerPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                 }
                 else
                 {
                     reg.ConfigureComponent<RegisterCommentPolicyLogic>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<CommentAnswerPolicyLogic>(DependencyLifecycle.InstancePerCall);
                 }
             });
 

@@ -25,5 +25,7 @@ namespace Bc.Contracts.Internals.Endpoint
         SecureString SmtpHostPassword { get; }
 
         string SmtpFrom { get; }
+
+        int CheckCommentAnswerTimeoutInSeconds { get; }
     }
 }
