@@ -2,13 +2,14 @@ using System;
 using System.Threading.Tasks;
 using Bc.Contracts.Internals.Endpoint;
 using Bc.Contracts.Internals.Endpoint.CommentAnswer;
+using Bc.Contracts.Internals.Endpoint.CommentRegistration;
 using NServiceBus;
 using NServiceBus.Logging;
 
 namespace Bc.Endpoint.CommentAnswer
 {
     public class CommentAnswerPolicy :
-        Saga<CommentAnswerPolicy.CommentAnswerPolicyData>,
+        Saga<CommentAnswerPolicyData>,
         IAmStartedByMessages<CheckCommentAnswerCmd>,
         IHandleTimeouts<CheckCommentAnswerTimeoutMsg>,
         IHandleMessages<CheckCommentAnswerMsgResponseMsg>
@@ -39,10 +40,6 @@ namespace Bc.Endpoint.CommentAnswer
         {
             switch (message.AnswerStatus)
             {
-                case CommentAnswerStatus.Rejected:
-                    this.MarkAsComplete();
-                    break;
-
                 case CommentAnswerStatus.NotAdded:
                     this.Data.ETag = message.ETag;
 
@@ -56,6 +53,11 @@ namespace Bc.Endpoint.CommentAnswer
                     this.MarkAsComplete();
                     break;
 
+                case CommentAnswerStatus.Rejected:
+                    await context.Publish(new CommentRejectedEvt(this.Data.CommentId)).ConfigureAwait(false);
+                    this.MarkAsComplete();
+                    break;
+
                 default:
                     throw new ArgumentException($"Not supported comment answer status: {message.AnswerStatus}");
             }
@@ -65,14 +67,39 @@ namespace Bc.Endpoint.CommentAnswer
         {
             mapper.ConfigureMapping<CheckCommentAnswerCmd>(message => message.CommentId).ToSaga(data => data.CommentId);
         }
-        
-        public class CommentAnswerPolicyData : ContainSagaData
+    }
+
+    public class CommentAnswerPolicyData : ContainSagaData
+    {
+        public Guid CommentId { get; set; }
+
+        public string CommentUri { get; set; }
+
+        public string ETag { get; set; }
+    }
+
+    public class CommentAnswerPolicyHandlers :
+        IHandleMessages<CommentRegisteredEvt>,
+        IHandleMessages<RequestCheckCommentAnswerMsg>
+    {
+        private static readonly ILog Log = LogManager.GetLogger<CommentAnswerPolicyHandlers>();
+        private readonly ICommentAnswerPolicyLogic logic;
+
+        public CommentAnswerPolicyHandlers(ICommentAnswerPolicyLogic logic)
         {
-            public Guid CommentId { get; set; }
+            this.logic = logic ?? throw new ArgumentNullException(nameof(logic));
+        }
+        
+        public Task Handle(CommentRegisteredEvt message, IMessageHandlerContext context)
+        {
+            Log.Info($"{this.GetType().Name} {message.CommentId}");
+            return context.Send(new CheckCommentAnswerCmd(message.CommentId, message.CommentUri));
+        }
 
-            public string CommentUri { get; set; }
-
-            public string ETag { get; set; }
+        public async Task Handle(RequestCheckCommentAnswerMsg message, IMessageHandlerContext context)
+        {
+            var response = await this.logic.CheckAnswer(message.CommentUri, message.Etag).ConfigureAwait(false);
+            await context.Reply(response).ConfigureAwait(false);
         }
     }
 }
