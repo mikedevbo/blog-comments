@@ -1,15 +1,15 @@
-namespace Bc.Contracts.Internals.Endpoint.CommentRegistration
+namespace Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands
 {
-    public class CreatePullRequestCmd
+    public class AddComment
     {
-        public CreatePullRequestCmd(string branchName, CommentData commentData)
+        public AddComment(string branchName, CommentData commentData)
         {
             this.BranchName = branchName;
             this.CommentData = commentData;
         }
-
+    
         public string BranchName { get; }
-
+    
         public CommentData CommentData { get; }
     }
 }

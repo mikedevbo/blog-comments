@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bc.Contracts.Internals.Endpoint;
 using Bc.Contracts.Internals.Endpoint.CommentAnswer;
 using Bc.Contracts.Internals.Endpoint.CommentRegistration;
+using Bc.Contracts.Internals.Endpoint.CommentRegistration.Events;
 using NServiceBus;
 using NServiceBus.Logging;
 
@@ -79,7 +80,7 @@ namespace Bc.Endpoint.CommentAnswer
     }
 
     public class CommentAnswerPolicyHandlers :
-        IHandleMessages<CommentRegisteredEvt>,
+        IHandleMessages<CommentRegistered>,
         IHandleMessages<RequestCheckCommentAnswerMsg>
     {
         private static readonly ILog Log = LogManager.GetLogger<CommentAnswerPolicyHandlers>();
@@ -90,7 +91,7 @@ namespace Bc.Endpoint.CommentAnswer
             this.logic = logic ?? throw new ArgumentNullException(nameof(logic));
         }
         
-        public Task Handle(CommentRegisteredEvt message, IMessageHandlerContext context)
+        public Task Handle(CommentRegistered message, IMessageHandlerContext context)
         {
             Log.Info($"{this.GetType().Name} {message.CommentId}");
             return context.Send(new CheckCommentAnswerCmd(message.CommentId, message.CommentUri));

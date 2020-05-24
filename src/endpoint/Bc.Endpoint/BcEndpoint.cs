@@ -4,8 +4,9 @@ using System.Net.Mail;
 using System.Reflection;
 using Bc.Common.Endpoint;
 using Bc.Contracts.Internals.Endpoint;
-using Bc.Contracts.Internals.Endpoint.Operations;
+using Bc.Contracts.Internals.Endpoint.ITOps.Commands;
 using Bc.Logic.Endpoint;
+using Bc.Logic.Endpoint.ITOps;
 using NServiceBus;
 using NServiceBus.Mailer;
 
@@ -26,21 +27,27 @@ namespace Bc.Endpoint
             var transport = endpoint.UseTransport<SqlServerTransport>();
             var routing = transport.Routing();
             routing.RouteToEndpoint(
-                assembly: typeof(TakeCommentCmd).Assembly,
+                assembly: typeof(TakeComment).Assembly,
                 destination: endpointName);
             
             // dependency injection
             endpoint.RegisterComponents(reg =>
             {
+                reg.ConfigureComponent<CreateGitHubPullRequest.ConfigurationProvider>(DependencyLifecycle.InstancePerCall);
+                
                 reg.ConfigureComponent<EndpointConfigurationProvider>(DependencyLifecycle.InstancePerCall);
 
                 if (configurationProvider.IsUseFakes)
                 {
+                    reg.ConfigureComponent<CreateGitHubPullRequest.PolicyLogicFake>(DependencyLifecycle.InstancePerCall);
+                    
                     reg.ConfigureComponent<RegisterCommentPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                     reg.ConfigureComponent<CommentAnswerPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                 }
                 else
                 {
+                    reg.ConfigureComponent<CreateGitHubPullRequest.PolicyLogic>(DependencyLifecycle.InstancePerCall);
+                    
                     reg.ConfigureComponent<RegisterCommentPolicyLogic>(DependencyLifecycle.InstancePerCall);
                     reg.ConfigureComponent<CommentAnswerPolicyLogic>(DependencyLifecycle.InstancePerCall);
                 }

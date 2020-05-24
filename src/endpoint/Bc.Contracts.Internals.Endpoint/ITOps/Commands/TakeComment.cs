@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 
-namespace Bc.Contracts.Internals.Endpoint.Operations
+namespace Bc.Contracts.Internals.Endpoint.ITOps.Commands
 {
-    public class TakeCommentCmd
+    public class TakeComment
     {
-        public TakeCommentCmd(
+        public TakeComment(
             Guid commentId,
             string userName,
             string userEmail,
@@ -34,6 +34,6 @@ namespace Bc.Contracts.Internals.Endpoint.Operations
 
         public string Content { get; }
 
-        public DateTime AddedDate { get; }
+        public DateTime AddedDate { get; }        
     }
 }

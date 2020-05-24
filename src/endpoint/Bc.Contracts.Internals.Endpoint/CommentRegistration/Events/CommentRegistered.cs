@@ -1,10 +1,10 @@
 using System;
 
-namespace Bc.Contracts.Internals.Endpoint.CommentRegistration
+namespace Bc.Contracts.Internals.Endpoint.CommentRegistration.Events
 {
-    public class CommentRegisteredEvt
+    public class CommentRegistered
     {
-        public CommentRegisteredEvt(Guid commentId, string commentUri)
+        public CommentRegistered(Guid commentId, string commentUri)
         {
             this.CommentId = commentId;
             this.CommentUri = commentUri;

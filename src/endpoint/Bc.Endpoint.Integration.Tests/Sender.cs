@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Bc.Common.Endpoint;
-using Bc.Contracts.Internals.Endpoint.Operations;
+using Bc.Contracts.Internals.Endpoint.ITOps.Commands;
 using NServiceBus;
 using NUnit.Framework;
 
 namespace Bc.Endpoint.Integration.Tests
 {
+    [TestFixture]
     public class Sender
     {
         private IEndpointInstance endpointInstance;
@@ -26,7 +27,7 @@ namespace Bc.Endpoint.Integration.Tests
 
             var transport = endpoint.UseTransport<SqlServerTransport>();
             var routing = transport.Routing();
-            routing.RouteToEndpoint(typeof(TakeCommentCmd).Assembly, bcEndpointAssemblyName);
+            routing.RouteToEndpoint(typeof(TakeComment).Assembly, bcEndpointAssemblyName);
 
             this.endpointInstance = await NServiceBus.Endpoint.Start(endpoint).ConfigureAwait(false);
         }
@@ -38,7 +39,7 @@ namespace Bc.Endpoint.Integration.Tests
         }
 
         [Test]
-        public async Task TakeCommentCmd_Send_NoException()
+        public async Task TakeComment_Send_NoException()
         {
             // Arrange
             var commentId = Guid.NewGuid();
@@ -49,7 +50,7 @@ namespace Bc.Endpoint.Integration.Tests
             const string content = "new_comment";
             var addedDate = DateTime.UtcNow;
 
-            var message = new TakeCommentCmd(commentId, userName, userEmail, userWebsite, fileName, content, addedDate);
+            var message = new TakeComment(commentId, userName, userEmail, userWebsite, fileName, content, addedDate);
 
             // Act
             await this.endpointInstance.Send(message).ConfigureAwait(false);
