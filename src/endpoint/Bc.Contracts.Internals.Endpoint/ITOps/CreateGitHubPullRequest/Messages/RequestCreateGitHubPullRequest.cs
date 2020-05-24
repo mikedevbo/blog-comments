@@ -1,10 +1,10 @@
 using System;
 
-namespace Bc.Contracts.Externals.Endpoint.ITOps.CreateGitHubPullRequest.Messages
+namespace Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest.Messages
 {
-    public class RequestCreatePullRequest
+    public class RequestCreateGitHubPullRequest
     {
-        public RequestCreatePullRequest(
+        public RequestCreateGitHubPullRequest(
             Guid commentId,
             string userName,
             string userWebSite,

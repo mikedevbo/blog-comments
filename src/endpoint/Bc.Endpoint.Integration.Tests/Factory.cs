@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Bc.Common.Endpoint;
-using Bc.Contracts.Externals.Endpoint.ITOps.CreateGitHubPullRequest.Messages;
+using Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest.Messages;
 using Bc.Contracts.Internals.Endpoint.ITOps.TakeComment.Commands;
 using NServiceBus;
 
@@ -22,7 +22,7 @@ namespace Bc.Endpoint.Integration.Tests
 
             var transport = endpoint.UseTransport<SqlServerTransport>();
             var routing = transport.Routing();
-            routing.RouteToEndpoint(typeof(RequestCreatePullRequest).Assembly, bcEndpointAssemblyName);
+            routing.RouteToEndpoint(typeof(RequestCreateGitHubPullRequest).Assembly, bcEndpointAssemblyName);
             routing.RouteToEndpoint(typeof(TakeComment).Assembly, bcEndpointAssemblyName);
 
             return NServiceBus.Endpoint.Start(endpoint);

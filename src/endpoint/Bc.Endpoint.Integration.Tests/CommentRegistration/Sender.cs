@@ -1,12 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest.Messages;
+using Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands;
 using NServiceBus;
 using NUnit.Framework;
 
-namespace Bc.Endpoint.Integration.Tests.ITOps.CreateGitHubPullRequest
+namespace Bc.Endpoint.Integration.Tests.CommentRegistration
 {
-    [TestFixture]
     public class Sender
     {
         private IEndpointInstance endpointInstance;
@@ -24,22 +23,22 @@ namespace Bc.Endpoint.Integration.Tests.ITOps.CreateGitHubPullRequest
         }
 
         [Test]
-        public async Task RequestCreatePullRequest_Send_NoException()
+        public async Task RegisterComment_Send_NoException()
         {
             // Arrange
             var commentId = Guid.NewGuid();
             const string userName = "test_user";
             const string userWebsite = "test_user_website";
-            const string fileName = @"_posts/2018-05-27-test.md";
-            const string content = "new_comment";
+            const string userComment = "new_comment";
+            const string articleFileName = @"_posts/2018-05-27-test.md";
             var addedDate = DateTime.UtcNow;
 
-            var message = new RequestCreateGitHubPullRequest(
+            var message = new RegisterComment(
                 commentId,
                 userName,
                 userWebsite,
-                fileName,
-                content,
+                userComment,
+                articleFileName,
                 addedDate);
 
             // Act

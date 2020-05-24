@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Externals = Bc.Contracts.Externals.Endpoint.ITOps.CreateGitHubPullRequest.Messages;
 using Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest.Messages;
 using NServiceBus;
 using NServiceBus.Persistence.Sql;
@@ -10,12 +9,12 @@ namespace Bc.Endpoint.ITOps.CreateGitHubPullRequest
     [SqlSaga(tableSuffix: "CreateGitHubPullRequest")]
     public class Policy :
         Saga<Policy.PolicyData>,
-        IAmStartedByMessages<Externals.RequestCreatePullRequest>,
+        IAmStartedByMessages<RequestCreateGitHubPullRequest>,
         IHandleMessages<ResponseCreateBranch>,
         IHandleMessages<ResponseUpdateFile>,
         IHandleMessages<ResponseCreatePullRequest>
     {
-        public Task Handle(Externals.RequestCreatePullRequest message, IMessageHandlerContext context)
+        public Task Handle(RequestCreateGitHubPullRequest message, IMessageHandlerContext context)
         {
             this.Data.UserName = message.UserName;
             this.Data.UserWebSite = message.UserWebSite;
@@ -40,12 +39,14 @@ namespace Bc.Endpoint.ITOps.CreateGitHubPullRequest
         public Task Handle(ResponseCreatePullRequest message, IMessageHandlerContext context)
         {
             this.MarkAsComplete();
-            return this.ReplyToOriginator(context, new Externals.ResponseCreatePullRequest(message.PullRequestUri));
+            return this.ReplyToOriginator(
+                context,
+                new ResponseCreateGitHubPullRequest(this.Data.CommentId, message.PullRequestUri));
         }
         
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<PolicyData> mapper)
         {
-            mapper.ConfigureMapping<Externals.RequestCreatePullRequest>(msg => msg.CommentId)
+            mapper.ConfigureMapping<RequestCreateGitHubPullRequest>(message => message.CommentId)
                   .ToSaga(data => data.CommentId);
         }        
 

@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Bc.Contracts.Externals.Endpoint.CommentRegistration.Events;
-using Bc.Contracts.Externals.Endpoint.ITOps.CreateGitHubPullRequest.Messages;
 using Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands;
+using Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest.Messages;
 using NServiceBus;
 using NServiceBus.Persistence.Sql;
 
@@ -12,18 +12,18 @@ namespace Bc.Endpoint.CommentRegistration
     public class Policy :
         Saga<Policy.PolicyData>,
         IAmStartedByMessages<RegisterComment>,
-        IHandleMessages<ResponseCreatePullRequest>
+        IHandleMessages<ResponseCreateGitHubPullRequest>
     {
         
         public Task Handle(RegisterComment message, IMessageHandlerContext context)
         {
             this.Data.UserName = message.UserName;
             this.Data.UserWebsite = message.UserWebsite;
-            this.Data.ArticleFileName = message.ArticleFileName;
             this.Data.UserComment = message.UserComment;
+            this.Data.ArticleFileName = message.ArticleFileName;
             this.Data.CommentAddedDate = message.CommentAddedDate;
 
-            return context.Send(new RequestCreatePullRequest(
+            return context.Send(new RequestCreateGitHubPullRequest(
                 message.CommentId,
                 this.Data.UserName,
                 this.Data.UserWebsite,
@@ -32,7 +32,7 @@ namespace Bc.Endpoint.CommentRegistration
                 this.Data.CommentAddedDate));
         }
         
-        public Task Handle(ResponseCreatePullRequest message, IMessageHandlerContext context)
+        public Task Handle(ResponseCreateGitHubPullRequest message, IMessageHandlerContext context)
         {
             this.MarkAsComplete();
             return context.Publish(new CommentRegistered(this.Data.CommentId, message.PullRequestUri));
@@ -40,8 +40,11 @@ namespace Bc.Endpoint.CommentRegistration
         
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<PolicyData> mapper)
         {
-            mapper.ConfigureMapping<RequestCreatePullRequest>(msg => msg.CommentId)
+            mapper.ConfigureMapping<RegisterComment>(message => message.CommentId)
                   .ToSaga(data => data.CommentId);
+            
+            mapper.ConfigureMapping<ResponseCreateGitHubPullRequest>(message => message.CommentId)
+                .ToSaga(data => data.CommentId);
         }
 
         public class PolicyData : ContainSagaData
