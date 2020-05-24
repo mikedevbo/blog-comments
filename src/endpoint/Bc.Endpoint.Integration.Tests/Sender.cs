@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Bc.Common.Endpoint;
-using Bc.Contracts.Internals.Endpoint.ITOps.Commands;
+using Bc.Contracts.Internals.Endpoint.ITOps.TakeComment.Commands;
 using NServiceBus;
 using NUnit.Framework;
 

@@ -4,7 +4,7 @@ using System.Net.Mail;
 using System.Reflection;
 using Bc.Common.Endpoint;
 using Bc.Contracts.Internals.Endpoint;
-using Bc.Contracts.Internals.Endpoint.ITOps.Commands;
+using Bc.Contracts.Internals.Endpoint.ITOps.TakeComment.Commands;
 using Bc.Logic.Endpoint;
 using Bc.Logic.Endpoint.ITOps;
 using NServiceBus;

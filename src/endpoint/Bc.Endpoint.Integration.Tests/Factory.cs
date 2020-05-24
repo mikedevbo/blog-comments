@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Bc.Common.Endpoint;
 using Bc.Contracts.Externals.Endpoint.ITOps.CreateGitHubPullRequest.Messages;
-using Bc.Contracts.Internals.Endpoint.ITOps.Commands;
+using Bc.Contracts.Internals.Endpoint.ITOps.TakeComment.Commands;
 using NServiceBus;
 
 namespace Bc.Endpoint.Integration.Tests

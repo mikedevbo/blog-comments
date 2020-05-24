@@ -1,6 +1,6 @@
 using System;
 
-namespace Bc.Contracts.Internals.Endpoint.ITOps.Commands
+namespace Bc.Contracts.Internals.Endpoint.ITOps.TakeComment.Commands
 {
     public class TakeComment
     {
@@ -9,17 +9,17 @@ namespace Bc.Contracts.Internals.Endpoint.ITOps.Commands
             string userName,
             string userEmail,
             string userWebsite,
-            string fileName,
-            string content,
-            DateTime addedDate)
+            string userComment,
+            string articleFileName,
+            DateTime commentAddedDate)
         {
             this.CommentId = commentId;
             this.UserName = userName;
             this.UserEmail = userEmail;
             this.UserWebsite = userWebsite;
-            this.FileName = fileName;
-            this.Content = content;
-            this.AddedDate = addedDate;
+            this.UserComment = userComment;
+            this.ArticleFileName = articleFileName;
+            this.CommentAddedDate = commentAddedDate;
         }
         
         public Guid CommentId { get; }
@@ -30,10 +30,10 @@ namespace Bc.Contracts.Internals.Endpoint.ITOps.Commands
 
         public string UserWebsite { get; }
 
-        public string FileName { get; }
+        public string UserComment { get; }
+        
+        public string ArticleFileName { get; }
 
-        public string Content { get; }
-
-        public DateTime AddedDate { get; }        
+        public DateTime CommentAddedDate { get; }
     }
 }
