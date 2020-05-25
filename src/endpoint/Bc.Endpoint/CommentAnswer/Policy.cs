@@ -82,29 +82,4 @@ namespace Bc.Endpoint.CommentAnswer
 
         public string ETag { get; set; }
     }
-
-    public class CommentAnswerPolicyHandlers :
-        IHandleMessages<CommentRegistered>,
-        IHandleMessages<RequestCheckCommentAnswer>
-    {
-        private static readonly ILog Log = LogManager.GetLogger<CommentAnswerPolicyHandlers>();
-        private readonly ICommentAnswerPolicyLogic logic;
-
-        public CommentAnswerPolicyHandlers(ICommentAnswerPolicyLogic logic)
-        {
-            this.logic = logic ?? throw new ArgumentNullException(nameof(logic));
-        }
-        
-        public Task Handle(CommentRegistered message, IMessageHandlerContext context)
-        {
-            Log.Info($"{this.GetType().Name} {message.CommentId}");
-            return context.Send(new CheckCommentAnswer(message.CommentId, message.CommentUri));
-        }
-
-        public async Task Handle(RequestCheckCommentAnswer message, IMessageHandlerContext context)
-        {
-            var response = await this.logic.CheckAnswer(message.CommentUri, message.Etag).ConfigureAwait(false);
-            await context.Reply(response).ConfigureAwait(false);
-        }
-    }
 }
