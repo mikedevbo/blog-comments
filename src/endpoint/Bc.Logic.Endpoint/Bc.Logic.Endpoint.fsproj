@@ -5,7 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="CommentRegistration.fs" />
         <Compile Include="CommentAnswer.fs" />
         <Compile Include="ITOps\CreateGitHubPullRequest.fs" />
     </ItemGroup>

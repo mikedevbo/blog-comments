@@ -40,15 +40,11 @@ namespace Bc.Endpoint
                 if (configurationProvider.IsUseFakes)
                 {
                     reg.ConfigureComponent<CreateGitHubPullRequest.PolicyLogicFake>(DependencyLifecycle.InstancePerCall);
-                    
-                    reg.ConfigureComponent<RegisterCommentPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                     reg.ConfigureComponent<CommentAnswerPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                 }
                 else
                 {
                     reg.ConfigureComponent<CreateGitHubPullRequest.PolicyLogic>(DependencyLifecycle.InstancePerCall);
-                    
-                    reg.ConfigureComponent<RegisterCommentPolicyLogic>(DependencyLifecycle.InstancePerCall);
                     reg.ConfigureComponent<CommentAnswerPolicyLogic>(DependencyLifecycle.InstancePerCall);
                 }
             });

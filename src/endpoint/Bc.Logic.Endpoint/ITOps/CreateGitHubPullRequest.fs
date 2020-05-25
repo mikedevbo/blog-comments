@@ -9,17 +9,36 @@ type PolicyLogic(configurationProvider: IConfigurationProvider) =
         interface IPolicyLogic with
             member this.CreateBranch(creationDate) =
                 async {
-                    return "test"
+                    let branchName = sprintf "c-%s" (creationDate.ToString("yyyy-MM-dd-HH-mm-ss-fff"))
+                    do! GitHubApi.CreateRepositoryBranch.execute
+                            this.ConfigurationProvider.UserAgent
+                            this.ConfigurationProvider.AuthorizationToken
+                            this.ConfigurationProvider.RepositoryName
+                            this.ConfigurationProvider.MasterBranchName
+                            branchName
+                    return branchName
                 } |> Async.StartAsTask
 
             member this.UpdateFile(branchName, fileName, content) =
                 async {
-                    ()
+                    do! GitHubApi.UpdateFile.execute
+                                this.ConfigurationProvider.UserAgent
+                                this.ConfigurationProvider.AuthorizationToken
+                                this.ConfigurationProvider.RepositoryName
+                                fileName
+                                branchName
+                                content
                 } |> Async.StartAsTask :> Task
 
             member this.CreatePullRequest(branchName) =
                 async {
-                    return "uri"
+                    let! pullRequestUri = GitHubApi.CreatePullRequest.execute
+                                            this.ConfigurationProvider.UserAgent
+                                            this.ConfigurationProvider.AuthorizationToken
+                                            this.ConfigurationProvider.RepositoryName
+                                            branchName
+                                            this.ConfigurationProvider.MasterBranchName
+                    return pullRequestUri
                 } |> Async.StartAsTask
                 
 type ConfigurationProvider() =

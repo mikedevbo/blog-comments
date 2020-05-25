@@ -8,29 +8,30 @@ type CommentAnswerPolicyLogic(configurationProvider: IEndpointConfigurationProvi
     interface ICommentAnswerPolicyLogic with
         member this.CheckAnswer(commentUri, etag) =
             async {
-                let! isOpenResult = GitHubApi.IsPullRequestOpen.execute
-                                        this.configurationProvider.UserAgent
-                                        this.configurationProvider.AuthorizationToken
-                                        commentUri
-                                        (Some etag)
-
-                if isOpenResult.isOpen then
-                    return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.NotAdded, isOpenResult.etag)
-                else
-                    let! isMerged = GitHubApi.IsPullRequestMerged.execute
-                                            this.configurationProvider.UserAgent
-                                            this.configurationProvider.AuthorizationToken
-                                            commentUri
-                    if isMerged then
-                        return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.Approved, isOpenResult.etag)
-                    else
-                        return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.Rejected, isOpenResult.etag)
+//                let! isOpenResult = GitHubApi.IsPullRequestOpen.execute
+//                                        this.configurationProvider.UserAgent
+//                                        this.configurationProvider.AuthorizationToken
+//                                        commentUri
+//                                        (Some etag)
+//
+//                if isOpenResult.isOpen then
+//                    return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.NotAdded, isOpenResult.etag)
+//                else
+//                    let! isMerged = GitHubApi.IsPullRequestMerged.execute
+//                                            this.configurationProvider.UserAgent
+//                                            this.configurationProvider.AuthorizationToken
+//                                            commentUri
+//                    if isMerged then
+//                        return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.Approved, isOpenResult.etag)
+//                    else
+//                        return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.Rejected, isOpenResult.etag)
+                return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.Approved, "123")
             } |> Async.StartAsTask
 
 type CommentAnswerPolicyLogicFake(configurationProvider: IEndpointConfigurationProvider) =
     member this.configurationProvider = configurationProvider
     interface ICommentAnswerPolicyLogic with
-        member this.CheckAnswer(commentUri, etag) =
+        member this.CheckAnswer(_, _) =
             async {
                 return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.Approved, "123")
             } |> Async.StartAsTask
