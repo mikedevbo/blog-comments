@@ -2,13 +2,13 @@ using System;
 using System.Threading.Tasks;
 using Bc.Contracts.Externals.Endpoint.CommentRegistration.Events;
 using Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands;
-using Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest.Messages;
+using Bc.Contracts.Internals.Endpoint.ITOps.GitHubPullRequest.Messages;
 using NServiceBus;
 using NServiceBus.Persistence.Sql;
 
 namespace Bc.Endpoint.CommentRegistration
 {
-    [SqlSaga(tableSuffix: "RegisterCommentPolicy")]
+    [SqlSaga(tableSuffix: "CommentRegistrationPolicy")]
     public class Policy :
         Saga<Policy.PolicyData>,
         IAmStartedByMessages<RegisterComment>,

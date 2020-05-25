@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest
+namespace Bc.Contracts.Internals.Endpoint.ITOps.GitHubPullRequest
 {
     public interface IPolicyLogic
     {

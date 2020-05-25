@@ -1,12 +1,12 @@
 using System;
 using System.Threading.Tasks;
-using Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest.Messages;
+using Bc.Contracts.Internals.Endpoint.ITOps.GitHubPullRequest.Messages;
 using NServiceBus;
 using NServiceBus.Persistence.Sql;
 
-namespace Bc.Endpoint.ITOps.CreateGitHubPullRequest
+namespace Bc.Endpoint.ITOps.GitHubPullRequest
 {
-    [SqlSaga(tableSuffix: "CreateGitHubPullRequestPolicy")]
+    [SqlSaga(tableSuffix: "GitHubPullRequestPolicy")]
     public class Policy :
         Saga<Policy.PolicyData>,
         IAmStartedByMessages<RequestCreateGitHubPullRequest>,

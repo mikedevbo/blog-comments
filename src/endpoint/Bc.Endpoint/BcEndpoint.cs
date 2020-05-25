@@ -33,18 +33,18 @@ namespace Bc.Endpoint
             // dependency injection
             endpoint.RegisterComponents(reg =>
             {
-                reg.ConfigureComponent<CreateGitHubPullRequest.ConfigurationProvider>(DependencyLifecycle.InstancePerCall);
+                reg.ConfigureComponent<GitHubPullRequest.ConfigurationProvider>(DependencyLifecycle.InstancePerCall);
                 
                 reg.ConfigureComponent<EndpointConfigurationProvider>(DependencyLifecycle.InstancePerCall);
 
                 if (configurationProvider.IsUseFakes)
                 {
-                    reg.ConfigureComponent<CreateGitHubPullRequest.PolicyLogicFake>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<GitHubPullRequest.PolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                     reg.ConfigureComponent<CommentAnswerPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                 }
                 else
                 {
-                    reg.ConfigureComponent<CreateGitHubPullRequest.PolicyLogic>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<GitHubPullRequest.PolicyLogic>(DependencyLifecycle.InstancePerCall);
                     reg.ConfigureComponent<CommentAnswerPolicyLogic>(DependencyLifecycle.InstancePerCall);
                 }
             });

@@ -1,7 +1,7 @@
-﻿namespace Components.GitHub
-{
-    using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
+namespace Components.GitHub.Dto
+{
     public class ErrorResponseDto
     {
         [JsonProperty("message")]

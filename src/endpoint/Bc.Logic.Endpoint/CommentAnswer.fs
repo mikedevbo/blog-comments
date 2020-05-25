@@ -2,6 +2,7 @@ namespace Bc.Logic.Endpoint
 
 open Bc.Contracts.Internals.Endpoint
 open Bc.Contracts.Internals.Endpoint.CommentAnswer
+open Bc.Contracts.Internals.Endpoint.CommentAnswer.Messages
 
 type CommentAnswerPolicyLogic(configurationProvider: IEndpointConfigurationProvider) =
     member this.configurationProvider = configurationProvider
@@ -25,7 +26,7 @@ type CommentAnswerPolicyLogic(configurationProvider: IEndpointConfigurationProvi
 //                        return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.Approved, isOpenResult.etag)
 //                    else
 //                        return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.Rejected, isOpenResult.etag)
-                return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.Approved, "123")
+                return ResponseCheckCommentAnswer(CommentAnswerStatus.Approved, "123")
             } |> Async.StartAsTask
 
 type CommentAnswerPolicyLogicFake(configurationProvider: IEndpointConfigurationProvider) =
@@ -33,6 +34,6 @@ type CommentAnswerPolicyLogicFake(configurationProvider: IEndpointConfigurationP
     interface ICommentAnswerPolicyLogic with
         member this.CheckAnswer(_, _) =
             async {
-                return CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus.Approved, "123")
+                return ResponseCheckCommentAnswer(CommentAnswerStatus.Approved, "123")
             } |> Async.StartAsTask
 

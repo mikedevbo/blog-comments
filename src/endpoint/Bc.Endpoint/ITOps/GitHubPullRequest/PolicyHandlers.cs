@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest;
-using Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest.Messages;
+using Bc.Contracts.Internals.Endpoint.ITOps.GitHubPullRequest;
+using Bc.Contracts.Internals.Endpoint.ITOps.GitHubPullRequest.Messages;
 using NServiceBus;
 
-namespace Bc.Endpoint.ITOps.CreateGitHubPullRequest
+namespace Bc.Endpoint.ITOps.GitHubPullRequest
 {
     public class PolicyHandlers :
         IHandleMessages<RequestCreateBranch>,

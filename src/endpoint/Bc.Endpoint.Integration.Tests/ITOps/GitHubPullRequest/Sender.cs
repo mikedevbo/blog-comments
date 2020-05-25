@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest.Messages;
+using Bc.Contracts.Internals.Endpoint.ITOps.GitHubPullRequest.Messages;
 using NServiceBus;
 using NUnit.Framework;
 
-namespace Bc.Endpoint.Integration.Tests.ITOps.CreateGitHubPullRequest
+namespace Bc.Endpoint.Integration.Tests.ITOps.GitHubPullRequest
 {
     [TestFixture]
     public class Sender

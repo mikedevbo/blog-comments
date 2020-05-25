@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Bc.Common.Endpoint;
-using Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest.Messages;
+using Bc.Contracts.Internals.Endpoint.ITOps.GitHubPullRequest.Messages;
 using Bc.Contracts.Internals.Endpoint.ITOps.TakeComment.Commands;
 using NServiceBus;
 

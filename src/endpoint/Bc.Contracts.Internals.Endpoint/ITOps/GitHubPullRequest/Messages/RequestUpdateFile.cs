@@ -1,4 +1,4 @@
-namespace Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest.Messages
+namespace Bc.Contracts.Internals.Endpoint.ITOps.GitHubPullRequest.Messages
 {
     public class RequestUpdateFile
     {

@@ -1,4 +1,4 @@
-namespace Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest
+namespace Bc.Contracts.Internals.Endpoint.ITOps.GitHubPullRequest
 {
     public interface IConfigurationProvider
     {

@@ -1,8 +1,8 @@
-module Bc.Logic.Endpoint.ITOps.CreateGitHubPullRequest
+module Bc.Logic.Endpoint.ITOps.GitHubPullRequest
 
 open System.Configuration
 open System.Threading.Tasks
-open Bc.Contracts.Internals.Endpoint.ITOps.CreateGitHubPullRequest
+open Bc.Contracts.Internals.Endpoint.ITOps.GitHubPullRequest
 
 type PolicyLogic(configurationProvider: IConfigurationProvider) =
         member this.ConfigurationProvider = configurationProvider
