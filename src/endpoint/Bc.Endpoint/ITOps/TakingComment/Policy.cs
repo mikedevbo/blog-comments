@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
 using Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands;
-using Internals = Bc.Contracts.Internals.Endpoint.ITOps.TakeComment.Commands;
 using NServiceBus;
+using Internals = Bc.Contracts.Internals.Endpoint.ITOps.TakeComment.Commands;
 
-namespace Bc.Endpoint.ITOps.TakeComment
+namespace Bc.Endpoint.ITOps.TakingComment
 {
-    public class TakeCommentPolicy : IHandleMessages<Internals.TakeComment>
+    public class Policy : IHandleMessages<Internals.TakeComment>
     {
         public async Task Handle(Internals.TakeComment message, IMessageHandlerContext context)
         {

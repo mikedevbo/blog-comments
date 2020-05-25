@@ -5,7 +5,7 @@ using Bc.Contracts.Internals.Endpoint.ITOps.TakeComment.Commands;
 using NServiceBus;
 using NUnit.Framework;
 
-namespace Bc.Endpoint.Integration.Tests
+namespace Bc.Endpoint.Integration.Tests.ITOps.TakingComment
 {
     [TestFixture]
     public class Sender
