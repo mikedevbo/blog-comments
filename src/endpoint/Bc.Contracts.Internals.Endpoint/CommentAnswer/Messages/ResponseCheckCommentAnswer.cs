@@ -1,8 +1,8 @@
-namespace Bc.Contracts.Internals.Endpoint.CommentAnswer
+namespace Bc.Contracts.Internals.Endpoint.CommentAnswer.Messages
 {
-    public class CheckCommentAnswerMsgResponseMsg
+    public class ResponseCheckCommentAnswer
     {
-        public CheckCommentAnswerMsgResponseMsg(CommentAnswerStatus answerStatus, string etag)
+        public ResponseCheckCommentAnswer(CommentAnswerStatus answerStatus, string etag)
         {
             this.AnswerStatus = answerStatus;
             this.ETag = etag;

@@ -6,7 +6,7 @@ using NServiceBus.Persistence.Sql;
 
 namespace Bc.Endpoint.ITOps.CreateGitHubPullRequest
 {
-    [SqlSaga(tableSuffix: "CreateGitHubPullRequest")]
+    [SqlSaga(tableSuffix: "CreateGitHubPullRequestPolicy")]
     public class Policy :
         Saga<Policy.PolicyData>,
         IAmStartedByMessages<RequestCreateGitHubPullRequest>,

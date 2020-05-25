@@ -1,10 +1,10 @@
 using System;
 
-namespace Bc.Contracts.Internals.Endpoint.CommentAnswer
+namespace Bc.Contracts.Internals.Endpoint.CommentAnswer.Commands
 {
-    public class CheckCommentAnswerCmd
+    public class CheckCommentAnswer
     {
-        public CheckCommentAnswerCmd(Guid commentId, string commentUri)
+        public CheckCommentAnswer(Guid commentId, string commentUri)
         {
             this.CommentId = commentId;
             this.CommentUri = commentUri;

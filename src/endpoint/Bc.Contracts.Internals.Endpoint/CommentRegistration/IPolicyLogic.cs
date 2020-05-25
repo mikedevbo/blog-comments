@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Bc.Contracts.Internals.Endpoint.CommentRegistration
 {
-    public interface IRegisterCommentPolicyLogic
+    public interface IPolicyLogic
     {
         Task<string> CreateBranch(DateTime creationDate);
 
