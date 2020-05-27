@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Folder Include="ITOps\GitHub\PullRequestCreation" />
       <Folder Include="ITOps\TakeComment" />
     </ItemGroup>
 

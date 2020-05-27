@@ -10,7 +10,6 @@ using NServiceBus.Logging;
 namespace Bc.Endpoint.CommentAnswer
 {
     public class PolicyHandlers :
-        IHandleMessages<CommentRegistered>,
         IHandleMessages<RequestCheckCommentAnswer>
     {
         private readonly ICommentAnswerPolicyLogic logic;
@@ -20,11 +19,6 @@ namespace Bc.Endpoint.CommentAnswer
             this.logic = logic ?? throw new ArgumentNullException(nameof(logic));
         }
         
-        public Task Handle(CommentRegistered message, IMessageHandlerContext context)
-        {
-            return context.Send(new CheckCommentAnswer(message.CommentId, message.CommentUri));
-        }
-
         public async Task Handle(RequestCheckCommentAnswer message, IMessageHandlerContext context)
         {
             var response = await this.logic.CheckAnswer(message.CommentUri, message.Etag).ConfigureAwait(false);

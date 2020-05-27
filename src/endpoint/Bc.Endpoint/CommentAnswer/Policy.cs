@@ -1,11 +1,12 @@
 using System;
 using System.Threading.Tasks;
 using Bc.Contracts.Externals.Endpoint.CommentAnswer.Events;
-using Bc.Contracts.Externals.Endpoint.CommentRegistration.Events;
 using Bc.Contracts.Internals.Endpoint;
 using Bc.Contracts.Internals.Endpoint.CommentAnswer;
 using Bc.Contracts.Internals.Endpoint.CommentAnswer.Commands;
 using Bc.Contracts.Internals.Endpoint.CommentAnswer.Messages;
+using Bc.Contracts.Internals.Endpoint.ITOps.GitHub;
+using Bc.Contracts.Internals.Endpoint.ITOps.GitHub.PullRequestStatusVerification.Messages;
 using NServiceBus;
 using NServiceBus.Logging;
 using NServiceBus.Persistence.Sql;
@@ -17,7 +18,7 @@ namespace Bc.Endpoint.CommentAnswer
         Saga<CommentAnswerPolicyData>,
         IAmStartedByMessages<CheckCommentAnswer>,
         IHandleTimeouts<TimeoutCheckCommentAnswer>,
-        IHandleMessages<ResponseCheckCommentAnswer>
+        IHandleMessages<ResponseCheckPullRequestStatus>
     {
         private static readonly ILog Log = LogManager.GetLogger<Policy>();
         private readonly IEndpointConfigurationProvider configurationProvider;
@@ -38,33 +39,38 @@ namespace Bc.Endpoint.CommentAnswer
 
         public Task Timeout(TimeoutCheckCommentAnswer state, IMessageHandlerContext context)
         {
-            return context.Send(new RequestCheckCommentAnswer(this.Data.CommentUri, this.Data.ETag));
+            return context.Send(new RequestCheckPullRequestStatus(this.Data.CommentUri, this.Data.ETag));
         }
 
-        public async Task Handle(ResponseCheckCommentAnswer message, IMessageHandlerContext context)
+        public Task Handle(ResponseCheckPullRequestStatus message, IMessageHandlerContext context)
         {
-            switch (message.AnswerStatus)
+            var answerStatus = message.PullRequestStatus switch
+            {
+                PullRequestStatus.Open => CommentAnswerStatus.NotAdded,
+                PullRequestStatus.Merged => CommentAnswerStatus.Approved,
+                PullRequestStatus.Closed => CommentAnswerStatus.Rejected,
+                _ => throw new ArgumentOutOfRangeException($"Not supported pull request status: {message.PullRequestStatus}")
+            };
+
+            switch (answerStatus)
             {
                 case CommentAnswerStatus.NotAdded:
                     this.Data.ETag = message.ETag;
 
-                    await this.RequestTimeout<TimeoutCheckCommentAnswer>(
+                    return this.RequestTimeout<TimeoutCheckCommentAnswer>(
                         context,
                         TimeSpan.FromSeconds(this.configurationProvider.CheckCommentAnswerTimeoutInSeconds));
-                    break;
 
                 case CommentAnswerStatus.Approved:
-                    await context.Publish(new CommentApproved(this.Data.CommentId)).ConfigureAwait(false);
                     this.MarkAsComplete();
-                    break;
+                    return context.Publish(new CommentApproved(this.Data.CommentId));
 
                 case CommentAnswerStatus.Rejected:
-                    await context.Publish(new CommentRejected(this.Data.CommentId)).ConfigureAwait(false);
                     this.MarkAsComplete();
-                    break;
+                    return context.Publish(new CommentRejected(this.Data.CommentId));
 
                 default:
-                    throw new ArgumentException($"Not supported comment answer status: {message.AnswerStatus}");
+                    throw new ArgumentOutOfRangeException($"Not supported comment answer status: {answerStatus}");
             }
         }
 
