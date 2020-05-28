@@ -29,33 +29,33 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Components.Logic.CSharp.Int
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Components.Logic.FSharp.Integration.Tests", "Components.Logic.FSharp.Integration.Tests\Components.Logic.FSharp.Integration.Tests.fsproj", "{E4E63623-EDCC-412A-92C8-DC27D1F8946F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{30BC943C-88BA-472F-AA04-FC9EC65D60AE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common-prev", "common-prev", "{30BC943C-88BA-472F-AA04-FC9EC65D60AE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "endpoint", "endpoint", "{A453C8BD-B878-4E8D-B311-9D5B75C708CC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "endpoint-prev", "endpoint-prev", "{A453C8BD-B878-4E8D-B311-9D5B75C708CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Endpoint", "endpoint\Bc.Endpoint\Bc.Endpoint.csproj", "{A1DD6220-9B67-4537-B9B1-23C70A9FAAAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Endpoint", "endpoint-prev\Bc.Endpoint\Bc.Endpoint.csproj", "{A1DD6220-9B67-4537-B9B1-23C70A9FAAAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Contracts.Internals.Endpoint", "endpoint\Bc.Contracts.Internals.Endpoint\Bc.Contracts.Internals.Endpoint.csproj", "{0CD87723-3441-46A2-9649-34EE9A9FDE3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Contracts.Internals.Endpoint", "endpoint-prev\Bc.Contracts.Internals.Endpoint\Bc.Contracts.Internals.Endpoint.csproj", "{0CD87723-3441-46A2-9649-34EE9A9FDE3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Contracts.Externals.Endpoint", "endpoint\Bc.Contracts.Externals.Endpoint\Bc.Contracts.Externals.Endpoint.csproj", "{B863D0C6-0F3A-42DB-93BC-DDA905676EFC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Contracts.Externals.Endpoint", "endpoint-prev\Bc.Contracts.Externals.Endpoint\Bc.Contracts.Externals.Endpoint.csproj", "{B863D0C6-0F3A-42DB-93BC-DDA905676EFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Endpoint.Integration.Tests", "endpoint\Bc.Endpoint.Integration.Tests\Bc.Endpoint.Integration.Tests.csproj", "{2561F77F-DD62-4158-9B69-BB36AE596C65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Endpoint.Integration.Tests", "endpoint-prev\Bc.Endpoint.Integration.Tests\Bc.Endpoint.Integration.Tests.csproj", "{2561F77F-DD62-4158-9B69-BB36AE596C65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Endpoint.Unit.Tests", "endpoint\Bc.Endpoint.Unit.Tests\Bc.Endpoint.Unit.Tests.csproj", "{ED76A81C-8D5A-48D5-A21A-2FD76A84F36B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Endpoint.Unit.Tests", "endpoint-prev\Bc.Endpoint.Unit.Tests\Bc.Endpoint.Unit.Tests.csproj", "{ED76A81C-8D5A-48D5-A21A-2FD76A84F36B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Host.AspNet.Endpoint", "endpoint\Bc.Host.AspNet.Endpoint\Bc.Host.AspNet.Endpoint.csproj", "{60F9818F-6C83-448B-B870-0A9CC561D9A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Host.AspNet.Endpoint", "endpoint-prev\Bc.Host.AspNet.Endpoint\Bc.Host.AspNet.Endpoint.csproj", "{60F9818F-6C83-448B-B870-0A9CC561D9A4}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Logic.Endpoint", "endpoint\Bc.Logic.Endpoint\Bc.Logic.Endpoint.fsproj", "{302EB384-69C4-4DE8-94B4-4C9CEEAF73B4}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Logic.Endpoint", "endpoint-prev\Bc.Logic.Endpoint\Bc.Logic.Endpoint.fsproj", "{302EB384-69C4-4DE8-94B4-4C9CEEAF73B4}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Logic.Endpoint.Integration.Tests", "endpoint\Bc.Logic.Endpoint.Integration.Tests\Bc.Logic.Endpoint.Integration.Tests.fsproj", "{9CE8BA4E-6521-46E9-9008-8A0B3D8DDE2D}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Logic.Endpoint.Integration.Tests", "endpoint-prev\Bc.Logic.Endpoint.Integration.Tests\Bc.Logic.Endpoint.Integration.Tests.fsproj", "{9CE8BA4E-6521-46E9-9008-8A0B3D8DDE2D}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Logic.Endpoint.Unit.Tests", "endpoint\Bc.Logic.Endpoint.Unit.Tests\Bc.Logic.Endpoint.Unit.Tests.fsproj", "{4A96A374-BC69-43D8-BFBC-66FFFF5F9D8C}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Logic.Endpoint.Unit.Tests", "endpoint-prev\Bc.Logic.Endpoint.Unit.Tests\Bc.Logic.Endpoint.Unit.Tests.fsproj", "{4A96A374-BC69-43D8-BFBC-66FFFF5F9D8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Common.Endpoint", "common\Bc.Common.Endpoint\Bc.Common.Endpoint.csproj", "{A1C758CB-BAE4-435C-A756-1C8302E7D78A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Common.Endpoint", "common-prev\Bc.Common.Endpoint\Bc.Common.Endpoint.csproj", "{A1C758CB-BAE4-435C-A756-1C8302E7D78A}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Common.Logic", "common\Bc.Common.Logic\Bc.Common.Logic.fsproj", "{404152BD-1B1E-44DC-9E31-B9E99707BD74}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Common.Logic", "common-prev\Bc.Common.Logic\Bc.Common.Logic.fsproj", "{404152BD-1B1E-44DC-9E31-B9E99707BD74}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Common.Logic.Integration.Tests", "common\Bc.Common.Logic.Integration.Tests\Bc.Common.Logic.Integration.Tests.fsproj", "{9D3B7AC7-E2BF-4004-84A8-77DF904A2EA2}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Common.Logic.Integration.Tests", "common-prev\Bc.Common.Logic.Integration.Tests\Bc.Common.Logic.Integration.Tests.fsproj", "{9D3B7AC7-E2BF-4004-84A8-77DF904A2EA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
