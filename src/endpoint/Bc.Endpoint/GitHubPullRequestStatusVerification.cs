@@ -3,13 +3,13 @@ using Bc.Contracts.Internals.Endpoint.ITOps.GitHub.PullRequestStatusVerification
 using Bc.Contracts.Internals.Endpoint.ITOps.GitHub.PullRequestStatusVerification.Messages;
 using NServiceBus;
 
-namespace Bc.Endpoint.ITOps.GitHub.PullRequestStatusVerification
+namespace Bc.Endpoint
 {
-    public class Policy : IHandleMessages<RequestCheckPullRequestStatus>
+    public class GitHubPullRequestStatusVerificationPolicy : IHandleMessages<RequestCheckPullRequestStatus>
     {
         private readonly IPolicyLogic logic;
 
-        public Policy(IPolicyLogic logic)
+        public GitHubPullRequestStatusVerificationPolicy(IPolicyLogic logic)
         {
             this.logic = logic;
         }

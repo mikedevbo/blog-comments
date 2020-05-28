@@ -15,7 +15,7 @@ namespace Bc.Endpoint.CommentAnswer
 {
     [SqlSaga(tableSuffix: "CommentAnswerPolicy")]
     public class Policy :
-        Saga<CommentAnswerPolicyData>,
+        Saga<Policy.CommentAnswerPolicyData>,
         IAmStartedByMessages<CheckCommentAnswer>,
         IHandleTimeouts<TimeoutCheckCommentAnswer>,
         IHandleMessages<ResponseCheckPullRequestStatus>
@@ -78,14 +78,14 @@ namespace Bc.Endpoint.CommentAnswer
         {
             mapper.ConfigureMapping<CheckCommentAnswer>(message => message.CommentId).ToSaga(data => data.CommentId);
         }
-    }
+        
+        public class CommentAnswerPolicyData : ContainSagaData
+        {
+            public Guid CommentId { get; set; }
 
-    public class CommentAnswerPolicyData : ContainSagaData
-    {
-        public Guid CommentId { get; set; }
+            public string CommentUri { get; set; }
 
-        public string CommentUri { get; set; }
-
-        public string ETag { get; set; }
+            public string ETag { get; set; }
+        }        
     }
 }
