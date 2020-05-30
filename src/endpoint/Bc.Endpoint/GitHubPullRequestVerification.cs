@@ -3,7 +3,7 @@ using Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification;
 using Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Messages;
 using NServiceBus;
 
-namespace Bc.Endpoint
+namespace Bc.Endpoint.GitHubPullRequestVerification
 {
     public class Policy : IHandleMessages<RequestCheckPullRequestStatus>
     {

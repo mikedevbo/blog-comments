@@ -39,3 +39,13 @@ type RequestCreatePullRequest(branchName: string) =
     
 type ResponseCreatePullRequest(pullRequestUri: string) =
     member this.PullRequestUri = pullRequestUri
+    
+namespace Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation
+
+open System
+open System.Threading.Tasks
+
+type IPolicyLogic =
+    abstract member CreateBranch: creationDate: DateTime -> Task<string>
+    abstract member UpdateFile: branchName: string -> fileName: string -> content: string -> Task
+    abstract member CreatePullRequest: branchName: string -> Task<string>

@@ -16,4 +16,4 @@ open System.Threading.Tasks
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Messages
 
 type IPolicyLogic =
-    abstract member CheckPullRequestStatus : pullRequestUri:string -> etag:string -> Task<ResponseCheckPullRequestStatus>
+    abstract member CheckPullRequestStatus: pullRequestUri: string -> etag: string -> Task<ResponseCheckPullRequestStatus>

@@ -6,6 +6,7 @@
 
     <ItemGroup>
         <Compile Include="GitHubPullRequestVerification.fs" />
+        <Compile Include="GitHubPullRequestCreation.fs" />
     </ItemGroup>
 
     <ItemGroup>
