@@ -3,6 +3,8 @@ using System.Net;
 using System.Net.Mail;
 using System.Reflection;
 using Bc.Common.Endpoint;
+using Bc.Logic.Endpoint.CommentAnswer;
+using Bc.Logic.Endpoint.GitHubPullRequestCreation;
 using Bc.Logic.Endpoint.GitHubPullRequestVerification;
 using NServiceBus;
 using NServiceBus.Persistence.Sql;
@@ -32,25 +34,17 @@ namespace Bc.Endpoint
             // dependency injection
             endpoint.RegisterComponents(reg =>
             {
-                // reg.ConfigureComponent<GitHubPullRequest.ConfigurationProvider>(DependencyLifecycle.InstancePerCall);
-                //
-                // reg.ConfigureComponent<EndpointConfigurationProvider>(DependencyLifecycle.InstancePerCall);
-
                 if (configurationProvider.IsUseFakes)
                 {
-                    // reg.ConfigureComponent<GitHubPullRequest.PolicyLogicFake>(DependencyLifecycle.InstancePerCall);
-                    // reg.ConfigureComponent<CommentAnswerPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
-                    
                     reg.ConfigureComponent<GitHubPullRequestVerificationPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
-                    reg.ConfigureComponent<Bc.Logic.Endpoint.GitHubPullRequestCreation.GitHubPullRequestCreationPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<GitHubPullRequestCreationPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<CommentAnswerPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                 }
                 else
                 {
-                    // reg.ConfigureComponent<GitHubPullRequest.PolicyLogic>(DependencyLifecycle.InstancePerCall);
-                    // reg.ConfigureComponent<CommentAnswerPolicyLogic>(DependencyLifecycle.InstancePerCall);
-                    
                     reg.ConfigureComponent<GitHubPullRequestVerificationPolicyLogic>(DependencyLifecycle.InstancePerCall);
-                    reg.ConfigureComponent<Bc.Logic.Endpoint.GitHubPullRequestCreation.GitHubPullRequestCreationPolicyLogic>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<GitHubPullRequestCreationPolicyLogic>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<CommentAnswerPolicyLogic>(DependencyLifecycle.InstancePerCall);
                 }
             });
 

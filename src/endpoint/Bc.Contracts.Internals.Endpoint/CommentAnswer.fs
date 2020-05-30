@@ -3,7 +3,9 @@ namespace Bc.Contracts.Internals.Endpoint.CommentAnswer
 
 namespace Bc.Contracts.Internals.Endpoint.CommentAnswer.Commands
 
-    type CheckCommentAnswer(commentId: string, commentUri: string) =
+    open System
+
+    type CheckCommentAnswer(commentId: Guid, commentUri: string) =
         member this.CommentId = commentId
         member this.CommentUri = commentUri 
 
