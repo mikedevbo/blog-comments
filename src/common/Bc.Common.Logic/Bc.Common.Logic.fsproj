@@ -6,7 +6,6 @@
 
     <ItemGroup>
         <Compile Include="GitHubApi.fs" />
-        <Compile Include="GitHubConfigurationProvider.fs" />
     </ItemGroup>
 
     <ItemGroup>

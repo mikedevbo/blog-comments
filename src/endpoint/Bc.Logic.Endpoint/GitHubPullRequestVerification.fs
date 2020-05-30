@@ -1,10 +1,11 @@
 namespace Bc.Logic.Endpoint.GitHubPullRequestVerification
 
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification
+open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Logic
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Messages
 
-type PolicyLogic() =
-    interface IPolicyLogic with
+type GitHubPullRequestVerificationPolicyLogic() =
+    interface IGitHubPullRequestVerificationPolicyLogic with
         member this.CheckPullRequestStatus pullRequestUri etag =
             async {
                 let! isOpenResult = GitHubApi.IsPullRequestOpen.execute
@@ -26,8 +27,8 @@ type PolicyLogic() =
                         return ResponseCheckPullRequestStatus(PullRequestStatus.Closed, isOpenResult.etag)
             } |> Async.StartAsTask
             
-type PolicyLogicFake() =
-    interface IPolicyLogic with
+type GitHubPullRequestVerificationPolicyLogicFake() =
+    interface IGitHubPullRequestVerificationPolicyLogic with
         member this.CheckPullRequestStatus _ _ =
             async {
                 return ResponseCheckPullRequestStatus(PullRequestStatus.Merged, "etag_123")

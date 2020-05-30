@@ -1,15 +1,15 @@
 using System.Threading.Tasks;
-using Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification;
+using Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Logic;
 using Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Messages;
 using NServiceBus;
 
-namespace Bc.Endpoint.GitHubPullRequestVerification
+namespace Bc.Endpoint
 {
-    public class Policy : IHandleMessages<RequestCheckPullRequestStatus>
+    public class GitHubPullRequestVerificationPolicy : IHandleMessages<RequestCheckPullRequestStatus>
     {
-        private readonly IPolicyLogic logic;
+        private readonly IGitHubPullRequestVerificationPolicyLogic logic;
 
-        public Policy(IPolicyLogic logic)
+        public GitHubPullRequestVerificationPolicy(IGitHubPullRequestVerificationPolicyLogic logic)
         {
             this.logic = logic;
         }

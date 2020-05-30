@@ -7,6 +7,7 @@
     <ItemGroup>
         <Compile Include="GitHubPullRequestVerification.fs" />
         <Compile Include="GitHubPullRequestCreation.fs" />
+        <Compile Include="CommentAnswer.fs" />
     </ItemGroup>
 
     <ItemGroup>

@@ -3,8 +3,11 @@ using System.Net;
 using System.Net.Mail;
 using System.Reflection;
 using Bc.Common.Endpoint;
+using Bc.Logic.Endpoint.GitHubPullRequestVerification;
 using NServiceBus;
+using NServiceBus.Persistence.Sql;
 
+[assembly: SqlPersistenceSettings(MsSqlServerScripts = true)]  
 
 namespace Bc.Endpoint
 {
@@ -38,16 +41,16 @@ namespace Bc.Endpoint
                     // reg.ConfigureComponent<GitHubPullRequest.PolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                     // reg.ConfigureComponent<CommentAnswerPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                     
-                    reg.ConfigureComponent<Bc.Logic.Endpoint.GitHubPullRequestVerification.PolicyLogicFake>(DependencyLifecycle.InstancePerCall);
-                    reg.ConfigureComponent<Bc.Logic.Endpoint.GitHubPullRequestCreation.PolicyLogicFake>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<GitHubPullRequestVerificationPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<Bc.Logic.Endpoint.GitHubPullRequestCreation.GitHubPullRequestCreationPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                 }
                 else
                 {
                     // reg.ConfigureComponent<GitHubPullRequest.PolicyLogic>(DependencyLifecycle.InstancePerCall);
                     // reg.ConfigureComponent<CommentAnswerPolicyLogic>(DependencyLifecycle.InstancePerCall);
                     
-                    reg.ConfigureComponent<Bc.Logic.Endpoint.GitHubPullRequestVerification.PolicyLogic>(DependencyLifecycle.InstancePerCall);
-                    reg.ConfigureComponent<Bc.Logic.Endpoint.GitHubPullRequestCreation.PolicyLogic>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<GitHubPullRequestVerificationPolicyLogic>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<Bc.Logic.Endpoint.GitHubPullRequestCreation.GitHubPullRequestCreationPolicyLogic>(DependencyLifecycle.InstancePerCall);
                 }
             });
 

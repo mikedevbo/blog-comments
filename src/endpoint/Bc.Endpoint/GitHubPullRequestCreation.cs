@@ -1,15 +1,16 @@
 using System;
 using System.Threading.Tasks;
 using Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation;
+using Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Logic;
 using Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Messages;
 using NServiceBus;
 using NServiceBus.Persistence.Sql;
 
-namespace Bc.Endpoint.GitHubPullRequestCreation
+namespace Bc.Endpoint
 {
     //[SqlSaga(tableSuffix: "GitHubPullRequestCreationPolicy")]
-    public class Policy :
-        Saga<Policy.PolicyData>,
+    public class GitHubPullRequestCreationPolicy :
+        Saga<GitHubPullRequestCreationPolicy.PolicyData>,
         IAmStartedByMessages<RequestCreateGitHubPullRequest>,
         IHandleMessages<ResponseCreateBranch>,
         IHandleMessages<ResponseUpdateFile>,
@@ -69,14 +70,14 @@ namespace Bc.Endpoint.GitHubPullRequestCreation
         }
     }
     
-    public class PolicyHandlers :
+    public class GitHubPullRequestCreationPolicyHandlers :
         IHandleMessages<RequestCreateBranch>,
         IHandleMessages<RequestUpdateFile>,
         IHandleMessages<RequestCreatePullRequest>
     {
-        private readonly IPolicyLogic logic;
+        private readonly IGitHubPullRequestCreationPolicyLogic logic;
 
-        public PolicyHandlers(IPolicyLogic logic)
+        public GitHubPullRequestCreationPolicyHandlers(IGitHubPullRequestCreationPolicyLogic logic)
         {
             this.logic = logic;
         }        

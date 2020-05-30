@@ -1,10 +1,10 @@
-module Bc.Logic.Endpoint.GitHubPullRequestCreation
+namespace Bc.Logic.Endpoint.GitHubPullRequestCreation
 
 open System.Threading.Tasks
-open Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation
+open Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Logic
 
-type PolicyLogic() =
-        interface IPolicyLogic with
+type GitHubPullRequestCreationPolicyLogic() =
+        interface IGitHubPullRequestCreationPolicyLogic with
             member this.CreateBranch creationDate =
                 async {
                     let branchName = sprintf "c-%s" (creationDate.ToString("yyyy-MM-dd-HH-mm-ss-fff"))
@@ -39,8 +39,8 @@ type PolicyLogic() =
                     return pullRequestUri
                 } |> Async.StartAsTask
                 
-type PolicyLogicFake() =
-    interface IPolicyLogic with
+type GitHubPullRequestCreationPolicyLogicFake() =
+    interface IGitHubPullRequestCreationPolicyLogic with
         member this.CreateBranch(_) =
             async {
                 return "branch_1234"

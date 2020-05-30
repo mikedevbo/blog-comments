@@ -1,5 +1,6 @@
 ﻿module GitHubApi
 
+open System.Configuration
 open FSharp.Data
 open System
 open System.Net
@@ -17,6 +18,20 @@ let getBaseHeaders userAgent authorizationToken (etag: string option) =
      match etag with
      | Some etag -> baseHeaders |> List.append ["If-None-Match", etag]
      | None -> baseHeaders
+     
+module GitHubConfigurationProvider =
+
+    let userAgent =
+        ConfigurationManager.AppSettings.["UserAgent"]
+
+    let authorizationToken =
+        ConfigurationManager.AppSettings.["AuthorizationToken"];
+
+    let repositoryName =
+        ConfigurationManager.AppSettings.["RepositoryName"]
+        
+    let masterBranchName =
+        ConfigurationManager.AppSettings.["MasterBranchName"];     
 
 module GetSha =
     [<Literal>]
