@@ -11,7 +11,6 @@ using NServiceBus;
 
 namespace Bc.Endpoint
 {
-    //[SqlSaga(tableSuffix: "CommentAnswerPolicy")]
     public class CommentAnswerPolicy :
         Saga<CommentAnswerPolicy.PolicyData>,
         IAmStartedByMessages<CheckCommentAnswer>,

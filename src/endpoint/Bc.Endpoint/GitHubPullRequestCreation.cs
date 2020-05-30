@@ -8,7 +8,6 @@ using NServiceBus.Persistence.Sql;
 
 namespace Bc.Endpoint
 {
-    //[SqlSaga(tableSuffix: "GitHubPullRequestCreationPolicy")]
     public class GitHubPullRequestCreationPolicy :
         Saga<GitHubPullRequestCreationPolicy.PolicyData>,
         IAmStartedByMessages<RequestCreateGitHubPullRequest>,

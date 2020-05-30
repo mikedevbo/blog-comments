@@ -6,6 +6,7 @@
 
     <ItemGroup>
         <Compile Include="CommentAnswer.fs" />
+        <Compile Include="CommentRegistration.fs" />
     </ItemGroup>
 
 </Project>
