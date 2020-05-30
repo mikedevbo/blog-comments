@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="GitHubPullRequestVerification.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\common-prev\Bc.Common.Logic\Bc.Common.Logic.fsproj" />
+      <ProjectReference Include="..\Bc.Contracts.Internals.Endpoint\Bc.Contracts.Internals.Endpoint.fsproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+    </ItemGroup>
+
+</Project>
