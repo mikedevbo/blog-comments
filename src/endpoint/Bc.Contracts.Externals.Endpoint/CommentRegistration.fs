@@ -2,6 +2,7 @@ namespace Bc.Contracts.Externals.Endpoint.CommentRegistration.Events
 
     open System
 
-    type CommentRegistered(commentId: Guid, pullRequestUri: string) =
+    type CommentRegistered(commentId: Guid, commentUri: string) =
         member this.CommentId = commentId
-        member this.PullRequestUri = pullRequestUri
+        member this.CommentUri = commentUri
+    
