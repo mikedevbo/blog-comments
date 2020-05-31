@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Reflection;
 using Bc.Common.Endpoint;
+using Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Messages;
 using Bc.Logic.Endpoint.CommentAnswer;
 using Bc.Logic.Endpoint.GitHubPullRequestCreation;
 using Bc.Logic.Endpoint.GitHubPullRequestVerification;
@@ -30,6 +31,7 @@ namespace Bc.Endpoint
             // routing.RouteToEndpoint(
             //     assembly: typeof(TakeComment).Assembly,
             //     destination: endpointName);
+            routing.RouteToEndpoint(typeof(RequestCreateGitHubPullRequest).Assembly, endpointName);
             
             // dependency injection
             endpoint.RegisterComponents(reg =>
