@@ -5,31 +5,17 @@ using Bc.Contracts.Internals.Endpoint.CommentTaking.Commands;
 using NServiceBus;
 using NUnit.Framework;
 
-namespace Bc.Endpoint.Integration.Tests.ITOps.TakingComment
+namespace Bc.Endpoint.Integration.Tests
 {
     [TestFixture]
-    public class Sender
+    public class CommentTakingSender
     {
         private IEndpointInstance endpointInstance;
 
         [SetUp]
         public async Task SetUp()
         {
-            const string bcEndpointAssemblyName = "Bc.Endpoint";
-
-            var endpoint = EndpointCommon.GetEndpoint(
-                "Sender.Tests",
-                false,
-                new EndpointCommonConfigurationProvider());
-
-            var scanner = endpoint.AssemblyScanner();
-            scanner.ExcludeAssemblies(bcEndpointAssemblyName);
-
-            var transport = endpoint.UseTransport<SqlServerTransport>();
-            var routing = transport.Routing();
-            routing.RouteToEndpoint(typeof(TakeComment).Assembly, bcEndpointAssemblyName);
-
-            this.endpointInstance = await NServiceBus.Endpoint.Start(endpoint).ConfigureAwait(false);
+            this.endpointInstance = await EndpointFactory.GetSenderEndpoint().ConfigureAwait(false);
         }
 
         [TearDown]

@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Bc.Endpoint.Integration.Tests
 {
     [TestFixture]
-    public class Sender
+    public class GitHubPullRequestCreationSender
     {
         private IEndpointInstance endpointInstance;
 

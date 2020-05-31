@@ -44,7 +44,7 @@ namespace Bc.Endpoint
             switch (answerStatus)
             {
                 case AnswerStatus.NotAdded:
-                    base.Data.ETag = message.ETag;
+                    this.Data.ETag = message.ETag;
 
                     return this.RequestTimeout<TimeoutCheckCommentAnswer>(
                         context,
@@ -52,11 +52,11 @@ namespace Bc.Endpoint
 
                 case AnswerStatus.Approved:
                     this.MarkAsComplete();
-                    return context.Publish(new CommentApproved(base.Data.CommentId));
+                    return context.Publish(new CommentApproved(this.Data.CommentId));
 
                 case AnswerStatus.Rejected:
                     this.MarkAsComplete();
-                    return context.Publish(new CommentRejected(base.Data.CommentId));
+                    return context.Publish(new CommentRejected(this.Data.CommentId));
 
                 default:
                     throw new ArgumentOutOfRangeException($"Not supported comment answer status: {answerStatus}");

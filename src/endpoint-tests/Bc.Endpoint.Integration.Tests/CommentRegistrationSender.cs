@@ -4,9 +4,10 @@ using Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands;
 using NServiceBus;
 using NUnit.Framework;
 
-namespace Bc.Endpoint.Integration.Tests.CommentRegistration
+namespace Bc.Endpoint.Integration.Tests
 {
-    public class Sender
+    [TestFixture]
+    public class CommentRegistrationSender
     {
         private IEndpointInstance endpointInstance;
 

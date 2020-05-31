@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Reflection;
 using Bc.Common.Endpoint;
+using Bc.Contracts.Internals.Endpoint.CommentTaking.Commands;
 using Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Messages;
 using Bc.Logic.Endpoint.CommentAnswer;
 using Bc.Logic.Endpoint.GitHubPullRequestCreation;
@@ -28,9 +29,7 @@ namespace Bc.Endpoint
             // routing
             var transport = endpoint.UseTransport<SqlServerTransport>();
             var routing = transport.Routing();
-            // routing.RouteToEndpoint(
-            //     assembly: typeof(TakeComment).Assembly,
-            //     destination: endpointName);
+            routing.RouteToEndpoint(typeof(TakeComment).Assembly, endpointName);
             routing.RouteToEndpoint(typeof(RequestCreateGitHubPullRequest).Assembly, endpointName);
             
             // dependency injection
