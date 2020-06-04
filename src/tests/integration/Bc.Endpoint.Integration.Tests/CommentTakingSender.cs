@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Bc.Common.Endpoint;
 using Bc.Contracts.Internals.Endpoint.CommentTaking.Commands;
 using NServiceBus;
 using NUnit.Framework;
