@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Bc.Contracts.Internals.Endpoint.CommentAnswerNotification.Commands;
 using Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands;
 using Bc.Contracts.Internals.Endpoint.CommentTaking.Commands;
 using NServiceBus;
@@ -17,9 +18,9 @@ namespace Bc.Endpoint
                 message.ArticleFileName,
                 message.CommentAddedDate)).ConfigureAwait(false);
             
-            // await context.Send(new NotifyByEmailCmd(
-            //     message.CommentId,
-            //     message.UserEmail)).ConfigureAwait(false);
+            await context.Send(new RegisterCommentNotification(
+                message.CommentId,
+                message.UserEmail)).ConfigureAwait(false);
         }
     }
 }

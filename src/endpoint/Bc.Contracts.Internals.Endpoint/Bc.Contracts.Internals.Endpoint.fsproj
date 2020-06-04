@@ -10,6 +10,7 @@
         <Compile Include="CommentTaking.fs" />
         <Compile Include="CommentRegistration.fs" />
         <Compile Include="CommentAnswer.fs" />
+        <Compile Include="CommentAnswerNotification.fs" />
     </ItemGroup>
 
 </Project>
