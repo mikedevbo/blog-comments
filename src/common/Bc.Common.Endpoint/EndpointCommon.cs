@@ -35,7 +35,7 @@ namespace Bc.Common.Endpoint
             var conventions = endpointConfiguration.Conventions();
             conventions.DefiningCommandsAs(type => type.Namespace != null && type.Namespace.EndsWith("Commands") || type.IsAssignableFrom(typeof(ICommand)));
             conventions.DefiningEventsAs(type => type.Namespace != null && type.Namespace.EndsWith("Events") || type.IsAssignableFrom(typeof(IEvent)));
-            conventions.DefiningMessagesAs(type => type.Namespace != null && type.Namespace.EndsWith("Messages") || type.IsAssignableFrom(typeof(IMessage)));
+            conventions.DefiningMessagesAs(type => type.Namespace != null && type.Namespace.EndsWith("Messages") || type.IsAssignableFrom(typeof(IMessage)) || type == typeof(NServiceBus.Mailer.MailMessage));
 
             // transport
             var transport = endpointConfiguration.UseTransport<SqlServerTransport>();
