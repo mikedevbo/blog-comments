@@ -20,7 +20,8 @@ namespace Bc.Endpoint
             
             await context.Send(new RegisterCommentNotification(
                 message.CommentId,
-                message.UserEmail)).ConfigureAwait(false);
+                message.UserEmail,
+                message.ArticleFileName)).ConfigureAwait(false);
         }
     }
 }

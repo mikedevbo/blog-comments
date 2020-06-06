@@ -3,6 +3,7 @@ namespace Bc.Logic.Endpoint.GitHubPullRequestVerification
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Logic
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Messages
+open GitHubApi
 
 type GitHubPullRequestVerificationPolicyLogic() =
     interface IGitHubPullRequestVerificationPolicyLogic with

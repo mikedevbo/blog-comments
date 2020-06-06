@@ -6,9 +6,11 @@ using Bc.Common.Endpoint;
 using Bc.Contracts.Internals.Endpoint.CommentTaking.Commands;
 using Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Messages;
 using Bc.Logic.Endpoint.CommentAnswer;
+using Bc.Logic.Endpoint.CommentAnswerNotification;
 using Bc.Logic.Endpoint.GitHubPullRequestCreation;
 using Bc.Logic.Endpoint.GitHubPullRequestVerification;
 using NServiceBus;
+using NServiceBus.Mailer;
 using NServiceBus.Persistence.Sql;
 
 [assembly: SqlPersistenceSettings(MsSqlServerScripts = true)]  
@@ -30,8 +32,7 @@ namespace Bc.Endpoint
             var transport = endpoint.UseTransport<SqlServerTransport>();
             var routing = transport.Routing();
             routing.RouteToEndpoint(typeof(TakeComment).Assembly, endpointName);
-            routing.RouteToEndpoint(typeof(RequestCreateGitHubPullRequest).Assembly, endpointName);
-            
+
             // dependency injection
             endpoint.RegisterComponents(reg =>
             {
@@ -40,42 +41,44 @@ namespace Bc.Endpoint
                     reg.ConfigureComponent<GitHubPullRequestVerificationPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                     reg.ConfigureComponent<GitHubPullRequestCreationPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                     reg.ConfigureComponent<CommentAnswerPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<CommentAnswerNotificationPolicyLogicFake>(DependencyLifecycle.InstancePerCall);
                 }
                 else
                 {
                     reg.ConfigureComponent<GitHubPullRequestVerificationPolicyLogic>(DependencyLifecycle.InstancePerCall);
                     reg.ConfigureComponent<GitHubPullRequestCreationPolicyLogic>(DependencyLifecycle.InstancePerCall);
                     reg.ConfigureComponent<CommentAnswerPolicyLogic>(DependencyLifecycle.InstancePerCall);
+                    reg.ConfigureComponent<CommentAnswerNotificationPolicyLogic>(DependencyLifecycle.InstancePerCall);
                 }
             });
 
-            // // mailer
-            // var mailSettings = endpoint.EnableMailer();
-            // mailSettings.UseSmtpBuilder(buildSmtpClient: () =>
-            // {
-            //     var smtpClient = new SmtpClient();
-            //
-            //     if (!configurationProvider.IsSendEmail)
-            //     {
-            //         var directoryLocation = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Emails");
-            //         Directory.CreateDirectory(directoryLocation);
-            //         smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
-            //         smtpClient.PickupDirectoryLocation = directoryLocation;
-            //     }
-            //     else
-            //     {
-            //         smtpClient.Host = configurationProvider.SmtpHost;
-            //         smtpClient.Port = configurationProvider.SmtpPort;
-            //         smtpClient.EnableSsl = true;
-            //         smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            //         smtpClient.UseDefaultCredentials = false;
-            //         smtpClient.Credentials = new NetworkCredential(
-            //             configurationProvider.SmtpHostUserName,
-            //             configurationProvider.SmtpHostPassword);
-            //     }
-            //
-            //     return smtpClient;
-            // });            
+            // mailer
+            var mailSettings = endpoint.EnableMailer();
+            mailSettings.UseSmtpBuilder(buildSmtpClient: () =>
+            {
+                var smtpClient = new SmtpClient();
+            
+                if (!configurationProvider.IsSendEmail)
+                {
+                    var directoryLocation = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Emails");
+                    Directory.CreateDirectory(directoryLocation);
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+                    smtpClient.PickupDirectoryLocation = directoryLocation;
+                }
+                else
+                {
+                    smtpClient.Host = configurationProvider.SmtpHost;
+                    smtpClient.Port = configurationProvider.SmtpPort;
+                    smtpClient.EnableSsl = true;
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.Credentials = new NetworkCredential(
+                        configurationProvider.SmtpHostUserName,
+                        configurationProvider.SmtpHostPassword);
+                }
+            
+                return smtpClient;
+            });            
 
             return endpoint;
         }

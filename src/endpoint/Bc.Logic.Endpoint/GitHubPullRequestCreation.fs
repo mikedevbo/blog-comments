@@ -2,6 +2,7 @@ namespace Bc.Logic.Endpoint.GitHubPullRequestCreation
 
 open System.Threading.Tasks
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Logic
+open GitHubApi
 
 type GitHubPullRequestCreationPolicyLogic() =
         interface IGitHubPullRequestCreationPolicyLogic with
