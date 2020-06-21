@@ -8,7 +8,7 @@ type CommentAnswerNotificationPolicyLogic() =
         member this.Subject = "Subject"
         member this.GetBody fileName = "Body"
         member this.IsSendNotification message userEmail =
-            true        
+            not(System.String.IsNullOrEmpty(userEmail)) && message.IsApproved
         
 type CommentAnswerNotificationPolicyLogicFake() =
     interface ICommentAnswerNotificationPolicyLogic with
