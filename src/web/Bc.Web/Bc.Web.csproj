@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\common\Bc.Common.Endpoint\Bc.Common.Endpoint.csproj" />
+      <ProjectReference Include="..\..\endpoint\Bc.Contracts.Internals.Endpoint\Bc.Contracts.Internals.Endpoint.fsproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -20,7 +20,7 @@ namespace Bc.Web.Models
 
         [Required(ErrorMessage = "Komentarz nie może być pusty.")]
         [StringLength(20, ErrorMessage = "Komentarz nie może mieć więcej niż 4000 znaków.")]
-        public string Content { get; set; }
+        public string UserComment { get; set; }
 
         public string UserPhone { get; set; }
     }
