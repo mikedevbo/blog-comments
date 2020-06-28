@@ -38,7 +38,7 @@ type CommentAnswerNotificationPolicyLogic() =
         member this.From = ConfigurationProvider.SmtpFrom
 
         ////TODO: move to resource file
-        member this.Subject = "Dodano odpowiedź do komentarza"
+        member this.Subject = "Dodano odpowiedź do komentarza."
         member this.GetBody fileName = GetBody.execute fileName ConfigurationProvider.BlogDomainName
         member this.IsSendNotification message userEmail =
             not(System.String.IsNullOrEmpty(userEmail)) && message.IsApproved

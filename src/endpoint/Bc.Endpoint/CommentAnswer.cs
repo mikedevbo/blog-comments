@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Bc.Contracts.Externals.Endpoint.CommentAnswer.Events;
+using Bc.Contracts.Externals.Endpoint.CommentRegistration.Events;
 using Bc.Contracts.Internals.Endpoint.CommentAnswer;
 using Bc.Contracts.Internals.Endpoint.CommentAnswer.Commands;
 using Bc.Contracts.Internals.Endpoint.CommentAnswer.Logic;
@@ -11,6 +12,14 @@ using NServiceBus;
 
 namespace Bc.Endpoint
 {
+    public class CommentAnswerEventsSubscribingPolicy : IHandleMessages<CommentRegistered>
+    {
+        public Task Handle(CommentRegistered message, IMessageHandlerContext context)
+        {
+            return context.Send(new CheckCommentAnswer(message.CommentId, message.CommentUri));
+        }
+    }
+
     public class CommentAnswerPolicy :
         Saga<CommentAnswerPolicy.PolicyData>,
         IAmStartedByMessages<CheckCommentAnswer>,

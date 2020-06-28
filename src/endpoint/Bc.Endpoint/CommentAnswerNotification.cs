@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Bc.Contracts.Externals.Endpoint.CommentAnswer.Events;
 using Bc.Contracts.Internals.Endpoint.CommentAnswerNotification.Commands;
 using Bc.Contracts.Internals.Endpoint.CommentAnswerNotification.Logic;
 using NServiceBus;
@@ -7,6 +8,21 @@ using NServiceBus.Mailer;
 
 namespace Bc.Endpoint
 {
+    public class CommentAnswerNotificationEventSubscribingPolicy :
+        IHandleMessages<CommentApproved>,
+        IHandleMessages<CommentRejected>
+    {
+        public Task Handle(CommentApproved message, IMessageHandlerContext context)
+        {
+            return context.Send(new NotifyAboutCommentAnswer(message.CommentId, true));
+        }
+
+        public Task Handle(CommentRejected message, IMessageHandlerContext context)
+        {
+            return context.Send(new NotifyAboutCommentAnswer(message.CommentId, false));
+        }
+    }
+
     public class CommentAnswerNotificationPolicy :
         Saga<CommentAnswerNotificationPolicy.PolicyData>,
         IAmStartedByMessages<RegisterCommentNotification>,
