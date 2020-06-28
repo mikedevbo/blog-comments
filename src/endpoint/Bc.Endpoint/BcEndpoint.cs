@@ -4,7 +4,6 @@ using System.Net.Mail;
 using System.Reflection;
 using Bc.Common.Endpoint;
 using Bc.Contracts.Internals.Endpoint.CommentTaking.Commands;
-using Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Messages;
 using Bc.Logic.Endpoint.CommentAnswer;
 using Bc.Logic.Endpoint.CommentAnswerNotification;
 using Bc.Logic.Endpoint.GitHubPullRequestCreation;

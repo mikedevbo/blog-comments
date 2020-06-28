@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\common\Bc.Common.Endpoint\Bc.Common.Endpoint.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="NServiceBus.Extensions.Hosting" Version="1.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="app.config">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
+
+</Project>
