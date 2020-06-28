@@ -48,5 +48,5 @@ type CommentAnswerNotificationPolicyLogicFake() =
         member this.From = "test@test.com"
         member this.Subject = "test_subject"
         member this.GetBody _ = "test_body"
-        member this.IsSendNotification _ _ =
-            true
+        member this.IsSendNotification message userEmail =
+            not(System.String.IsNullOrEmpty(userEmail)) && message.IsApproved

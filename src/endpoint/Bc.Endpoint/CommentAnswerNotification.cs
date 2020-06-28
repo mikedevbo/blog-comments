@@ -44,6 +44,8 @@ namespace Bc.Endpoint
 
         public Task Handle(NotifyAboutCommentAnswer message, IMessageHandlerContext context)
         {
+            this.MarkAsComplete();
+
             if (!this.logic.IsSendNotification(message, this.Data.UserEmail))
             {
                 return Task.CompletedTask;
@@ -57,7 +59,6 @@ namespace Bc.Endpoint
                 Body = this.logic.GetBody(this.Data.ArticleFileName)
             };
 
-            this.MarkAsComplete();
             return context.SendMail(mail);
         }
 
