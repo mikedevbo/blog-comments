@@ -90,7 +90,7 @@ module CommentAnswerNotificationPolicyTests =
 
     [<TestCase(false)>]
     [<TestCase(true)>]
-    let Handle_CheckCommentAnswer_ProperResult isApproved =
+    let Handle_NotifyAboutCommentAnswer_ProperResult isApproved =
 
         // Arrange
         let commentId = Guid.NewGuid()
@@ -111,5 +111,5 @@ module CommentAnswerNotificationPolicyTests =
         let sentNumberOfMessages = context.SentMessages.Length
 
         Assert.That((sentNumberOfMessages = 1), Is.EqualTo(isApproved))
-        //Assert.That(policy.Completed, Is.True)
+        Assert.That(policy.Completed, Is.True)
 
