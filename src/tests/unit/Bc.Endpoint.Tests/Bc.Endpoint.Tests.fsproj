@@ -20,6 +20,7 @@
         <Compile Include="CommentAnswerNotification.fs" />
         <Compile Include="CommentRegistrationPolicy.fs" />
         <Compile Include="CommentTaking.fs" />
+        <Compile Include="GitHubPullRequestCreation.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
