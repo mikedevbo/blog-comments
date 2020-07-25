@@ -1,4 +1,4 @@
-module Bc.Endpoint.Tests
+module Bc.Endpoint.Tests.CommentAnswer
 
 open System
 open Bc.Contracts.Externals.Endpoint.CommentAnswer.Events
@@ -8,6 +8,7 @@ open Bc.Contracts.Internals.Endpoint.CommentAnswer.Logic
 open Bc.Contracts.Internals.Endpoint.CommentAnswer.Messages
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Messages
+open Bc.Endpoint
 open NServiceBus.Testing
 open NSubstitute
 open NUnit.Framework
@@ -62,11 +63,11 @@ module CommentAnswerPolicyTests =
 
         // Assert
         let sentNumberOfMessages = context.SentMessages.Length
-        let sentMessages = context.SentMessages.[0].Message :?> RequestCheckPullRequestStatus
+        let sentMessage = context.SentMessages.[0].Message :?> RequestCheckPullRequestStatus
 
         Assert.That(sentNumberOfMessages, Is.EqualTo(1))
-        Assert.That(sentMessages.PullRequestUri, Is.EqualTo(commentUri))
-        Assert.That(sentMessages.ETag, Is.Null)
+        Assert.That(sentMessage.PullRequestUri, Is.EqualTo(commentUri))
+        Assert.That(sentMessage.ETag, Is.Null)
         Assert.That(policy.Data.CommentUri, Is.EqualTo(commentUri))
 
     [<Test>]
