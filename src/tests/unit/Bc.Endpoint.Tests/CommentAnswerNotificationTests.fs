@@ -35,4 +35,24 @@ module CommentAnswerNotificationEventSubscribingPolicyTests =
         Assert.That(sentMessage.CommentId, Is.EqualTo(commentId))
         Assert.That(sentMessage.IsApproved, Is.True)
 
+    [<Test>]
+    let Handle_CommentRejected_ProperResult () =
+
+        // Arrange
+        let commentId = Guid.NewGuid()
+        let message = CommentRejected(commentId)
+        let policy = getPolicy ()
+        let context = getContext ()
+
+        // Act
+        policy.Handle(message, context) |> ignore
+
+        // Assert
+        let sentNumberOfMessages = context.SentMessages.Length
+        let sentMessage = context.SentMessages.[0].Message :?> NotifyAboutCommentAnswer
+
+        Assert.That(sentNumberOfMessages, Is.EqualTo(1))
+        Assert.That(sentMessage.CommentId, Is.EqualTo(commentId))
+        Assert.That(sentMessage.IsApproved, Is.False)
+
 
