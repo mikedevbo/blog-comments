@@ -11,11 +11,11 @@ namespace Bc.Endpoint
         public bool IsUseFakes => Convert.ToBoolean(ConfigurationManager.AppSettings["IsUseFakes"]);
 
         public bool IsSendEmail => Convert.ToBoolean(ConfigurationManager.AppSettings["IsSendEmail"]);
-        
+
         public string SmtpHost => ConfigurationManager.AppSettings["SmtpHost"];
-        
+
         public int SmtpPort => Convert.ToInt32(ConfigurationManager.AppSettings["SmtpPort"]);
-        
+
         public string SmtpHostUserName => ConfigurationManager.AppSettings["SmtpHostUserName"];
 
         public SecureString SmtpHostPassword
@@ -30,10 +30,5 @@ namespace Bc.Endpoint
                 return pass;
             }
         }
-        
-        public string SmtpFrom => ConfigurationManager.AppSettings["SmtpFrom"];
-
-        public int CheckCommentAnswerTimeoutInSeconds =>
-            Convert.ToInt32(ConfigurationManager.AppSettings["CheckCommentAnswerTimeoutInSeconds"]);
     }
 }
