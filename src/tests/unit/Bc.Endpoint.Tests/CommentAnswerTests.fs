@@ -142,3 +142,27 @@ module CommentAnswerPolicyTests =
         Assert.That(publishedNumberOfMessages, Is.EqualTo(1))
         Assert.That(publishedCommentApproved.CommentId, Is.EqualTo(commentId))
         Assert.That(policyData.ETag, Is.EqualTo(etag))
+
+    [<Test>]
+    let Handle_TimeoutCheckCommentAnswer_ProperResult () =
+
+        // Arrange
+        let commentUri = "Uri_123"
+        let etag = "ETag_123"
+        let message = TimeoutCheckCommentAnswer()
+
+        let policyData = CommentAnswerPolicy.PolicyData(CommentUri = commentUri, ETag = etag)
+        let policy = getPolicy policyData
+
+        let context = getContext ()
+
+        // Act
+        policy.Timeout(message, context) |> ignore
+
+        // Assert
+        let sentNumberOfMessages = context.SentMessages.Length
+        let sentRequestCheckPullRequestStatus = context.SentMessages.[0].Message :?> RequestCheckPullRequestStatus
+
+        Assert.That(sentNumberOfMessages, Is.EqualTo(1))
+        Assert.That(sentRequestCheckPullRequestStatus.PullRequestUri, Is.EqualTo(commentUri))
+        Assert.That(sentRequestCheckPullRequestStatus.ETag, Is.EqualTo(etag))
