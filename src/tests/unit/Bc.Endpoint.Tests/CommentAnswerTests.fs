@@ -33,10 +33,10 @@ module CommentAnswerEventsSubscribingPolicyTests =
 
         // Assert
         let sentNumberOfMessages = context.SentMessages.Length
-        let isSentCheckCommentAnswer = context.SentMessages.[0].Message :? CheckCommentAnswer
+        let isSentProperMessage = context.SentMessages.[0].Message :? CheckCommentAnswer
 
         Assert.That(sentNumberOfMessages, Is.EqualTo(1))
-        Assert.That(isSentCheckCommentAnswer, Is.EqualTo(true))
+        Assert.That(isSentProperMessage, Is.EqualTo(true))
 
 module CommentAnswerPolicyTests =
 
@@ -62,11 +62,11 @@ module CommentAnswerPolicyTests =
 
         // Assert
         let sentNumberOfMessages = context.SentMessages.Length
-        let sentCheckPullRequestStatus = context.SentMessages.[0].Message :?> RequestCheckPullRequestStatus
+        let sentMessages = context.SentMessages.[0].Message :?> RequestCheckPullRequestStatus
 
         Assert.That(sentNumberOfMessages, Is.EqualTo(1))
-        Assert.That(sentCheckPullRequestStatus.PullRequestUri, Is.EqualTo(commentUri))
-        Assert.That(sentCheckPullRequestStatus.ETag, Is.Null)
+        Assert.That(sentMessages.PullRequestUri, Is.EqualTo(commentUri))
+        Assert.That(sentMessages.ETag, Is.Null)
         Assert.That(policy.Data.CommentUri, Is.EqualTo(commentUri))
 
     [<Test>]
@@ -87,10 +87,10 @@ module CommentAnswerPolicyTests =
 
         // Assert
         let requestNumberOfTimeouts = context.TimeoutMessages.Length
-        let isRequestTimeoutCheckCommentAnswer = context.TimeoutMessages.[0].Message :? TimeoutCheckCommentAnswer
+        let isRequestProperTimeout = context.TimeoutMessages.[0].Message :? TimeoutCheckCommentAnswer
 
         Assert.That(requestNumberOfTimeouts, Is.EqualTo(1))
-        Assert.That(isRequestTimeoutCheckCommentAnswer, Is.True)
+        Assert.That(isRequestProperTimeout, Is.True)
         Assert.That(policyData.ETag, Is.EqualTo(etag))
 
     [<Test>]
@@ -112,10 +112,10 @@ module CommentAnswerPolicyTests =
 
         // Assert
         let publishedNumberOfMessages = context.PublishedMessages.Length
-        let publishedCommentApproved = context.PublishedMessages.[0].Message :?> CommentApproved
+        let publishedMessage = context.PublishedMessages.[0].Message :?> CommentApproved
 
         Assert.That(publishedNumberOfMessages, Is.EqualTo(1))
-        Assert.That(publishedCommentApproved.CommentId, Is.EqualTo(commentId))
+        Assert.That(publishedMessage.CommentId, Is.EqualTo(commentId))
         Assert.That(policyData.ETag, Is.EqualTo(etag))
 
     [<Test>]
@@ -137,10 +137,10 @@ module CommentAnswerPolicyTests =
 
         // Assert
         let publishedNumberOfMessages = context.PublishedMessages.Length
-        let publishedCommentApproved = context.PublishedMessages.[0].Message :?> CommentRejected
+        let publishedMessage = context.PublishedMessages.[0].Message :?> CommentRejected
 
         Assert.That(publishedNumberOfMessages, Is.EqualTo(1))
-        Assert.That(publishedCommentApproved.CommentId, Is.EqualTo(commentId))
+        Assert.That(publishedMessage.CommentId, Is.EqualTo(commentId))
         Assert.That(policyData.ETag, Is.EqualTo(etag))
 
     [<Test>]
@@ -161,8 +161,8 @@ module CommentAnswerPolicyTests =
 
         // Assert
         let sentNumberOfMessages = context.SentMessages.Length
-        let sentRequestCheckPullRequestStatus = context.SentMessages.[0].Message :?> RequestCheckPullRequestStatus
+        let sentMessage = context.SentMessages.[0].Message :?> RequestCheckPullRequestStatus
 
         Assert.That(sentNumberOfMessages, Is.EqualTo(1))
-        Assert.That(sentRequestCheckPullRequestStatus.PullRequestUri, Is.EqualTo(commentUri))
-        Assert.That(sentRequestCheckPullRequestStatus.ETag, Is.EqualTo(etag))
+        Assert.That(sentMessage.PullRequestUri, Is.EqualTo(commentUri))
+        Assert.That(sentMessage.ETag, Is.EqualTo(etag))
