@@ -19,6 +19,7 @@
         <Compile Include="CommentAnswer.fs" />
         <Compile Include="CommentAnswerNotification.fs" />
         <Compile Include="CommentRegistrationPolicy.fs" />
+        <Compile Include="CommentTaking.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
