@@ -5,6 +5,7 @@
 
         <IsPackable>false</IsPackable>
         <GenerateProgramFile>false</GenerateProgramFile>
+        <OutputType>Library</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,7 +23,6 @@
         <Compile Include="CommentTaking.fs" />
         <Compile Include="GitHubPullRequestCreation.fs" />
         <Compile Include="GitHubPullRequestVerification.fs" />
-        <Compile Include="Program.fs" />
     </ItemGroup>
 
     <ItemGroup>
