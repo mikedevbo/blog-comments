@@ -21,6 +21,7 @@
         <Compile Include="CommentRegistrationPolicy.fs" />
         <Compile Include="CommentTaking.fs" />
         <Compile Include="GitHubPullRequestCreation.fs" />
+        <Compile Include="GitHubPullRequestVerification.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
