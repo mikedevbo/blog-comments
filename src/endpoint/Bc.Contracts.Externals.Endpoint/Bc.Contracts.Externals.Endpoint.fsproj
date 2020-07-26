@@ -9,4 +9,8 @@
         <Compile Include="CommentRegistration.fs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MinVer" Version="2.3.0" />
+    </ItemGroup>
+
 </Project>
