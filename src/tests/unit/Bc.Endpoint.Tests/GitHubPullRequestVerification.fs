@@ -1,6 +1,5 @@
 module Bc.Endpoint.Tests.GitHubPullRequestVerification
 
-open System.Threading.Tasks
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Logic
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Messages

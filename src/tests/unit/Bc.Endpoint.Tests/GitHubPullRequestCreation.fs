@@ -20,7 +20,6 @@ module GitHubPullRequestCreationPolicyTests =
         // Arrange
         let commentId = Guid.NewGuid()
         let userName = "user_name"
-        let userEmail = "user_email"
         let userWebsite = "user_website"
         let content = "content"
         let fileName = "fileName"
@@ -58,7 +57,6 @@ module GitHubPullRequestCreationPolicyTests =
     let Handle_ResponseCreateBranch_ProperResult () =
 
         // Arrange
-        let commentId = Guid.NewGuid()
         let branchName = "branch_name"
         let content = "content"
         let fileName = "fileName"

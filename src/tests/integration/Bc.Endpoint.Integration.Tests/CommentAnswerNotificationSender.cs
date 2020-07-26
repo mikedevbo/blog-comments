@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Bc.Contracts.Internals.Endpoint.CommentAnswerNotification.Commands;
-using Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands;
 using NServiceBus;
 using NUnit.Framework;
 
@@ -43,7 +42,7 @@ namespace Bc.Endpoint.Integration.Tests
             // Assert
             Assert.Pass();
         }
-        
+
         [Test]
         public async Task NotifyAboutCommentAnswer_Send_NoException()
         {
@@ -57,6 +56,6 @@ namespace Bc.Endpoint.Integration.Tests
 
             // Assert
             Assert.Pass();
-        }          
+        }
     }
 }

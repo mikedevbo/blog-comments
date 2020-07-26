@@ -1,10 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation;
 using Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Logic;
 using Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Messages;
 using NServiceBus;
-using NServiceBus.Persistence.Sql;
 
 namespace Bc.Endpoint
 {
@@ -44,12 +42,12 @@ namespace Bc.Endpoint
                 context,
                 new ResponseCreateGitHubPullRequest(this.Data.CommentId, message.PullRequestUri));
         }
-        
+
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<PolicyData> mapper)
         {
             mapper.ConfigureMapping<RequestCreateGitHubPullRequest>(message => message.CommentId)
                   .ToSaga(data => data.CommentId);
-        }        
+        }
 
         public class PolicyData : ContainSagaData
         {
@@ -65,10 +63,10 @@ namespace Bc.Endpoint
 
             public DateTime AddedDate { get; set; }
 
-            public string BranchName { get; set; }    
+            public string BranchName { get; set; }
         }
     }
-    
+
     public class GitHubPullRequestCreationPolicyHandlers :
         IHandleMessages<RequestCreateBranch>,
         IHandleMessages<RequestUpdateFile>,
@@ -79,8 +77,8 @@ namespace Bc.Endpoint
         public GitHubPullRequestCreationPolicyHandlers(IGitHubPullRequestCreationPolicyLogic logic)
         {
             this.logic = logic;
-        }        
-        
+        }
+
         public async Task Handle(RequestCreateBranch message, IMessageHandlerContext context)
         {
             var branchName = await this.logic.CreateBranch(message.AddedDate).ConfigureAwait(false);
@@ -98,5 +96,5 @@ namespace Bc.Endpoint
             var pullRequestUri = await this.logic.CreatePullRequest(message.BranchName).ConfigureAwait(false);
             await context.Reply(new ResponseCreatePullRequest(pullRequestUri)).ConfigureAwait(false);
         }
-    }    
+    }
 }
