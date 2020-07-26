@@ -17,6 +17,7 @@
 
     <ItemGroup>
         <Compile Include="CommentAnswerNotification.fs" />
+        <Compile Include="Program.fs" />
     </ItemGroup>
 
     <ItemGroup>
