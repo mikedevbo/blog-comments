@@ -28,16 +28,12 @@ namespace Bc.Endpoint.Integration.Tests
         {
             // Arrange
             var commentId = Guid.NewGuid();
-            const string userName = "test_user";
-            const string userWebsite = "test_user_website";
             const string fileName = @"_posts/2018-05-27-test.md";
             const string content = "new_comment";
             var addedDate = DateTime.UtcNow;
 
             var message = new RequestCreateGitHubPullRequest(
                 commentId,
-                userName,
-                userWebsite,
                 fileName,
                 content,
                 addedDate);
@@ -47,6 +43,6 @@ namespace Bc.Endpoint.Integration.Tests
 
             // Assert
             Assert.Pass();
-        }        
+        }
     }
 }

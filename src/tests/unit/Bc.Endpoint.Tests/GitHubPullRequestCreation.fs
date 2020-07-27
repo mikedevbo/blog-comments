@@ -19,15 +19,11 @@ module GitHubPullRequestCreationPolicyTests =
 
         // Arrange
         let commentId = Guid.NewGuid()
-        let userName = "user_name"
-        let userWebsite = "user_website"
         let content = "content"
         let fileName = "fileName"
         let addedDate = DateTime(2020, 7, 25)
         let message = RequestCreateGitHubPullRequest(
                                                         commentId,
-                                                        userName,
-                                                        userWebsite,
                                                         fileName,
                                                         content,
                                                         addedDate
@@ -47,8 +43,6 @@ module GitHubPullRequestCreationPolicyTests =
 
         Assert.That(sentNumberOfMessages, Is.EqualTo(1))
         Assert.That(sentMessage.AddedDate, Is.EqualTo(addedDate))
-        Assert.That(policyData.UserName, Is.EqualTo(userName))
-        Assert.That(policyData.UserWebSite, Is.EqualTo(userWebsite))
         Assert.That(policyData.FileName, Is.EqualTo(fileName))
         Assert.That(policyData.Content, Is.EqualTo(content))
         Assert.That(policyData.AddedDate, Is.EqualTo(addedDate))

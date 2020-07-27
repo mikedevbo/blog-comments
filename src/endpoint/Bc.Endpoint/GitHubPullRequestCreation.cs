@@ -15,8 +15,6 @@ namespace Bc.Endpoint
     {
         public Task Handle(RequestCreateGitHubPullRequest message, IMessageHandlerContext context)
         {
-            this.Data.UserName = message.UserName;
-            this.Data.UserWebSite = message.UserWebsite;
             this.Data.FileName = message.FileName;
             this.Data.Content = message.Content;
             this.Data.AddedDate = message.AddedDate;
@@ -52,10 +50,6 @@ namespace Bc.Endpoint
         public class PolicyData : ContainSagaData
         {
             public Guid CommentId { get; set; }
-
-            public string UserName { get; set; }
-
-            public string UserWebSite { get; set; }
 
             public string FileName { get; set; }
 
