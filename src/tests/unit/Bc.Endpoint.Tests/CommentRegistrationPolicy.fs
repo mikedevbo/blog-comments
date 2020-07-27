@@ -3,9 +3,11 @@ module Bc.Endpoint.Tests.CommentRegistrationPolicy
 open System
 open Bc.Contracts.Externals.Endpoint.CommentRegistration.Events
 open Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands
+open Bc.Contracts.Internals.Endpoint.CommentRegistration.Logic
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Messages
 open Bc.Endpoint
 open NServiceBus.Testing
+open NSubstitute
 open NUnit.Framework
 
 let getContext() =
@@ -13,8 +15,10 @@ let getContext() =
 
 module CommentRegistrationPolicyTests =
 
+    let logic = Substitute.For<ICommentRegistrationPolicyLogic>()
+
     let getPolicy data =
-        CommentRegistrationPolicy(Data = data)
+        CommentRegistrationPolicy(logic, Data = data)
 
     [<Test>]
     let Handle_RegisterComment_ProperResult () =
@@ -41,8 +45,6 @@ module CommentRegistrationPolicyTests =
 
         Assert.That(sentNumberOfMessages, Is.EqualTo(1))
         Assert.That(sentMessage.CommentId, Is.EqualTo(commentId))
-        Assert.That(sentMessage.UserName, Is.EqualTo(userName))
-        Assert.That(sentMessage.UserWebsite, Is.EqualTo(userWebsite))
         Assert.That(sentMessage.FileName, Is.EqualTo(articleFileName))
         Assert.That(sentMessage.Content, Is.EqualTo(userComment))
         Assert.That(sentMessage.AddedDate, Is.EqualTo(commentAddedDate))
