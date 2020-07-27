@@ -22,7 +22,7 @@ module GetBodyTests =
 
 module CommentAnswerNotificationPolicyLogicTests =
 
-    let getPolicy () =
+    let getLogic () =
         CommentAnswerNotificationPolicyLogic()
 
     [<TestCase(false, null, false)>]
@@ -36,10 +36,10 @@ module CommentAnswerNotificationPolicyLogicTests =
         // Arrange
         let commentId = Guid.NewGuid()
         let message = NotifyAboutCommentAnswer(commentId, isCommentApproved)
-        let policy = getPolicy () :> ICommentAnswerNotificationPolicyLogic
+        let logic = getLogic () :> ICommentAnswerNotificationPolicyLogic
 
         // Act
-        let result = policy.IsSendNotification message userEmail
+        let result = logic.IsSendNotification message userEmail
 
         // Assert
         Assert.That(result, Is.EqualTo(expectedResult))
