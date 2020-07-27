@@ -17,3 +17,7 @@ namespace Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands
         member this.ArticleFileName = articleFileName
         member this.CommentAddedDate = commentAddedDate
 
+namespace Bc.Contracts.Internals.Endpoint.CommentRegistration.Logic
+
+    type ICommentRegistrationPolicyLogic =
+        abstract member FormatUserName: userName: string -> userWebsite: string option -> string

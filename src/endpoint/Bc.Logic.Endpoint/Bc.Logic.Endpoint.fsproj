@@ -9,6 +9,7 @@
         <Compile Include="GitHubPullRequestCreation.fs" />
         <Compile Include="CommentAnswer.fs" />
         <Compile Include="CommentAnswerNotification.fs" />
+        <Compile Include="CommentRegistration.fs" />
     </ItemGroup>
 
     <ItemGroup>
