@@ -13,7 +13,7 @@ type CommentRegistrationPolicyLogic() =
 
 
         member this.FormatUserComment userName userComment commentAddedDate =
-            sprintf "begin-%s-%s-%s UTC %s" userName userComment (commentAddedDate.ToString("yyyy-MM-dd HH:mm")) Environment.NewLine
+            sprintf "begin-%s-%s-%s UTC %s%s" userName userComment (commentAddedDate.ToString("yyyy-MM-dd HH:mm")) Environment.NewLine Environment.NewLine
 
 type CommentRegistrationPolicyLogicFake() =
     interface ICommentRegistrationPolicyLogic with

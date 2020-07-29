@@ -31,7 +31,7 @@ module CommentRegistrationPolicyLogicTests =
         let userName = "user_name"
         let userComment = "user_comment"
         let commentAddedDate = DateTime(2020, 7, 29, 10, 0, 0)
-        let expectedResult = "begin-user_name-user_comment-2020-07-29 10:00 UTC \n"
+        let expectedResult = "begin-user_name-user_comment-2020-07-29 10:00 UTC \n\n"
         let logic = getLogic () :> ICommentRegistrationPolicyLogic
 
         // Act
