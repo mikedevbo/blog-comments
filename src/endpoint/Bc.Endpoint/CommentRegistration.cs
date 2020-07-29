@@ -28,10 +28,14 @@ namespace Bc.Endpoint
             this.Data.ArticleFileName = message.ArticleFileName;
             this.Data.CommentAddedDate = message.CommentAddedDate;
 
+            var formatUserName = this.logic.FormatUserName(this.Data.UserName, this.Data.UserWebsite);
+            var formatUserComment =
+                this.logic.FormatUserComment(formatUserName, this.Data.UserComment, this.Data.CommentAddedDate);
+
             return context.Send(new RequestCreateGitHubPullRequest(
                 message.CommentId,
                 this.Data.ArticleFileName,
-                this.Data.UserComment,
+                formatUserComment,
                 this.Data.CommentAddedDate));
         }
 

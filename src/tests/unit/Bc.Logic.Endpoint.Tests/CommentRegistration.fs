@@ -15,16 +15,10 @@ module CommentRegistrationPolicyLogicTests =
     let FormatUserName_Execute_ProperResult(userName, userWebsite, expectedResult) =
 
         // Arrange
-        let userWebsiteOption =
-            match userWebsite with
-            | null -> None
-            | "" -> None
-            | value -> (Some value)
-
         let logic = getLogic () :> ICommentRegistrationPolicyLogic
 
         // Act
-        let result = logic.FormatUserName userName userWebsiteOption
+        let result = logic.FormatUserName userName userWebsite
 
         // Assert
         Assert.That(result, Is.EqualTo(expectedResult))
