@@ -7,6 +7,7 @@ using NUnit.Framework;
 namespace Bc.Endpoint.Integration.Tests
 {
     [TestFixture]
+    [Ignore("Only for manual tests")]
     public class CommentRegistrationSender
     {
         private IEndpointInstance endpointInstance;
@@ -47,6 +48,6 @@ namespace Bc.Endpoint.Integration.Tests
 
             // Assert
             Assert.Pass();
-        }        
+        }
     }
 }

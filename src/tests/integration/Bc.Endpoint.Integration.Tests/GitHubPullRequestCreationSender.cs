@@ -7,6 +7,7 @@ using NUnit.Framework;
 namespace Bc.Endpoint.Integration.Tests
 {
     [TestFixture]
+    [Ignore("Only for manual tests")]
     public class GitHubPullRequestCreationSender
     {
         private IEndpointInstance endpointInstance;

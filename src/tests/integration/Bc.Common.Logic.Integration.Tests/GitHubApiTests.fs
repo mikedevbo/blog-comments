@@ -11,91 +11,94 @@ let masterBranchName = ConfigurationManager.AppSettings.["MasterBranchName"]
 let pullRequestUri = ConfigurationManager.AppSettings.["PullRequestUri"]
 
 let branchName = "c-18"
-    
-[<Test>]
-let getSha_execute_properResult () =
 
-    // Arrange
+[<Ignore("Only for manual tests")>]
+module GitHubApiTests =
 
-    // Act
-    let result = GitHubApi.GetSha.execute userAgent repositoryName masterBranchName |> Async.RunSynchronously
+    [<Test>]
+    let getSha_execute_properResult () =
 
-    // Assert
-    Assert.NotNull(result)
-    printfn "%s" result
+        // Arrange
 
-[<Test>]
-let getFile_execute_properResult () =
+        // Act
+        let result = GitHubApi.GetSha.execute userAgent repositoryName masterBranchName |> Async.RunSynchronously
 
-    // Arrange
-    let fileName = "_posts/test.md"
+        // Assert
+        Assert.NotNull(result)
+        printfn "%s" result
 
-    // Act
-    let result = GitHubApi.GetFile.execute userAgent repositoryName fileName branchName |> Async.RunSynchronously
+    [<Test>]
+    let getFile_execute_properResult () =
 
-    // Assert
-    Assert.NotNull(result)
-    printfn "%A" result
+        // Arrange
+        let fileName = "_posts/test.md"
 
-[<Test>]
-let createRepositoryBranch_execute_noException () =
+        // Act
+        let result = GitHubApi.GetFile.execute userAgent repositoryName fileName branchName |> Async.RunSynchronously
 
-    // Arrange
+        // Assert
+        Assert.NotNull(result)
+        printfn "%A" result
 
-    // Act
-    GitHubApi.CreateRepositoryBranch.execute userAgent authorizationToken repositoryName masterBranchName branchName
-    |> Async.RunSynchronously
+    [<Test>]
+    let createRepositoryBranch_execute_noException () =
 
-    // Assert
-    Assert.Pass()
+        // Arrange
 
-[<Test>]
-let updateFile_execute_noException () =
+        // Act
+        GitHubApi.CreateRepositoryBranch.execute userAgent authorizationToken repositoryName masterBranchName branchName
+        |> Async.RunSynchronously
 
-    // Arrange
-    let fileName = "_posts/test.md"
-    let content = "new comment - " + DateTime.Now.ToString()
+        // Assert
+        Assert.Pass()
 
-    // Act
-    GitHubApi.UpdateFile.execute userAgent authorizationToken repositoryName fileName branchName content |> Async.RunSynchronously
+    [<Test>]
+    let updateFile_execute_noException () =
 
-    // Assert
-    Assert.Pass()
+        // Arrange
+        let fileName = "_posts/test.md"
+        let content = "new comment - " + DateTime.Now.ToString()
 
-[<Test>]
-let createPullRequest_execute_noException () =
+        // Act
+        GitHubApi.UpdateFile.execute userAgent authorizationToken repositoryName fileName branchName content |> Async.RunSynchronously
 
-    // Arrange
+        // Assert
+        Assert.Pass()
 
-    // Act
-    let result = GitHubApi.CreatePullRequest.execute userAgent authorizationToken repositoryName branchName masterBranchName |> Async.RunSynchronously
+    [<Test>]
+    let createPullRequest_execute_noException () =
 
-    // Assert
-    Assert.NotNull(result)
-    printfn "%s" result
-    
-[<Test>]
-let isPullRequestOpen_execute_noException () =
+        // Arrange
 
-    // Arrange
-    ////let etag = None
-    let etag = Some "W/\"e06d1474660cd511ae4e78da4c1389da\""//"\"96ac3062f47cab793ff0aea264498eb4\""
+        // Act
+        let result = GitHubApi.CreatePullRequest.execute userAgent authorizationToken repositoryName branchName masterBranchName |> Async.RunSynchronously
 
-    // Act
-    let result = GitHubApi.IsPullRequestOpen.execute userAgent authorizationToken pullRequestUri etag |> Async.RunSynchronously
+        // Assert
+        Assert.NotNull(result)
+        printfn "%s" result
 
-    // Assert
-    printfn "%A" result
-    Assert.Pass()
-    
-[<Test>]
-let isPullRequestMerged_execute_noException () =
+    [<Test>]
+    let isPullRequestOpen_execute_noException () =
 
-    // Arrange
+        // Arrange
+        ////let etag = None
+        let etag = Some "W/\"e06d1474660cd511ae4e78da4c1389da\""//"\"96ac3062f47cab793ff0aea264498eb4\""
 
-    // Act
-    let result = GitHubApi.IsPullRequestMerged.execute userAgent authorizationToken pullRequestUri |> Async.RunSynchronously
+        // Act
+        let result = GitHubApi.IsPullRequestOpen.execute userAgent authorizationToken pullRequestUri etag |> Async.RunSynchronously
 
-    // Assert
-    printfn "%b" result
-    Assert.Pass()    
+        // Assert
+        printfn "%A" result
+        Assert.Pass()
+
+    [<Test>]
+    let isPullRequestMerged_execute_noException () =
+
+        // Arrange
+
+        // Act
+        let result = GitHubApi.IsPullRequestMerged.execute userAgent authorizationToken pullRequestUri |> Async.RunSynchronously
+
+        // Assert
+        printfn "%b" result
+        Assert.Pass()
