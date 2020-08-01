@@ -46,7 +46,6 @@ module CommentRegistrationPolicyTests =
         Assert.That(sentNumberOfMessages, Is.EqualTo(1))
         Assert.That(sentMessage.CommentId, Is.EqualTo(commentId))
         Assert.That(sentMessage.FileName, Is.EqualTo(articleFileName))
-        Assert.That(sentMessage.Content, Is.EqualTo(userComment))
         Assert.That(sentMessage.AddedDate, Is.EqualTo(commentAddedDate))
 
     [<Test>]
