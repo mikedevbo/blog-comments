@@ -19,7 +19,7 @@ namespace Bc.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Comment>> PostTodoItem(Comment comment)
+        public async Task<ActionResult<Comment>> Post(Comment comment)
         {
             // guess what for ;)
             if (!string.IsNullOrEmpty(comment.UserPhone))
@@ -40,6 +40,12 @@ namespace Bc.Web.Controllers
             await this.messageSession.Send(command).ConfigureAwait(false);
 
             return Ok();
+        }
+
+        [HttpGet]
+        public string Get()
+        {
+            return "Ready.";
         }
     }
 }
