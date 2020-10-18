@@ -35,11 +35,10 @@ module CommentAnswerNotificationPolicyLogicTests =
 
         // Arrange
         let commentId = Guid.NewGuid()
-        let message = NotifyAboutCommentAnswer(commentId, isCommentApproved)
         let logic = getLogic () :> ICommentAnswerNotificationPolicyLogic
 
         // Act
-        let result = logic.IsSendNotification message userEmail
+        let result = logic.IsSendNotification isCommentApproved userEmail
 
         // Assert
         Assert.That(result, Is.EqualTo(expectedResult))

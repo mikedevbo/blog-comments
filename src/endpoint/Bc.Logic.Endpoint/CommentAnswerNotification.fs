@@ -40,13 +40,13 @@ type CommentAnswerNotificationPolicyLogic() =
         ////TODO: move to resource file
         member this.Subject = "Dodano odpowiedź do komentarza."
         member this.GetBody fileName = GetBody.execute fileName ConfigurationProvider.BlogDomainName
-        member this.IsSendNotification message userEmail =
-            not(System.String.IsNullOrEmpty(userEmail)) && message.IsApproved
-        
+        member this.IsSendNotification isCommentApproved userEmail =
+            not(System.String.IsNullOrEmpty(userEmail)) && isCommentApproved
+
 type CommentAnswerNotificationPolicyLogicFake() =
     interface ICommentAnswerNotificationPolicyLogic with
         member this.From = "test@test.com"
         member this.Subject = "test_subject"
         member this.GetBody _ = "test_body"
-        member this.IsSendNotification message userEmail =
-            not(System.String.IsNullOrEmpty(userEmail)) && message.IsApproved
+        member this.IsSendNotification isCommentApproved userEmail =
+            not(System.String.IsNullOrEmpty(userEmail)) && isCommentApproved

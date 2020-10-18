@@ -39,14 +39,29 @@ namespace Bc.Endpoint
         {
             this.Data.UserEmail = message.UserEmail;
             this.Data.ArticleFileName = message.ArticleFileName;
-            return Task.CompletedTask;
+            this.Data.IsNotificationRegistered = true;
+
+            return this.SendNotification(context);
         }
 
         public Task Handle(NotifyAboutCommentAnswer message, IMessageHandlerContext context)
         {
+            this.Data.IsCommentApproved = message.IsApproved;
+            this.Data.IsNotificationReadyToSend = true;
+
+            return this.SendNotification(context);
+        }
+
+        private Task SendNotification(IMessageHandlerContext context)
+        {
+            if (!this.Data.IsNotificationRegistered || !this.Data.IsNotificationReadyToSend)
+            {
+                return Task.CompletedTask;
+            }
+
             this.MarkAsComplete();
 
-            if (!this.logic.IsSendNotification(message, this.Data.UserEmail))
+            if (!this.logic.IsSendNotification(this.Data.IsCommentApproved, this.Data.UserEmail))
             {
                 return Task.CompletedTask;
             }
@@ -66,18 +81,24 @@ namespace Bc.Endpoint
         {
             mapper.ConfigureMapping<RegisterCommentNotification>(message => message.CommentId)
                   .ToSaga(data => data.CommentId);
-            
+
             mapper.ConfigureMapping<NotifyAboutCommentAnswer>(message => message.CommentId)
                   .ToSaga(data => data.CommentId);
         }
-        
+
         public class PolicyData : ContainSagaData
         {
             public Guid CommentId { get; set; }
 
             public string UserEmail { get; set; }
-            
+
             public string ArticleFileName { get; set; }
-        }        
+
+            public bool IsCommentApproved { get; set; }
+
+            public bool IsNotificationRegistered { get; set; }
+
+            public bool IsNotificationReadyToSend { get; set; }
+        }
     }
 }
