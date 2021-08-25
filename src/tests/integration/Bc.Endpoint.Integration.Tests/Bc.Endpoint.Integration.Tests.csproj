@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
@@ -9,13 +9,16 @@
     </Target>
 
     <ItemGroup>
-      <PackageReference Include="AsyncFixer" Version="1.3.0" />
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
-      <PackageReference Include="MinVer" Version="2.3.0" />
-      <PackageReference Include="NUnit" Version="3.12.0" />
-      <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+      <PackageReference Include="AsyncFixer" Version="1.5.1">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+      <!-- <PackageReference Include="MinVer" Version="2.3.0" /> -->
+      <PackageReference Include="NUnit" Version="3.13.2" />
+      <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
       <PackageReference Include="Particular.CodeRules" Version="0.3.0" />
-      <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+      <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
     </ItemGroup>
 
     <ItemGroup>
