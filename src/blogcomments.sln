@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Endpoint.Integration.Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web", "web", "{3961194A-2435-403B-A0AA-7EFC18AFC756}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Web", "web\Bc.Web\Bc.Web.csproj", "{967C24C9-A5BE-422C-8AAB-6B79851FFBB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Web", "web\Bc.Web\Bc.Web.fsproj", "{967C24C9-A5BE-422C-8AAB-6B79851FFBB0}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Endpoint.Tests", "tests\unit\Bc.Endpoint.Tests\Bc.Endpoint.Tests.fsproj", "{41FEED7E-CC68-4345-B6C2-CD738FBA8C58}"
 EndProject
