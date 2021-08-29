@@ -21,7 +21,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Logic.Endpoint", "endpoi
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Contracts.Externals.Endpoint", "endpoint\Bc.Contracts.Externals.Endpoint\Bc.Contracts.Externals.Endpoint.fsproj", "{E1F8C606-3B33-45C7-A329-57664E54A6C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Host.AspNet.Endpoint", "endpoint\Bc.Host.AspNet.Endpoint\Bc.Host.AspNet.Endpoint.csproj", "{70E405F2-BF8B-43C5-BE85-4A759D4FEBDD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Host.AspNet.Endpoint", "endpoint\Bc.Host.AspNet.Endpoint\Bc.Host.AspNet.Endpoint.fsproj", "{70E405F2-BF8B-43C5-BE85-4A759D4FEBDD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{74D71FB8-6F34-4391-A5C3-300F1F6FEFCE}"
 EndProject
