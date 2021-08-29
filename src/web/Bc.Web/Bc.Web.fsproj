@@ -24,12 +24,4 @@
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="1.1.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="app.config">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
 </Project>
