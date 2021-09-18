@@ -19,7 +19,7 @@ module Program =
     let CreateHostBuilder args =
         Host.CreateDefaultBuilder(args)
             .UseNServiceBus(fun nsbBuilder ->
-                BcEndpoint.GetEndpoint(EndpointConfigurationProvider()))
+                getEndpoint())
             .ConfigureWebHostDefaults(fun webBuilder ->
                 webBuilder.UseStartup<Startup>() |> ignore
             )

@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bc.Endpoint\Bc.Endpoint.csproj" />
+    <ProjectReference Include="..\Bc.Endpoint\Bc.Endpoint.fsproj" />
     <ProjectReference Include="..\Bc.Logic.Endpoint\Bc.Logic.Endpoint.fsproj" />
-  </ItemGroup>  
+  </ItemGroup>
 
 </Project>

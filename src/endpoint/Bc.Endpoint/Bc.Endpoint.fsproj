@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="BcEndpoint.fs" />
+    <Compile Include="CommentAnswer.fs" />
+    <Compile Include="CommentAnswerNotification.fs" />
+    <Compile Include="CommentRegistration.fs" />
+    <Compile Include="CommentTaking.fs" />
+    <Compile Include="GitHubPullRequestCreation.fs" />
+    <Compile Include="GitHubPullRequestVerification.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- <PackageReference Include="MinVer" Version="2.3.0" /> -->
+    <PackageReference Include="NServiceBus" Version="7.5.0" />
+    <PackageReference Include="NServiceBus.Mailer" Version="5.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\common\Bc.Common.Endpoint\Bc.Common.Endpoint.csproj" />
+    <ProjectReference Include="..\Bc.Contracts.Externals.Endpoint\Bc.Contracts.Externals.Endpoint.fsproj" />
+    <ProjectReference Include="..\Bc.Contracts.Internals.Endpoint\Bc.Contracts.Internals.Endpoint.fsproj" />
+    <ProjectReference Include="..\..\common\Bc.Common.Logic\Bc.Common.Logic.fsproj" />
+  </ItemGroup>
+
+</Project>

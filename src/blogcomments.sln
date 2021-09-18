@@ -13,7 +13,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Contracts.Internals.Endp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Common.Endpoint", "common\Bc.Common.Endpoint\Bc.Common.Endpoint.csproj", "{4932CFF7-6BFB-49C9-9D2D-E3FE7636C93A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Endpoint", "endpoint\Bc.Endpoint\Bc.Endpoint.csproj", "{11E037D5-0BF0-4EF1-9696-D4753E1F5C4D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.Endpoint", "endpoint\Bc.Endpoint\Bc.Endpoint.fsproj", "{11E037D5-0BF0-4EF1-9696-D4753E1F5C4D}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bc.Common.Logic", "common\Bc.Common.Logic\Bc.Common.Logic.fsproj", "{C76E81EF-432B-4381-8BD8-F5095BA25051}"
 EndProject
