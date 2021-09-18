@@ -4,7 +4,6 @@ open System
 open System.Configuration
 open System.Threading.Tasks
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification
-open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Logic
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Messages
 open GitHubApi
 open NServiceBus

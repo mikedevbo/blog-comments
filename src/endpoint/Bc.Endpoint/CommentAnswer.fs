@@ -7,7 +7,6 @@ open Bc.Contracts.Externals.Endpoint.CommentAnswer.Events
 open Bc.Contracts.Externals.Endpoint.CommentRegistration.Events
 open Bc.Contracts.Internals.Endpoint.CommentAnswer
 open Bc.Contracts.Internals.Endpoint.CommentAnswer.Commands
-open Bc.Contracts.Internals.Endpoint.CommentAnswer.Logic
 open Bc.Contracts.Internals.Endpoint.CommentAnswer.Messages
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Messages

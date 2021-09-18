@@ -11,11 +11,3 @@ namespace Bc.Contracts.Internals.Endpoint.CommentAnswerNotification.Commands
         member this.CommentId = commentId
         member this.IsApproved = isApproved
 
-namespace Bc.Contracts.Internals.Endpoint.CommentAnswerNotification.Logic
-
-    type ICommentAnswerNotificationPolicyLogic =
-        abstract member From: string
-        abstract member Subject: string
-        abstract member GetBody: articleFileName: string -> string
-        abstract member IsSendNotification: isCommentApproved: bool -> userEmail: string -> bool
-

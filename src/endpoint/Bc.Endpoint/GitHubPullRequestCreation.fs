@@ -3,7 +3,6 @@ module Bc.GitHubPullRequestCreation
 open System
 open System.Configuration
 open System.Threading.Tasks
-open Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Logic
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Messages
 open GitHubApi
 open NServiceBus

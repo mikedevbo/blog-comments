@@ -4,7 +4,6 @@ open System
 open System.Threading.Tasks
 open Bc.Contracts.Externals.Endpoint.CommentRegistration.Events
 open Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands
-open Bc.Contracts.Internals.Endpoint.CommentRegistration.Logic
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Messages
 open NServiceBus
 open NServiceBus.Persistence.Sql

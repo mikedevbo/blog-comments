@@ -7,11 +7,7 @@ namespace Bc.Contracts.Internals.Endpoint.CommentAnswer.Commands
 
     type CheckCommentAnswer(commentId: Guid, commentUri: string) =
         member this.CommentId = commentId
-        member this.CommentUri = commentUri 
+        member this.CommentUri = commentUri
 
 namespace Bc.Contracts.Internals.Endpoint.CommentAnswer.Messages
     type TimeoutCheckCommentAnswer() = class end
-    
-namespace Bc.Contracts.Internals.Endpoint.CommentAnswer.Logic
-    type ICommentAnswerPolicyLogic =
-        abstract member CheckCommentAnswerTimeoutInSeconds: int

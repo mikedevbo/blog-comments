@@ -6,7 +6,6 @@ open System.Linq
 open System.Threading.Tasks
 open Bc.Contracts.Externals.Endpoint.CommentAnswer.Events
 open Bc.Contracts.Internals.Endpoint.CommentAnswerNotification.Commands
-open Bc.Contracts.Internals.Endpoint.CommentAnswerNotification.Logic
 open NServiceBus
 open NServiceBus.Mailer
 open NServiceBus.Persistence.Sql

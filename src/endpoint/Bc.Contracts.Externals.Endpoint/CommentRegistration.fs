@@ -5,4 +5,3 @@ namespace Bc.Contracts.Externals.Endpoint.CommentRegistration.Events
     type CommentRegistered(commentId: Guid, commentUri: string) =
         member this.CommentId = commentId
         member this.CommentUri = commentUri
-    

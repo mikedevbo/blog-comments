@@ -16,12 +16,3 @@ namespace Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands
         member this.UserComment = userComment
         member this.ArticleFileName = articleFileName
         member this.CommentAddedDate = commentAddedDate
-
-namespace Bc.Contracts.Internals.Endpoint.CommentRegistration.Logic
-
-    open System
-
-    type ICommentRegistrationPolicyLogic =
-        abstract member FormatUserName: userName: string -> userWebsite: string -> string
-
-        abstract member FormatUserComment: userName: string -> userComment: string -> commentAddedDate: DateTime -> string

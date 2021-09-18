@@ -13,11 +13,3 @@ namespace Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Messages
     type ResponseCheckPullRequestStatus(pullRequestStatus: PullRequestStatus, etag: string) =
         member this.PullRequestStatus = pullRequestStatus
         member this.ETag = etag
-    
-namespace Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Logic
-
-    open System.Threading.Tasks
-    open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Messages
-
-    type IGitHubPullRequestVerificationPolicyLogic =
-        abstract member CheckPullRequestStatus: pullRequestUri: string -> etag: string -> Task<ResponseCheckPullRequestStatus>
