@@ -18,7 +18,7 @@ let getBaseHeaders userAgent authorizationToken (etag: string option) =
      match etag with
      | Some etag -> baseHeaders |> List.append ["If-None-Match", etag]
      | None -> baseHeaders
-     
+
 module GitHubConfigurationProvider =
 
     let userAgent =
@@ -29,9 +29,9 @@ module GitHubConfigurationProvider =
 
     let repositoryName =
         ConfigurationManager.AppSettings.["RepositoryName"]
-        
+
     let masterBranchName =
-        ConfigurationManager.AppSettings.["MasterBranchName"];     
+        ConfigurationManager.AppSettings.["MasterBranchName"];
 
 module GetSha =
     [<Literal>]
@@ -52,7 +52,7 @@ module GetSha =
     type Provider = JsonProvider<Json>
 
     let execute userAgent repositoryName branchName =
-        async { 
+        async {
             let url = sprintf @"%s/repos/%s/%s/git/refs/heads/%s" ApiBaseUrl userAgent repositoryName branchName
             let! response = url |> Provider.AsyncLoad
             return response.Object.Sha
@@ -71,7 +71,7 @@ module GetFile =
     type Provider = JsonProvider<Json>
 
     let execute userAgent repositoryName fileName branchName =
-        async { 
+        async {
             let url = sprintf @"%s/repos/%s/%s/contents/%s?ref=%s" ApiBaseUrl userAgent repositoryName fileName branchName
             let! response = url |> Provider.AsyncLoad
             return response
@@ -92,14 +92,14 @@ module CreateRepositoryBranch =
         async {
             let url = sprintf @"%s/repos/%s/%s/git/refs" ApiBaseUrl userAgent repositoryName
             let headers = getBaseHeaders userAgent authorizationToken None
-        
+
             let! sha = GetSha.execute userAgent repositoryName masterBranchName
             let post = Provider.Branch(@"refs/heads/" + newBranchName, sha)
             let! _ = post.JsonValue.RequestAsync (url = url, httpMethod = "POST", headers = headers)
             ()
         }
 
-module UpdateFile = 
+module UpdateFile =
     [<Literal>]
     let Json = """
     {
@@ -111,15 +111,15 @@ module UpdateFile =
     """
 
     type Provider = JsonProvider<Json, RootName="newContent">
-    
+
     let execute userAgent authorizationToken repositoryName fileName branchName content =
         async {
             let! file = GetFile.execute userAgent repositoryName fileName branchName
             let currentContent = file.Content |> Convert.FromBase64String |> Encoding.UTF8.GetString
-            
+
             let newContent = currentContent + content
             let newContentBase64string = newContent |> Encoding.UTF8.GetBytes |> Convert.ToBase64String
-            
+
             let url = sprintf @"%s/repos/%s/%s/contents/%s" ApiBaseUrl userAgent repositoryName fileName
             let headers = getBaseHeaders userAgent authorizationToken None
 
@@ -178,7 +178,7 @@ module IsPullRequestOpen =
                 match etagHeader with
                 | Some etag -> etag
                 | None -> raise (ArgumentException("There is no ETag Header."))
-            
+
             match response.StatusCode with
             | HttpStatusCodes.NotModified ->
                 return {isOpen = true; etag = etagValue}
@@ -193,14 +193,14 @@ module IsPullRequestOpen =
                 ex.Data.Add("response", response);
                 return raise ex
         }
-        
+
 module IsPullRequestMerged =
     let execute userAgent authorizationToken pullRequestUrl =
         async {
             let headers = getBaseHeaders userAgent authorizationToken None
             let url = sprintf "%s/merge" pullRequestUrl
             let! response = Http.AsyncRequest(url, headers = headers, silentHttpErrors = true)
-            
+
             match response.StatusCode with
             | HttpStatusCodes.NoContent ->
                 return true
