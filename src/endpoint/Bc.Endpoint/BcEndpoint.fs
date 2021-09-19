@@ -27,10 +27,7 @@ module ConfigurationProvider =
 let getEndpoint () =
     let endpointName = "Bc.Endpoint"
 
-    let endpoint = EndpointCommon.GetEndpoint(
-                                    endpointName,
-                                    false,
-                                    new EndpointCommonConfigurationProvider())
+    let endpoint = getEndpoint endpointName false
 
     // routing
     let transport = endpoint.UseTransport<SqlServerTransport>()

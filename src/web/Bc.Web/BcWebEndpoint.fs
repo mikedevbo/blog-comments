@@ -10,11 +10,8 @@ type BcWebEndpoint() =
     static member GetEndpoint() =
         let endpointName = "Bc.WebEndpoint"
         let destinationEndpointName = "Bc.Endpoint"
-            
-        let endpoint = EndpointCommon.GetEndpoint(
-                                        endpointName,
-                                        true,
-                                        EndpointCommonConfigurationProvider())
+
+        let endpoint = getEndpoint endpointName true
 
         let transport = endpoint.UseTransport<SqlServerTransport>()
         let routing = transport.Routing()
