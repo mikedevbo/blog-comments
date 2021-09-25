@@ -36,9 +36,12 @@ let getEndpoint endpointName isSendOnlyEndpoint =
 
     // conventions
     let conventions = endpointConfiguration.Conventions()
-    conventions.DefiningCommandsAs(fun t -> t.Namespace <> null && t.Namespace.EndsWith("Commands") || t.IsAssignableFrom(typeof<ICommand>)) |> ignore
-    conventions.DefiningEventsAs(fun t -> t.Namespace <> null && t.Namespace.EndsWith("Events") || t.IsAssignableFrom(typeof<IEvent>)) |> ignore
-    conventions.DefiningMessagesAs(fun t -> t.Namespace <> null && t.Namespace.EndsWith("Messages") || t.IsAssignableFrom(typeof<IMessage>) || t = typeof<NServiceBus.Mailer.MailMessage>) |> ignore
+    conventions.Add(
+        { new IMessageConvention with
+            member this.Name = "Type name suffix"
+            member this.IsCommandType(t) = t.Namespace <> null && t.Namespace.EndsWith("Commands")
+            member this.IsEventType(t) = t.Namespace <> null && t.Namespace.EndsWith("Events")
+            member this.IsMessageType(t) = t.Namespace <> null && t.Namespace.EndsWith("Messages")}) |> ignore
 
     // transport
     let transport = endpointConfiguration.UseTransport<SqlServerTransport>()
