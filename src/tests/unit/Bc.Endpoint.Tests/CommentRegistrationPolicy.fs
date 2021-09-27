@@ -1,11 +1,12 @@
 module Bc.Endpoint.Tests.CommentRegistrationPolicy
 
 open System
+open Bc.CommentRegistration
 open Bc.Contracts.Externals.Endpoint.CommentRegistration.Events
 open Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands
-open Bc.Contracts.Internals.Endpoint.CommentRegistration.Logic
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Messages
 open Bc.Endpoint
+open NServiceBus
 open NServiceBus.Testing
 open NSubstitute
 open NUnit.Framework
@@ -13,12 +14,9 @@ open NUnit.Framework
 let getContext() =
     TestableMessageHandlerContext()
 
-module CommentRegistrationPolicyTests =
+module PolicyTests =
 
-    let logic = Substitute.For<ICommentRegistrationPolicyLogic>()
-
-    let getPolicy data =
-        CommentRegistrationPolicy(logic, Data = data)
+    let getPolicy data = Policy(Data = data)
 
     [<Test>]
     let Handle_RegisterComment_ProperResult () =
@@ -32,8 +30,8 @@ module CommentRegistrationPolicyTests =
         let commentAddedDate = DateTime(2020, 7, 25)
         let message = RegisterComment(commentId, userName, userWebsite, userComment, articleFileName, commentAddedDate)
 
-        let policyData = CommentRegistrationPolicy.PolicyData()
-        let policy = getPolicy policyData
+        let policyData = PolicyData()
+        let policy = getPolicy policyData :> IHandleMessages<RegisterComment>
         let context = getContext ()
 
         // Act
@@ -56,12 +54,13 @@ module CommentRegistrationPolicyTests =
         let pullRequestUri = "uri_123"
         let message = ResponseCreateGitHubPullRequest(commentId, pullRequestUri)
 
-        let policyData = CommentRegistrationPolicy.PolicyData(CommentId = commentId)
+        let policyData = PolicyData(CommentId = commentId)
         let policy = getPolicy policyData
         let context = getContext ()
 
         // Act
-        policy.Handle(message, context) |> ignore
+        let policyHandler = policy :> IHandleMessages<ResponseCreateGitHubPullRequest>
+        policyHandler.Handle(message, context) |> ignore
 
         // Assert
         let publishedNumberOfMessages = context.PublishedMessages.Length

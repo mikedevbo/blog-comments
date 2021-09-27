@@ -1,10 +1,11 @@
 module Bc.Endpoint.Tests.CommentAnswerNotification
 
 open System
+open Bc.CommentAnswerNotification
 open Bc.Contracts.Externals.Endpoint.CommentAnswer.Events
 open Bc.Contracts.Internals.Endpoint.CommentAnswerNotification.Commands
-open Bc.Contracts.Internals.Endpoint.CommentAnswerNotification.Logic
 open Bc.Endpoint
+open NServiceBus
 open NServiceBus.Testing
 open NSubstitute
 open NUnit.Framework
@@ -12,10 +13,9 @@ open NUnit.Framework
 let getContext() =
     TestableMessageHandlerContext()
 
-module CommentAnswerNotificationEventSubscribingPolicyTests =
+module EventSubscribingPolicyTests =
 
-    let getPolicy() =
-        CommentAnswerNotificationEventSubscribingPolicy()
+    let getPolicy () = EventSubscribingPolicy()
 
     [<Test>]
     let Handle_CommentApproved_ProperResult () =
@@ -23,7 +23,7 @@ module CommentAnswerNotificationEventSubscribingPolicyTests =
         // Arrange
         let commentId = Guid.NewGuid()
         let message = CommentApproved(commentId)
-        let policy = getPolicy ()
+        let policy = getPolicy () :> IHandleMessages<CommentApproved>
         let context = getContext ()
 
         // Act
@@ -43,7 +43,7 @@ module CommentAnswerNotificationEventSubscribingPolicyTests =
         // Arrange
         let commentId = Guid.NewGuid()
         let message = CommentRejected(commentId)
-        let policy = getPolicy ()
+        let policy = getPolicy () :> IHandleMessages<CommentRejected>
         let context = getContext ()
 
         // Act
@@ -57,12 +57,9 @@ module CommentAnswerNotificationEventSubscribingPolicyTests =
         Assert.That(sentMessage.CommentId, Is.EqualTo(commentId))
         Assert.That(sentMessage.IsApproved, Is.False)
 
-module CommentAnswerNotificationPolicyTests =
+module PolicyTests =
 
-    let logic = Substitute.For<ICommentAnswerNotificationPolicyLogic>()
-
-    let getPolicy data =
-        CommentAnswerNotificationPolicy(logic, Data = data)
+    let getPolicy data = Policy(Data = data)
 
     [<TestCase(false, false, false, false)>]
     [<TestCase(false, true, false, false)>]
@@ -80,18 +77,16 @@ module CommentAnswerNotificationPolicyTests =
         let articleFileName = "sample_file_name"
         let message = RegisterCommentNotification(commentId, userEmail, articleFileName)
 
-        let policyData = CommentAnswerNotificationPolicy.PolicyData(
-                                                                    IsNotificationReadyToSend = isNotificationReadyToSend,
-                                                                    IsCommentApproved = isCommentApproved
-                                                                   )
-
-        (logic.IsSendNotification (Arg.Any<bool> ()) (Arg.Any<string> ())).Returns(isCommentApproved) |> ignore
+        let policyData = PolicyData(
+                            IsNotificationReadyToSend = isNotificationReadyToSend,
+                            IsCommentApproved = isCommentApproved)
 
         let policy = getPolicy policyData
         let context = getContext ()
 
         // Act
-        policy.Handle(message, context) |> ignore
+        let policyHandler = policy :> IHandleMessages<RegisterCommentNotification>
+        policyHandler.Handle(message, context) |> ignore
 
         // Assert
         Assert.That(policyData.UserEmail, Is.EqualTo(userEmail))
@@ -116,15 +111,16 @@ module CommentAnswerNotificationPolicyTests =
         let commentId = Guid.NewGuid()
         let message = NotifyAboutCommentAnswer(commentId, isCommentApproved)
 
-        let policyData = CommentAnswerNotificationPolicy.PolicyData(IsNotificationRegistered = isNotificationRegistered)
-
-        (logic.IsSendNotification (Arg.Any<bool> ()) (Arg.Any<string> ())).Returns(isCommentApproved) |> ignore
+        let policyData = PolicyData(
+                            IsNotificationRegistered = isNotificationRegistered,
+                            IsCommentApproved = isCommentApproved)
 
         let policy = getPolicy policyData
         let context = getContext ()
 
         // Act
-        policy.Handle(message, context) |> ignore
+        let policyHandler = policy :> IHandleMessages<NotifyAboutCommentAnswer>
+        policyHandler.Handle(message, context) |> ignore
 
         // Assert
         Assert.That(policyData.IsCommentApproved, Is.EqualTo(isCommentApproved))

@@ -2,17 +2,18 @@ module Bc.Endpoint.Tests.GitHubPullRequestCreation
 
 open System
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Messages
+open Bc.GitHubPullRequestCreation
 open Bc.Endpoint
+open NServiceBus
 open NServiceBus.Testing
 open NUnit.Framework
 
 let getContext() =
     TestableMessageHandlerContext()
 
-module GitHubPullRequestCreationPolicyTests =
+module PolicyTests =
 
-    let getPolicy data =
-        GitHubPullRequestCreationPolicy(Data = data)
+    let getPolicy data = Policy(Data = data)
 
     [<Test>]
     let Handle_RequestCreateGitHubPullRequest_ProperResult () =
@@ -29,8 +30,8 @@ module GitHubPullRequestCreationPolicyTests =
                                                         addedDate
                                                     )
 
-        let policyData = GitHubPullRequestCreationPolicy.PolicyData()
-        let policy = getPolicy policyData
+        let policyData = PolicyData()
+        let policy = getPolicy policyData :> IHandleMessages<RequestCreateGitHubPullRequest>
 
         let context = getContext ()
 
@@ -56,8 +57,8 @@ module GitHubPullRequestCreationPolicyTests =
         let fileName = "fileName"
         let message = ResponseCreateBranch(branchName)
 
-        let policyData = GitHubPullRequestCreationPolicy.PolicyData(FileName = fileName, Content = content)
-        let policy = getPolicy policyData
+        let policyData = PolicyData(FileName = fileName, Content = content)
+        let policy = getPolicy policyData :> IHandleMessages<ResponseCreateBranch>
 
         let context = getContext ()
 
@@ -81,8 +82,8 @@ module GitHubPullRequestCreationPolicyTests =
         let branchName = "branch_name"
         let message = ResponseUpdateFile()
 
-        let policyData = GitHubPullRequestCreationPolicy.PolicyData(BranchName = branchName)
-        let policy = getPolicy policyData
+        let policyData = PolicyData(BranchName = branchName)
+        let policy = getPolicy policyData :> IHandleMessages<ResponseUpdateFile>
 
         let context = getContext ()
 
@@ -105,14 +106,15 @@ module GitHubPullRequestCreationPolicyTests =
         let pullRequestUri = "uri_123"
         let message = ResponseCreatePullRequest(pullRequestUri)
 
-        let policyData = GitHubPullRequestCreationPolicy.PolicyData(CommentId = commentId)
+        let policyData = PolicyData(CommentId = commentId)
         let policy = getPolicy policyData
         policy.Entity.Originator <- "test"
 
         let context = getContext ()
 
         // Act
-        policy.Handle(message, context) |> ignore
+        let policyHandler = policy :> IHandleMessages<ResponseCreatePullRequest>
+        policyHandler.Handle(message, context) |> ignore
 
         // Assert
         let sentNumberOfMessages = context.RepliedMessages.Length

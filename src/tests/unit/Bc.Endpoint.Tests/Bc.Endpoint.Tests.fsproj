@@ -28,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\endpoint\Bc.Endpoint\Bc.Endpoint.csproj" />
+      <ProjectReference Include="..\..\..\endpoint\Bc.Endpoint\Bc.Endpoint.fsproj" />
     </ItemGroup>
 
 </Project>

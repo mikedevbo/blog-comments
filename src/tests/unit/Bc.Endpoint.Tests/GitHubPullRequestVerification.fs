@@ -1,9 +1,10 @@
 module Bc.Endpoint.Tests.GitHubPullRequestVerification
 
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification
-open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Logic
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Messages
 open Bc.Endpoint
+open Bc.GitHubPullRequestVerification
+open NServiceBus
 open NServiceBus.Testing
 open NSubstitute
 open NUnit.Framework
@@ -11,12 +12,9 @@ open NUnit.Framework
 let getContext() =
     TestableMessageHandlerContext()
 
-module GitHubPullRequestVerificationPolicyTests =
+module PolicyTests =
 
-    let logic = Substitute.For<IGitHubPullRequestVerificationPolicyLogic>()
-
-    let getPolicy() =
-        GitHubPullRequestVerificationPolicy(logic)
+    let getPolicy() = Policy()
 
     [<Test>]
     let Handle_RequestCheckPullRequestStatus_ProperResult () =
@@ -27,9 +25,7 @@ module GitHubPullRequestVerificationPolicyTests =
         let etag = "ETag_123"
         let message = RequestCheckPullRequestStatus(pullRequestUri, etag)
 
-        (logic.CheckPullRequestStatus pullRequestUri etag).Returns(ResponseCheckPullRequestStatus(pullRequestStatus, etag)) |> ignore
-
-        let policy = getPolicy ()
+        let policy = getPolicy () :> IHandleMessages<RequestCheckPullRequestStatus>
         let context = getContext ()
 
         // Act

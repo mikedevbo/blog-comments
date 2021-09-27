@@ -1,14 +1,15 @@
 module Bc.Endpoint.Tests.CommentAnswer
 
 open System
+open Bc.CommentAnswer
 open Bc.Contracts.Externals.Endpoint.CommentAnswer.Events
 open Bc.Contracts.Externals.Endpoint.CommentRegistration.Events
 open Bc.Contracts.Internals.Endpoint.CommentAnswer.Commands
-open Bc.Contracts.Internals.Endpoint.CommentAnswer.Logic
 open Bc.Contracts.Internals.Endpoint.CommentAnswer.Messages
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification
 open Bc.Contracts.Internals.Endpoint.GitHubPullRequestVerification.Messages
 open Bc.Endpoint
+open NServiceBus
 open NServiceBus.Testing
 open NSubstitute
 open NUnit.Framework
@@ -16,17 +17,17 @@ open NUnit.Framework
 let getContext() =
     TestableMessageHandlerContext()
 
-module CommentAnswerEventsSubscribingPolicyTests =
+module EventsSubscribingPolicyTests =
 
-    let getPolicy() =
-        CommentAnswerEventsSubscribingPolicy()
+    let getPolicy () =
+        EventsSubscribingPolicy()
 
     [<Test>]
     let Handle_CommentRegistered_ProperResult () =
 
         // Arrange
         let message = CommentRegistered(Guid.NewGuid(), " Uri_1234")
-        let policy = getPolicy ()
+        let policy = getPolicy () :> IHandleMessages<CommentRegistered>
         let context = getContext ()
 
         // Act
@@ -39,12 +40,9 @@ module CommentAnswerEventsSubscribingPolicyTests =
         Assert.That(sentNumberOfMessages, Is.EqualTo(1))
         Assert.That(isSentProperMessage, Is.EqualTo(true))
 
-module CommentAnswerPolicyTests =
+module PolicyTests =
 
-    let logic = Substitute.For<ICommentAnswerPolicyLogic>()
-
-    let getPolicy data =
-        CommentAnswerPolicy(logic, Data = data)
+    let getPolicy data = Policy(Data = data)
 
     [<Test>]
     let Handle_CheckCommentAnswer_ProperResult () =
@@ -53,8 +51,8 @@ module CommentAnswerPolicyTests =
         let commentUri = "Uri_123"
         let message = CheckCommentAnswer(Guid.NewGuid(), commentUri)
 
-        let policyData = CommentAnswerPolicy.PolicyData()
-        let policy = getPolicy policyData
+        let policyData = PolicyData()
+        let policy = getPolicy policyData :> IAmStartedByMessages<CheckCommentAnswer>
 
         let context = getContext ()
 
@@ -67,8 +65,8 @@ module CommentAnswerPolicyTests =
 
         Assert.That(sentNumberOfMessages, Is.EqualTo(1))
         Assert.That(sentMessage.PullRequestUri, Is.EqualTo(commentUri))
-        Assert.That(sentMessage.ETag, Is.Null)
-        Assert.That(policy.Data.CommentUri, Is.EqualTo(commentUri))
+        Assert.That(sentMessage.ETag, Is.Empty)
+        Assert.That(policyData.CommentUri, Is.EqualTo(commentUri))
 
     [<Test>]
     let Handle_ResponseCheckPullRequestStatusWhenStatusIsOpen_ProperResult () =
@@ -78,8 +76,8 @@ module CommentAnswerPolicyTests =
         let etag = "ETag_123"
         let message = ResponseCheckPullRequestStatus(pullRequestStatus, etag)
 
-        let policyData = CommentAnswerPolicy.PolicyData(ETag = etag)
-        let policy = getPolicy policyData
+        let policyData = PolicyData(ETag = etag)
+        let policy = getPolicy policyData :> IHandleMessages<ResponseCheckPullRequestStatus>
 
         let context = getContext ()
 
@@ -103,8 +101,8 @@ module CommentAnswerPolicyTests =
         let etag = "ETag_123"
         let message = ResponseCheckPullRequestStatus(pullRequestStatus, etag)
 
-        let policyData = CommentAnswerPolicy.PolicyData(ETag = etag, CommentId = commentId)
-        let policy = getPolicy policyData
+        let policyData = PolicyData(ETag = etag, CommentId = commentId)
+        let policy = getPolicy policyData :> IHandleMessages<ResponseCheckPullRequestStatus>
 
         let context = getContext ()
 
@@ -128,8 +126,8 @@ module CommentAnswerPolicyTests =
         let etag = "ETag_123"
         let message = ResponseCheckPullRequestStatus(pullRequestStatus, etag)
 
-        let policyData = CommentAnswerPolicy.PolicyData(ETag = etag, CommentId = commentId)
-        let policy = getPolicy policyData
+        let policyData = PolicyData(ETag = etag, CommentId = commentId)
+        let policy = getPolicy policyData :> IHandleMessages<ResponseCheckPullRequestStatus>
 
         let context = getContext ()
 
@@ -152,8 +150,8 @@ module CommentAnswerPolicyTests =
         let etag = "ETag_123"
         let message = TimeoutCheckCommentAnswer()
 
-        let policyData = CommentAnswerPolicy.PolicyData(CommentUri = commentUri, ETag = etag)
-        let policy = getPolicy policyData
+        let policyData = PolicyData(CommentUri = commentUri, ETag = etag)
+        let policy = getPolicy policyData :> IHandleTimeouts<TimeoutCheckCommentAnswer>
 
         let context = getContext ()
 

@@ -1,20 +1,21 @@
 module Bc.Endpoint.Tests.CommentTaking
 
 open System
+open Bc.CommentTaking
 open Bc.Contracts.Internals.Endpoint.CommentAnswerNotification.Commands
 open Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands
 open Bc.Contracts.Internals.Endpoint.CommentTaking.Commands
 open Bc.Endpoint
+open NServiceBus
 open NServiceBus.Testing
 open NUnit.Framework
 
 let getContext() =
     TestableMessageHandlerContext()
 
-module CommentTakingPolicyTests =
+module PolicyTests =
 
-    let getPolicy() =
-        CommentTakingPolicy()
+    let getPolicy() = Policy()
 
     [<Test>]
     let Handle_TakeComment_ProperResult () =
@@ -37,7 +38,7 @@ module CommentTakingPolicyTests =
                                      commentAddedDate
                                  )
 
-        let policy = getPolicy ()
+        let policy = getPolicy () :> IHandleMessages<TakeComment>
         let context = getContext ()
 
         // Act
