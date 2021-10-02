@@ -21,7 +21,7 @@
         <Compile Include="CommentAnswer.fs" />
         <Compile Include="CommentAnswerNotificationTests.fs" />
         <Compile Include="CommentRegistrationTests.fs" />
-        <Compile Include="CommentTaking.fs" />
+        <Compile Include="CommentTakingTests.fs" />
         <Compile Include="GitHubPullRequestCreation.fs" />
         <Compile Include="GitHubPullRequestVerification.fs" />
         <Compile Include="Program.fs" />
