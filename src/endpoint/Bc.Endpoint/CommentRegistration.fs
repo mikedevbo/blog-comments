@@ -8,6 +8,7 @@ open Bc.Contracts.Internals.Endpoint.GitHubPullRequestCreation.Messages
 open NServiceBus
 open NServiceBus.Persistence.Sql
 
+[<RequireQualifiedAccess>]
 module Logic =
 
     let formatUserName userName userWebsite =

@@ -11,12 +11,44 @@ open NServiceBus.Testing
 open NSubstitute
 open NUnit.Framework
 
-let getContext() =
-    TestableMessageHandlerContext()
+let getContext() = TestableMessageHandlerContext()
+
+module LogicTests =
+
+    [<TestCase("user", null, "**user**")>]
+    [<TestCase("user", "", "**user**")>]
+    [<TestCase("user", "webSite", "[user](webSite)")>]
+    let formatUserName_dependsOnData_useProperFormatting
+        userName
+        userWebsite
+        expectedResult =
+
+        // Arrange
+
+        // Act
+        let result = Logic.formatUserName userName userWebsite
+
+        // Assert
+        Assert.That(result, Is.EqualTo(expectedResult))
+
+    [<Test>]
+    let formatUserComment_forComment_formatComment() =
+
+        // Arrange
+        let userName = "user_name"
+        let userComment = "user_comment"
+        let commentAddedDate = DateTime(2020, 7, 29, 10, 0, 0)
+        let expectedResult = sprintf "begin-user_name-user_comment-2020-07-29 10:00 UTC %s" Environment.NewLine
+
+        // Act
+        let result = Logic.formatUserComment userName userComment commentAddedDate
+
+        // Assert
+        Assert.That(result, Is.EqualTo(expectedResult))
 
 module PolicyTests =
 
-    let getPolicy data = Policy(Data = data)
+    let getPolicy data = Policy(Data=data)
 
     [<Test>]
     let Handle_RegisterComment_ProperResult () =
@@ -59,8 +91,8 @@ module PolicyTests =
         let context = getContext ()
 
         // Act
-        let policyHandler = policy :> IHandleMessages<ResponseCreateGitHubPullRequest>
-        policyHandler.Handle(message, context) |> ignore
+        let handler = policy :> IHandleMessages<ResponseCreateGitHubPullRequest>
+        handler.Handle(message, context) |> ignore
 
         // Assert
         let publishedNumberOfMessages = context.PublishedMessages.Length
