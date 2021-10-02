@@ -10,8 +10,7 @@ open NServiceBus
 open NServiceBus.Testing
 open NUnit.Framework
 
-let getContext() =
-    TestableMessageHandlerContext()
+let getContext() = TestableMessageHandlerContext()
 
 module PolicyTests =
 
@@ -26,7 +25,7 @@ module PolicyTests =
         let userEmail = "user_email"
         let userWebsite = "user_website"
         let userComment = "user_comment"
-        let articleFileName = "article_filename"
+        let articleFileName = "_posts/2021-01-02-sample-file-name.md"
         let commentAddedDate = DateTime(2020, 7, 25)
         let message = TakeComment(
                                      commentId,
@@ -42,7 +41,7 @@ module PolicyTests =
         let context = getContext ()
 
         // Act
-        policy.Handle(message, context) |> ignore
+        policy.Handle(message, context) |> Async.AwaitTask |> Async.RunSynchronously
 
         // Assert
         let sentNumberOfMessages = context.SentMessages.Length
