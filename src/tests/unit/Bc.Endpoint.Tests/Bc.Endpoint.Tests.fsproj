@@ -19,7 +19,7 @@
 
     <ItemGroup>
         <Compile Include="CommentAnswer.fs" />
-        <Compile Include="CommentAnswerNotification.fs" />
+        <Compile Include="CommentAnswerNotificationTests.fs" />
         <Compile Include="CommentRegistrationPolicy.fs" />
         <Compile Include="CommentTaking.fs" />
         <Compile Include="GitHubPullRequestCreation.fs" />
