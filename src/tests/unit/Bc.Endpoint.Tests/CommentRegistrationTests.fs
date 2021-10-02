@@ -1,4 +1,4 @@
-module Bc.Endpoint.Tests.CommentRegistrationPolicy
+module Bc.Endpoint.Tests.CommentRegistration
 
 open System
 open Bc.CommentRegistration
