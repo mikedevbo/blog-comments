@@ -18,10 +18,14 @@ module ConfigurationProvider =
     let blogDomainName =
         ConfigurationManager.AppSettings.["BlogDomainName"]
 
+[<RequireQualifiedAccess>]
 module Logic =
 
+    let isNotificationReady isNotificationRegistered isNotificationReadyToSend =
+        isNotificationRegistered && isNotificationReadyToSend
+
     let isSendNotification isCommentApproved userEmail =
-        not(String.IsNullOrEmpty(userEmail)) && isCommentApproved
+        isCommentApproved && not(String.IsNullOrEmpty(userEmail))
 
     let getBody (fileName: String) (blogDomainName: string) =
         // depend on Jekyll file format
@@ -52,7 +56,7 @@ type EventSubscribingPolicy() =
 
     interface IHandleMessages<CommentRejected> with
         member this.Handle(message, context) =
-            context.Send(new NotifyAboutCommentAnswer(message.CommentId, false))
+            context.Send(NotifyAboutCommentAnswer(message.CommentId, false))
 
 type PolicyData() =
     inherit ContainSagaData()
@@ -65,32 +69,33 @@ type PolicyData() =
     member val IsNotificationReadyToSend = false with get, set
 
 [<SqlSaga(nameof Unchecked.defaultof<PolicyData>.CommentId)>]
-type Policy() =
+type Policy(smtpFrom: string, blogDomainName: string) =
     inherit Saga<PolicyData>()
         override this.ConfigureHowToFindSaga(mapper: SagaPropertyMapper<PolicyData>) =
             mapper.MapSaga(fun saga -> saga.CommentId :> obj)
                 .ToMessage<RegisterCommentNotification>(fun message -> message.CommentId :> obj)
                 .ToMessage<NotifyAboutCommentAnswer>(fun message -> message.CommentId :> obj) |> ignore
 
-    member this.SendNotification(context: IMessageHandlerContext) =
-        if (not(this.Data.IsNotificationRegistered) || not(this.Data.IsNotificationReadyToSend))
-        then
-            Task.CompletedTask
-        else
-            this.MarkAsComplete();
+    new() = Policy(ConfigurationProvider.smtpFrom, ConfigurationProvider.blogDomainName)
 
-            if (not((Logic.isSendNotification this.Data.IsCommentApproved this.Data.UserEmail)))
-            then
-                Task.CompletedTask
-            else
-                let mail = Mail()
-                mail.From <- ConfigurationProvider.smtpFrom
-                mail.To.Add(this.Data.UserEmail)
-                ////TODO: move to resource file
-                mail.Subject <- "Dodano odpowiedź do komentarza."
-                mail.Body <- Logic.getBody this.Data.ArticleFileName ConfigurationProvider.blogDomainName
+    member this.SendNotification (context: IMessageHandlerContext) =
+                match Logic.isNotificationReady this.Data.IsNotificationRegistered this.Data.IsNotificationReadyToSend with
+                | false ->
+                    Task.CompletedTask
+                | true ->
+                    this.MarkAsComplete()
+                    match Logic.isSendNotification this.Data.IsCommentApproved this.Data.UserEmail with
+                    | false ->
+                        Task.CompletedTask
+                    | true ->
+                        let mail = Mail()
+                        mail.From <- smtpFrom
+                        mail.To.Add(this.Data.UserEmail)
+                        ////TODO: move to resource file
+                        mail.Subject <- "Dodano odpowiedź do komentarza."
+                        mail.Body <- Logic.getBody this.Data.ArticleFileName blogDomainName
 
-                context.SendMail(mail)
+                        context.SendMail(mail)
 
     interface IAmStartedByMessages<RegisterCommentNotification> with
         member this.Handle(message, context) =
@@ -98,7 +103,7 @@ type Policy() =
             this.Data.ArticleFileName <- message.ArticleFileName
             this.Data.IsNotificationRegistered <- true
 
-            this.SendNotification(context);
+            this.SendNotification(context)
 
     interface IAmStartedByMessages<NotifyAboutCommentAnswer> with
         member this.Handle(message, context) =
