@@ -14,13 +14,11 @@ open NServiceBus.Testing
 open NSubstitute
 open NUnit.Framework
 
-let getContext() =
-    TestableMessageHandlerContext()
+let getContext() = TestableMessageHandlerContext()
 
 module EventsSubscribingPolicyTests =
 
-    let getPolicy () =
-        EventsSubscribingPolicy()
+    let getPolicy () = EventsSubscribingPolicy()
 
     [<Test>]
     let Handle_CommentRegistered_ProperResult () =
@@ -42,7 +40,8 @@ module EventsSubscribingPolicyTests =
 
 module PolicyTests =
 
-    let getPolicy data = Policy(Data = data)
+    let getPolicy timeoutInSeconds data =
+        Policy(timeoutInSeconds, Data=data)
 
     [<Test>]
     let Handle_CheckCommentAnswer_ProperResult () =
@@ -52,7 +51,7 @@ module PolicyTests =
         let message = CheckCommentAnswer(Guid.NewGuid(), commentUri)
 
         let policyData = PolicyData()
-        let policy = getPolicy policyData :> IAmStartedByMessages<CheckCommentAnswer>
+        let policy = getPolicy 2.0 policyData :> IAmStartedByMessages<CheckCommentAnswer>
 
         let context = getContext ()
 
@@ -77,7 +76,7 @@ module PolicyTests =
         let message = ResponseCheckPullRequestStatus(pullRequestStatus, etag)
 
         let policyData = PolicyData(ETag = etag)
-        let policy = getPolicy policyData :> IHandleMessages<ResponseCheckPullRequestStatus>
+        let policy = getPolicy 2.0 policyData :> IHandleMessages<ResponseCheckPullRequestStatus>
 
         let context = getContext ()
 
@@ -102,12 +101,13 @@ module PolicyTests =
         let message = ResponseCheckPullRequestStatus(pullRequestStatus, etag)
 
         let policyData = PolicyData(ETag = etag, CommentId = commentId)
-        let policy = getPolicy policyData :> IHandleMessages<ResponseCheckPullRequestStatus>
+        let policy = getPolicy 2.0 policyData
 
         let context = getContext ()
 
         // Act
-        policy.Handle(message, context) |> ignore
+        let handler = policy :> IHandleMessages<ResponseCheckPullRequestStatus>
+        handler.Handle(message, context) |> ignore
 
         // Assert
         let publishedNumberOfMessages = context.PublishedMessages.Length
@@ -116,6 +116,7 @@ module PolicyTests =
         Assert.That(publishedNumberOfMessages, Is.EqualTo(1))
         Assert.That(publishedMessage.CommentId, Is.EqualTo(commentId))
         Assert.That(policyData.ETag, Is.EqualTo(etag))
+        Assert.That(policy.Completed, Is.EqualTo(true))
 
     [<Test>]
     let Handle_ResponseCheckPullRequestStatusWhenStatusIsClosed_ProperResult () =
@@ -127,12 +128,13 @@ module PolicyTests =
         let message = ResponseCheckPullRequestStatus(pullRequestStatus, etag)
 
         let policyData = PolicyData(ETag = etag, CommentId = commentId)
-        let policy = getPolicy policyData :> IHandleMessages<ResponseCheckPullRequestStatus>
+        let policy = getPolicy 2.0 policyData
 
         let context = getContext ()
 
         // Act
-        policy.Handle(message, context) |> ignore
+        let handler = policy :> IHandleMessages<ResponseCheckPullRequestStatus>
+        handler.Handle(message, context) |> ignore
 
         // Assert
         let publishedNumberOfMessages = context.PublishedMessages.Length
@@ -141,6 +143,7 @@ module PolicyTests =
         Assert.That(publishedNumberOfMessages, Is.EqualTo(1))
         Assert.That(publishedMessage.CommentId, Is.EqualTo(commentId))
         Assert.That(policyData.ETag, Is.EqualTo(etag))
+        Assert.That(policy.Completed, Is.EqualTo(true))
 
     [<Test>]
     let Handle_TimeoutCheckCommentAnswer_ProperResult () =
@@ -151,7 +154,7 @@ module PolicyTests =
         let message = TimeoutCheckCommentAnswer()
 
         let policyData = PolicyData(CommentUri = commentUri, ETag = etag)
-        let policy = getPolicy policyData :> IHandleTimeouts<TimeoutCheckCommentAnswer>
+        let policy = getPolicy 2.0 policyData :> IHandleTimeouts<TimeoutCheckCommentAnswer>
 
         let context = getContext ()
 
