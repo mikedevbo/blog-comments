@@ -8,8 +8,7 @@ open NServiceBus
 open NServiceBus.Testing
 open NUnit.Framework
 
-let getContext() =
-    TestableMessageHandlerContext()
+let getContext() = TestableMessageHandlerContext()
 
 module PolicyTests =
 
