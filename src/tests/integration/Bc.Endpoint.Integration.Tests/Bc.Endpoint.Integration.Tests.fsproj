@@ -13,6 +13,7 @@
       <Compile Include="CommentAnswerNotificationSender.fs" />
       <Compile Include="CommentRegistrationSender.fs" />
       <Compile Include="CommentTakingSender.fs" />
+      <Compile Include="GitHubPullRequestCreationSender.fs" />
       <!-- <None Include="app.config" /> -->
     </ItemGroup>
 
