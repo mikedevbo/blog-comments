@@ -1,8 +1,8 @@
-module Bc.Endpoint.Integration.Tests.CommentRegistrationSender
+﻿module Bc.Endpoint.Integration.Tests.CommentTakingSender
 
 open System
 open System.Threading.Tasks
-open Bc.Contracts.Internals.Endpoint.CommentRegistration.Commands
+open Bc.Contracts.Internals.Endpoint.CommentTaking.Commands
 open NServiceBus
 open NUnit.Framework
 
@@ -17,28 +17,30 @@ module Sender =
         } |> Async.RunSynchronously
 
     [<Test>]
-    let registerComment_send_noException () =
+    let takeComment_send_noException () =
 
         // Arrange
         let commentId = Guid.NewGuid()
         let userName = "test_user"
+        let userEmail = "test_user_email"
         let userWebsite = "test_user_website"
-        let userComment = "new_comment"
-        let articleFileName = @"_posts/2018-05-27-test.md"
+        let fileName = @"_posts/2018-05-27-test.md"
+        let content = "new_comment"
         let addedDate = DateTime.UtcNow
 
         let message =
-            RegisterComment (
+            TakeComment (
                 commentId,
                 userName,
+                userEmail,
                 userWebsite,
-                userComment,
-                articleFileName,
+                fileName,
+                content,
                 addedDate
             )
 
         // Act
-        sendMessage<RegisterComment> message
+        sendMessage<TakeComment> message
 
         // Assert
         Assert.Pass()
