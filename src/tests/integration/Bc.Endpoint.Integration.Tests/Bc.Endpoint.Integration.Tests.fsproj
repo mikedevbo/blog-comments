@@ -11,6 +11,7 @@
     <ItemGroup>
       <Compile Include="EndpointFactory.fs" />
       <Compile Include="CommentAnswerNotificationSender.fs" />
+      <Compile Include="CommentRegistrationSender.fs" />
       <!-- <None Include="app.config" /> -->
     </ItemGroup>
 
