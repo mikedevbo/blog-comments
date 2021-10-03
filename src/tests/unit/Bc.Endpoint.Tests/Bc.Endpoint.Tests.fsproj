@@ -23,7 +23,7 @@
         <Compile Include="CommentRegistrationTests.fs" />
         <Compile Include="CommentTakingTests.fs" />
         <Compile Include="GitHubPullRequestCreationTests.fs" />
-        <Compile Include="GitHubPullRequestVerification.fs" />
+        <Compile Include="GitHubPullRequestVerificationTests.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
