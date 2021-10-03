@@ -39,14 +39,14 @@ module GitHub =
                         return ResponseCheckPullRequestStatus(PullRequestStatus.Closed, isOpenResult.etag)
         }
 
-type Policy() =
+type Policy (checkPullRequestStatus: string -> string -> Async<ResponseCheckPullRequestStatus>) =
+    new() = Policy(GitHub.checkPullRequestStatus)
+
     interface IHandleMessages<RequestCheckPullRequestStatus> with
         member this.Handle(message, context) =
             async {
 
-                let! response = GitHub.checkPullRequestStatus
-                                            message.PullRequestUri
-                                            message.ETag
+                let! response = checkPullRequestStatus message.PullRequestUri message.ETag
 
                 do! context.Reply(response) |> Async.AwaitTask
 

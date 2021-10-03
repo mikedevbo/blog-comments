@@ -9,12 +9,11 @@ open NServiceBus.Testing
 open NSubstitute
 open NUnit.Framework
 
-let getContext() =
-    TestableMessageHandlerContext()
+let getContext() = TestableMessageHandlerContext()
 
 module PolicyTests =
 
-    let getPolicy() = Policy()
+    let getPolicy() = Policy(fun _ _ -> async { return ResponseCheckPullRequestStatus(PullRequestStatus.Open, "ETag_123") })
 
     [<Test>]
     let Handle_RequestCheckPullRequestStatus_ProperResult () =
@@ -29,7 +28,7 @@ module PolicyTests =
         let context = getContext ()
 
         // Act
-        policy.Handle(message, context) |> ignore
+        policy.Handle(message, context) |> Async.AwaitTask |> Async.RunSynchronously
 
         // Assert
         let repliedNumberOfMessages = context.RepliedMessages.Length
