@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Include="CommentAnswer.fs" />
+        <Compile Include="CommentAnswerTests.fs" />
         <Compile Include="CommentAnswerNotificationTests.fs" />
         <Compile Include="CommentRegistrationTests.fs" />
         <Compile Include="CommentTakingTests.fs" />
