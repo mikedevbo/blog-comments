@@ -9,20 +9,21 @@
     </Target>
 
     <ItemGroup>
-      <PackageReference Include="AsyncFixer" Version="1.5.1">
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        <PrivateAssets>all</PrivateAssets>
-      </PackageReference>
+      <Compile Include="EndpointFactory.fs" />
+      <Compile Include="CommentAnswerNotificationSender.fs" />
+      <!-- <None Include="app.config" /> -->
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
       <!-- <PackageReference Include="MinVer" Version="2.3.0" /> -->
       <PackageReference Include="NUnit" Version="3.13.2" />
       <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
-      <PackageReference Include="Particular.CodeRules" Version="0.3.0" />
       <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\endpoint\Bc.Endpoint\Bc.Endpoint.csproj" />
+      <ProjectReference Include="..\..\..\endpoint\Bc.Endpoint\Bc.Endpoint.fsproj" />
     </ItemGroup>
 
 </Project>
