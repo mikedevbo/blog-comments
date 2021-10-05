@@ -20,10 +20,10 @@ module Sender =
     let requestCreateGitHubPullRequest_send_noException () =
 
         // Arrange
-        let commentId = Guid.NewGuid();
-        let fileName = @"_posts/2018-05-27-test.md";
-        let content = "new_comment";
-        let addedDate = DateTime.UtcNow;
+        let commentId = Guid.NewGuid()
+        let fileName = @"_posts/2018-05-27-test.md"
+        let content = "new_comment"
+        let addedDate = DateTime.UtcNow
 
         let message =
             RequestCreateGitHubPullRequest (
@@ -37,4 +37,4 @@ module Sender =
         sendMessage<RequestCreateGitHubPullRequest> message
 
         // Assert
-        Assert.Pass();
+        Assert.Pass()

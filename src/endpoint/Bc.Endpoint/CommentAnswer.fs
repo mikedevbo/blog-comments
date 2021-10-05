@@ -61,11 +61,11 @@ type Policy(checkCommentAnswerTimeoutInSeconds: double) =
                         TimeSpan.FromSeconds(checkCommentAnswerTimeoutInSeconds))
 
             | AnswerStatus.Approved ->
-                this.MarkAsComplete();
+                this.MarkAsComplete()
                 context.Publish(CommentApproved(this.Data.CommentId))
 
             | AnswerStatus.Rejected ->
-                this.MarkAsComplete();
+                this.MarkAsComplete()
                 context.Publish(CommentRejected(this.Data.CommentId))
 
             | _ ->

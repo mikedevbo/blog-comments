@@ -43,4 +43,4 @@ module Sender =
         sendMessage<NotifyAboutCommentAnswer> message
 
         // Assert
-        Assert.Pass();
+        Assert.Pass()

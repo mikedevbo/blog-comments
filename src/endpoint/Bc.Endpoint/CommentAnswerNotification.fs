@@ -35,9 +35,9 @@ module Logic =
         let onlyFileName = fileName.Split('/').[1]
 
         let split = onlyFileName.Split('-')
-        let year = split.[0];
-        let month = split.[1];
-        let day = split.[2];
+        let year = split.[0]
+        let month = split.[1]
+        let day = split.[2]
 
         // remove year, month and day
         //split.RemoveRange(0, 3)

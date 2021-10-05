@@ -25,13 +25,13 @@ module GitHubConfigurationProvider =
         ConfigurationManager.AppSettings.["UserAgent"]
 
     let authorizationToken =
-        ConfigurationManager.AppSettings.["AuthorizationToken"];
+        ConfigurationManager.AppSettings.["AuthorizationToken"]
 
     let repositoryName =
         ConfigurationManager.AppSettings.["RepositoryName"]
 
     let masterBranchName =
-        ConfigurationManager.AppSettings.["MasterBranchName"];
+        ConfigurationManager.AppSettings.["MasterBranchName"]
 
 module GetSha =
     [<Literal>]
@@ -189,8 +189,8 @@ module IsPullRequestOpen =
                     return {isOpen = (state = "open"); etag = etagValue}
                 | _ -> return raise (ArgumentException("Invalid body format. Expected json as text."))
             | _ ->
-                let ex = HttpRequestException(sprintf "Response bad status code: %d" response.StatusCode);
-                ex.Data.Add("response", response);
+                let ex = HttpRequestException(sprintf "Response bad status code: %d" response.StatusCode)
+                ex.Data.Add("response", response)
                 return raise ex
         }
 
@@ -207,7 +207,7 @@ module IsPullRequestMerged =
             | HttpStatusCodes.NotFound ->
                 return false
             | _ ->
-                let ex = HttpRequestException(sprintf "Response bad status code: %d" response.StatusCode);
-                ex.Data.Add("response", response);
+                let ex = HttpRequestException(sprintf "Response bad status code: %d" response.StatusCode)
+                ex.Data.Add("response", response)
                 return raise ex
         }
