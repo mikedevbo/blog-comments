@@ -41,9 +41,9 @@ let getEndpoint endpointName isSendOnlyEndpoint =
     conventions.Add(
         { new IMessageConvention with
             member this.Name = "Type name suffix"
-            member this.IsCommandType(t) = t.Namespace <> null && t.Namespace.EndsWith("Commands")
-            member this.IsEventType(t) = t.Namespace <> null && t.Namespace.EndsWith("Events")
-            member this.IsMessageType(t) = t.Namespace <> null && t.Namespace.EndsWith("Messages")}) |> ignore
+            member this.IsCommandType(t) = not(isNull t.Namespace) && t.Namespace.EndsWith("Commands")
+            member this.IsEventType(t) = not(isNull t.Namespace) && t.Namespace.EndsWith("Events")
+            member this.IsMessageType(t) = not(isNull t.Namespace) && t.Namespace.EndsWith("Messages")}) |> ignore
 
     match ConfigurationProvider.isUseLearningTransportAndPersistence with
     | false ->
