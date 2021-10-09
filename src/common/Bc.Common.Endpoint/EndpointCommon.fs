@@ -7,6 +7,7 @@ open Microsoft.Data.SqlClient
 open NServiceBus
 
 
+[<RequireQualifiedAccessAttribute>]
 module ConfigurationProvider =
 
     let transportConnectionString = ConfigurationManager.AppSettings.["TransportConnectionString"]
@@ -15,6 +16,7 @@ module ConfigurationProvider =
     let serviceControlAddress = ConfigurationManager.AppSettings.["ServiceControlAddress"]
     let isSendMetrics = Convert.ToBoolean(ConfigurationManager.AppSettings.["IsSendMetrics"])
     let serviceControlMetricsAddress = ConfigurationManager.AppSettings.["ServiceControlMetricsAddress"]
+    let isUseLearningTransportAndPersistence = Convert.ToBoolean(ConfigurationManager.AppSettings.["IsUseLearningTransportAndPersistence"])
 
 let getEndpoint endpointName isSendOnlyEndpoint =
 
@@ -43,23 +45,28 @@ let getEndpoint endpointName isSendOnlyEndpoint =
             member this.IsEventType(t) = t.Namespace <> null && t.Namespace.EndsWith("Events")
             member this.IsMessageType(t) = t.Namespace <> null && t.Namespace.EndsWith("Messages")}) |> ignore
 
-    // transport
-    let transport = endpointConfiguration.UseTransport<SqlServerTransport>()
-    transport.ConnectionString(ConfigurationProvider.transportConnectionString) |> ignore
-    transport.DefaultSchema(schema) |> ignore
+    match ConfigurationProvider.isUseLearningTransportAndPersistence with
+    | false ->
+        // transport
+        let transport = endpointConfiguration.UseTransport<SqlServerTransport>()
+        transport.ConnectionString(ConfigurationProvider.transportConnectionString) |> ignore
+        transport.DefaultSchema(schema) |> ignore
 
-    // persistence
-    let persistence = endpointConfiguration.UsePersistence<SqlPersistence>()
-    persistence.ConnectionBuilder(fun _ -> new SqlConnection(ConfigurationProvider.transportConnectionString) :> DbConnection) |> ignore
+        // persistence
+        let persistence = endpointConfiguration.UsePersistence<SqlPersistence>()
+        persistence.ConnectionBuilder(fun _ -> new SqlConnection(ConfigurationProvider.transportConnectionString) :> DbConnection) |> ignore
 
-    let dialect = persistence.SqlDialect<SqlDialect.MsSqlServer>()
-    dialect.Schema(schema)
+        let dialect = persistence.SqlDialect<SqlDialect.MsSqlServer>()
+        dialect.Schema(schema)
 
-    let subscriptions = persistence.SubscriptionSettings()
-    subscriptions.DisableCache()
+        let subscriptions = persistence.SubscriptionSettings()
+        subscriptions.DisableCache()
 
-    // outbox
-    endpointConfiguration.EnableOutbox() |> ignore
+        // outbox
+        endpointConfiguration.EnableOutbox() |> ignore
+    | true ->
+        endpointConfiguration.UseTransport<LearningTransport>() |> ignore
+        endpointConfiguration.UsePersistence<LearningPersistence>() |> ignore
 
     // recoverability
     match ConfigurationProvider.isDisableRecoverability with

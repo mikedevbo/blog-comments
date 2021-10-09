@@ -13,8 +13,12 @@ type BcWebEndpoint() =
 
         let endpoint = getEndpoint endpointName true
 
-        let transport = endpoint.UseTransport<SqlServerTransport>()
-        let routing = transport.Routing()
-        routing.RouteToEndpoint((typeof<TakeComment>).Assembly, destinationEndpointName)
+        // routing
+        let setRouting (transport: TransportExtensions<'T>) =
+           transport.Routing().RouteToEndpoint((typeof<TakeComment>).Assembly, destinationEndpointName)
+
+        match ConfigurationProvider.isUseLearningTransportAndPersistence with
+        | false -> setRouting (endpoint.UseTransport<SqlServerTransport>())
+        | true -> setRouting (endpoint.UseTransport<LearningTransport>())
 
         endpoint

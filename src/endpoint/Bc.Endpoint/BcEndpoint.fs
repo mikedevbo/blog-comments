@@ -1,6 +1,6 @@
 module Bc.Endpoint
 
-open System;
+open System
 open System.Configuration
 open System.Security
 open System.IO
@@ -13,6 +13,7 @@ open NServiceBus
 open NServiceBus.Mailer
 open NServiceBus.Persistence.Sql
 
+[<RequireQualifiedAccessAttribute>]
 module ConfigurationProvider =
 
     let isSendEmail = Convert.ToBoolean(ConfigurationManager.AppSettings.["IsSendEmail"])
@@ -30,9 +31,12 @@ let getEndpoint () =
     let endpoint = getEndpoint endpointName false
 
     // routing
-    let transport = endpoint.UseTransport<SqlServerTransport>()
-    let routing = transport.Routing()
-    routing.RouteToEndpoint((typeof<TakeComment>).Assembly, endpointName)
+    let setRouting (transport: TransportExtensions<'T>) =
+       transport.Routing().RouteToEndpoint((typeof<TakeComment>).Assembly, endpointName)
+
+    match ConfigurationProvider.isUseLearningTransportAndPersistence with
+    | false -> setRouting (endpoint.UseTransport<SqlServerTransport>())
+    | true -> setRouting (endpoint.UseTransport<LearningTransport>())
 
     // mailer
     let mailSettings = endpoint.EnableMailer()

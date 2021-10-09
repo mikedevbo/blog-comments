@@ -14,10 +14,12 @@ let getSenderEndpoint () =
     let scanner = endpoint.AssemblyScanner()
     scanner.ExcludeAssemblies(bcEndpointAssemblyName)
 
-    let transport = endpoint.UseTransport<SqlServerTransport>()
+    // routing
+    let setRouting (transport: TransportExtensions<'T>) =
+       transport.Routing().RouteToEndpoint((typeof<TakeComment>).Assembly, bcEndpointAssemblyName)
 
-    let routing = transport.Routing()
-    routing.RouteToEndpoint((typeof<RequestCreateGitHubPullRequest>).Assembly, bcEndpointAssemblyName)
-    routing.RouteToEndpoint((typeof<TakeComment>.Assembly), bcEndpointAssemblyName)
+    match ConfigurationProvider.isUseLearningTransportAndPersistence with
+    | false -> setRouting (endpoint.UseTransport<SqlServerTransport>())
+    | true -> setRouting (endpoint.UseTransport<LearningTransport>())
 
     NServiceBus.Endpoint.Start(endpoint)
