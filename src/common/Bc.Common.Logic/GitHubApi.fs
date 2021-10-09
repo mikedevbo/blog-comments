@@ -167,7 +167,7 @@ module IsPullRequestOpen =
     """
 
     type Provider = JsonProvider<Json>
-    type result = {isOpen: bool; etag: string}
+    type Result = {IsOpen: bool; Etag: string}
 
     let execute userAgent authorizationToken pullRequestUrl etag =
         async {
@@ -181,12 +181,12 @@ module IsPullRequestOpen =
 
             match response.StatusCode with
             | HttpStatusCodes.NotModified ->
-                return {isOpen = true; etag = etagValue}
+                return {IsOpen = true; Etag = etagValue}
             | HttpStatusCodes.OK ->
                 match response.Body with
                 | Text body ->
                     let state = (Provider.Parse body).State
-                    return {isOpen = (state = "open"); etag = etagValue}
+                    return {IsOpen = (state = "open"); Etag = etagValue}
                 | _ -> return raise (ArgumentException("Invalid body format. Expected json as text."))
             | _ ->
                 let ex = HttpRequestException(sprintf "Response bad status code: %d" response.StatusCode)

@@ -26,17 +26,17 @@ module GitHub =
                                         pullRequestUri
                                         (Some etag)
 
-                if isOpenResult.isOpen then
-                    return ResponseCheckPullRequestStatus(PullRequestStatus.Open, isOpenResult.etag)
+                if isOpenResult.IsOpen then
+                    return ResponseCheckPullRequestStatus(PullRequestStatus.Open, isOpenResult.Etag)
                 else
                     let! isMerged = GitHubApi.IsPullRequestMerged.execute
                                             GitHubConfigurationProvider.userAgent
                                             GitHubConfigurationProvider.authorizationToken
                                             pullRequestUri
                     if isMerged then
-                        return ResponseCheckPullRequestStatus(PullRequestStatus.Merged, isOpenResult.etag)
+                        return ResponseCheckPullRequestStatus(PullRequestStatus.Merged, isOpenResult.Etag)
                     else
-                        return ResponseCheckPullRequestStatus(PullRequestStatus.Closed, isOpenResult.etag)
+                        return ResponseCheckPullRequestStatus(PullRequestStatus.Closed, isOpenResult.Etag)
         }
 
 type Policy (checkPullRequestStatus: string -> string -> Async<ResponseCheckPullRequestStatus>) =
