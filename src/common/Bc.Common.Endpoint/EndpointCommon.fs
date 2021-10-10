@@ -10,13 +10,13 @@ open NServiceBus
 [<RequireQualifiedAccessAttribute>]
 module ConfigurationProvider =
 
-    let transportConnectionString = ConfigurationManager.AppSettings.["TransportConnectionString"]
-    let isDisableRecoverability = Convert.ToBoolean(ConfigurationManager.AppSettings.["IsDisableRecoverability"])
-    let isSendHeartbeats = Convert.ToBoolean(ConfigurationManager.AppSettings.["IsSendHeartbeats"])
-    let serviceControlAddress = ConfigurationManager.AppSettings.["ServiceControlAddress"]
-    let isSendMetrics = Convert.ToBoolean(ConfigurationManager.AppSettings.["IsSendMetrics"])
-    let serviceControlMetricsAddress = ConfigurationManager.AppSettings.["ServiceControlMetricsAddress"]
-    let isUseLearningTransportAndPersistence = Convert.ToBoolean(ConfigurationManager.AppSettings.["IsUseLearningTransportAndPersistence"])
+    let transportConnectionString = ConfigurationManager.ConnectionStrings.["NsbTransportConnectionString"].ConnectionString
+    let isDisableRecoverability = Convert.ToBoolean(ConfigurationManager.AppSettings.["NsbIsDisableRecoverability"])
+    let isSendHeartbeats = Convert.ToBoolean(ConfigurationManager.AppSettings.["NsbIsSendHeartbeats"])
+    let serviceControlAddress = ConfigurationManager.AppSettings.["NsbServiceControlAddress"]
+    let isSendMetrics = Convert.ToBoolean(ConfigurationManager.AppSettings.["NsbIsSendMetrics"])
+    let serviceControlMetricsAddress = ConfigurationManager.AppSettings.["NsbServiceControlMetricsAddress"]
+    let isUseLearningTransportAndPersistence = Convert.ToBoolean(ConfigurationManager.AppSettings.["NsbIsUseLearningTransportAndPersistence"])
 
 let getEndpoint endpointName isSendOnlyEndpoint =
 
