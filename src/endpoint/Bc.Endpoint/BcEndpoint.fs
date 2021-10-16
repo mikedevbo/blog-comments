@@ -13,6 +13,9 @@ open NServiceBus
 open NServiceBus.Mailer
 open NServiceBus.Persistence.Sql
 
+[<assembly:SqlPersistenceSettings(MsSqlServerScripts = true)>]
+do ()
+
 [<RequireQualifiedAccessAttribute>]
 module ConfigurationProvider =
 

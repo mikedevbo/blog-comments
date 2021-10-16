@@ -14,7 +14,7 @@ let getContext() = TestableMessageHandlerContext()
 
 module PolicyTests =
 
-    let getPolicy() = Policy()
+    let getPolicy() = CommentTakingPolicy()
 
     [<Test>]
     let Handle_TakeComment_ProperResult () =

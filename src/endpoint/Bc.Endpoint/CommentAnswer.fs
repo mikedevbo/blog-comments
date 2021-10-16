@@ -31,13 +31,13 @@ type PolicyData() =
     member val ETag = "" with get, set
 
 [<SqlSaga(nameof Unchecked.defaultof<PolicyData>.CommentId)>]
-type Policy(checkCommentAnswerTimeoutInSeconds: double) =
+type CommentAnswerPolicy(checkCommentAnswerTimeoutInSeconds: double) =
     inherit Saga<PolicyData>()
         override this.ConfigureHowToFindSaga(mapper: SagaPropertyMapper<PolicyData>) =
             mapper.MapSaga(fun saga -> saga.CommentId :> obj)
                   .ToMessage<CheckCommentAnswer>(fun message -> message.CommentId :> obj) |> ignore
 
-    new() = Policy(double ConfigurationProvider.checkCommentAnswerTimeoutInSeconds)
+    new() = CommentAnswerPolicy(double ConfigurationProvider.checkCommentAnswerTimeoutInSeconds)
 
     interface IAmStartedByMessages<CheckCommentAnswer> with
         member this.Handle(message, context) =

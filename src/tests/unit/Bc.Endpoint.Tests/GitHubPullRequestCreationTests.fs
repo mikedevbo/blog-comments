@@ -12,7 +12,7 @@ let getContext() = TestableMessageHandlerContext()
 
 module PolicyTests =
 
-    let getPolicy data = Policy(Data = data)
+    let getPolicy data = GitHubPullRequestCreationPolicy(Data = data)
 
     [<Test>]
     let Handle_RequestCreateGitHubPullRequest_ProperResult () =

@@ -71,7 +71,7 @@ type PolicyData () =
 
 
 [<SqlSaga(nameof Unchecked.defaultof<PolicyData>.CommentId)>]
-type Policy() =
+type GitHubPullRequestCreationPolicy() =
     inherit Saga<PolicyData>()
         override this.ConfigureHowToFindSaga(mapper: SagaPropertyMapper<PolicyData>) =
             mapper.MapSaga(fun saga -> saga.CommentId :> obj)

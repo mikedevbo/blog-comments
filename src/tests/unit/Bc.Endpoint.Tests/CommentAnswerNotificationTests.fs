@@ -117,7 +117,7 @@ module PolicyTests =
     let smtpFrom = "test@test.com"
     let blogDomainName = "sampleBlogDomainName"
 
-    let getPolicy smtpFrom blogDomainName data = Policy(smtpFrom, blogDomainName, Data=data)
+    let getPolicy smtpFrom blogDomainName data = CommentAnswerNotificationPolicy(smtpFrom, blogDomainName, Data=data)
 
     [<Test>]
     let Handle_RegisterCommentNotification_FillProperPolicyData () =

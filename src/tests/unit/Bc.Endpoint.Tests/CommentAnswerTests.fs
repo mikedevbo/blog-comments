@@ -41,7 +41,7 @@ module EventsSubscribingPolicyTests =
 module PolicyTests =
 
     let getPolicy timeoutInSeconds data =
-        Policy(timeoutInSeconds, Data=data)
+        CommentAnswerPolicy(timeoutInSeconds, Data=data)
 
     [<Test>]
     let Handle_CheckCommentAnswer_ProperResult () =

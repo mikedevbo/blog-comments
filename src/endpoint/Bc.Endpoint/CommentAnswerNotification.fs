@@ -69,14 +69,14 @@ type PolicyData() =
     member val IsNotificationReadyToSend = false with get, set
 
 [<SqlSaga(nameof Unchecked.defaultof<PolicyData>.CommentId)>]
-type Policy(smtpFrom: string, blogDomainName: string) =
+type CommentAnswerNotificationPolicy(smtpFrom: string, blogDomainName: string) =
     inherit Saga<PolicyData>()
         override this.ConfigureHowToFindSaga(mapper: SagaPropertyMapper<PolicyData>) =
             mapper.MapSaga(fun saga -> saga.CommentId :> obj)
                 .ToMessage<RegisterCommentNotification>(fun message -> message.CommentId :> obj)
                 .ToMessage<NotifyAboutCommentAnswer>(fun message -> message.CommentId :> obj) |> ignore
 
-    new() = Policy(ConfigurationProvider.smtpFrom, ConfigurationProvider.blogDomainName)
+    new() = CommentAnswerNotificationPolicy(ConfigurationProvider.smtpFrom, ConfigurationProvider.blogDomainName)
 
     member this.SendNotification (context: IMessageHandlerContext) =
                 match Logic.isNotificationReady this.Data.IsNotificationRegistered this.Data.IsNotificationReadyToSend with

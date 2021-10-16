@@ -48,7 +48,7 @@ module LogicTests =
 
 module PolicyTests =
 
-    let getPolicy data = Policy(Data=data)
+    let getPolicy data = CommentRegistrationPolicy(Data=data)
 
     [<Test>]
     let Handle_RegisterComment_ProperResult () =

@@ -13,7 +13,7 @@ let getContext() = TestableMessageHandlerContext()
 
 module PolicyTests =
 
-    let getPolicy() = Policy(fun _ _ -> async { return ResponseCheckPullRequestStatus(PullRequestStatus.Open, "ETag_123") })
+    let getPolicy() = GitHubPullRequestVerificationPolicy(fun _ _ -> async { return ResponseCheckPullRequestStatus(PullRequestStatus.Open, "ETag_123") })
 
     [<Test>]
     let Handle_RequestCheckPullRequestStatus_ProperResult () =

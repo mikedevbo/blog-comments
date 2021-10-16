@@ -7,7 +7,7 @@ open Bc.Contracts.Internals.Endpoint.CommentTaking.Commands
 open NServiceBus
 open NServiceBus.Logging
 
-type Policy() =
+type CommentTakingPolicy() =
     interface IHandleMessages<TakeComment> with
         member this.Handle(message, context) =
             async {

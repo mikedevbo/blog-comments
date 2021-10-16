@@ -31,7 +31,7 @@ type PolicyData() =
     member val CommentAddedDate = DateTime.MinValue with get, set
 
 [<SqlSaga(nameof Unchecked.defaultof<PolicyData>.CommentId)>]
-type Policy() =
+type CommentRegistrationPolicy() =
     inherit Saga<PolicyData>()
         override this.ConfigureHowToFindSaga(mapper: SagaPropertyMapper<PolicyData>) =
             mapper.MapSaga(fun saga -> saga.CommentId :> obj)
