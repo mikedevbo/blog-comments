@@ -3,7 +3,10 @@ namespace Bc.Web
 open Bc.Common.Endpoint
 open Bc.Contracts.Internals.Endpoint.CommentTaking.Commands
 open NServiceBus
+open NServiceBus.Logging
 open NServiceBus.Persistence.Sql
+open Microsoft.Extensions.Hosting
+open System
 
 type BcWebEndpoint() =
 
@@ -12,6 +15,10 @@ type BcWebEndpoint() =
         let destinationEndpointName = "Bc.Endpoint"
 
         let endpoint = getEndpoint endpointName true
+
+        // logging
+        let defaultFactory = LogManager.Use<DefaultFactory>()
+        defaultFactory.Directory(AppDomain.CurrentDomain.BaseDirectory)
 
         // routing
         let setRouting (transport: TransportExtensions<'T>) =

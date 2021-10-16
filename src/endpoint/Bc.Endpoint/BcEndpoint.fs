@@ -10,6 +10,7 @@ open System.Reflection
 open Bc.Common.Endpoint
 open Bc.Contracts.Internals.Endpoint.CommentTaking.Commands
 open NServiceBus
+open NServiceBus.Logging
 open NServiceBus.Mailer
 open NServiceBus.Persistence.Sql
 
@@ -32,6 +33,10 @@ let getEndpoint () =
     let endpointName = "Bc.Endpoint"
 
     let endpoint = getEndpoint endpointName false
+
+    // logging
+    let defaultFactory = LogManager.Use<DefaultFactory>()
+    defaultFactory.Directory(AppDomain.CurrentDomain.BaseDirectory)
 
     // routing
     let setRouting (transport: TransportExtensions<'T>) =
